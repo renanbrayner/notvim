@@ -3,7 +3,7 @@ require'dressing'.setup{
     fzf = {
       window = {
         width = 0.9,
-        height = 0.6
+        height = 0.8
       }
     }
   }
