@@ -51,7 +51,4 @@ endfunction
 " 	autocmd!
 " 	autocmd FileType coc-explorer call <SID>init_explorer()
 " augroup END
-
-autocmd FileType NvimTree set winhighlight=Normal:MyExplorer
-
   ]])
