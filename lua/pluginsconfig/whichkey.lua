@@ -141,7 +141,7 @@ wk.register({
       name = "toggle",
       t    = { "<cmd>call ChooseTerm('term-slider', 1)<cr>" , "Terminal split" },
       s    = { "<cmd>setlocal spell! spelllang=en_us,pt<cr>", "Spellcheck" },
-      p    = { "<cmd>NvimTreeToggle<cr>"               , "File tree" },
+      p    = { "<cmd>NvimTreeFindFileToggle<cr>"            , "File tree" },
       l    = { "<cmd>set list!<cr>"                         , "List chars" },
       n    = { "<cmd>set relativenumber!<cr>"               , "Relativenumber" },
       i    = { "<cmd>IndentBlanklineToggle<cr>"             , "Toggle indentline" }
