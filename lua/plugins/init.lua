@@ -51,17 +51,16 @@ packer.startup(function()
   use 'rcarriga/nvim-notify'            -- better notifications
   use 'lewis6991/impatient.nvim'        -- better performance for lua plugins
   use 'farmergreg/vim-lastplace'        -- reopen vim with cursor on the same position
-  use 'lilydjwg/colorizer'              -- color highlight alt(norcalli/nvim-colorizer.lua)
+  use 'norcalli/nvim-colorizer.lua'     -- color highlight alt(Rethy/vim-hexokinase)
   use 'antoinemadec/FixCursorHold.nvim' -- fix some shit
   use 'justinmk/vim-sneak'              -- friendship ended with s, cl is my new best friend
-  use 'unblevable/quick-scope'           -- better FfTt
+  use 'unblevable/quick-scope'          -- better FfTt
   use 'AndrewRadev/tagalong.vim'        -- auto change both tags
   use 'mattn/emmet-vim'                 -- good old emmet needed for coc-emmet
   use 'tpope/vim-commentary'            -- autocomment
   use 'suy/vim-context-commentstring'   -- fix autocomment
   use 'tpope/vim-surround'              -- surround
   use 'voldikss/vim-floaterm'           -- terminal inside vim
-  use 'lervag/vimtex'                   -- latex stuff
   use 'dbeniamine/cheat.sh-vim'         -- wierd search stuff
   use 'mhinz/vim-signify'               -- git symbols at the left
   use 'tpope/vim-fugitive'              -- git branch

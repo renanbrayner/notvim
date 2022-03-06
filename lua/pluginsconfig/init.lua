@@ -19,3 +19,5 @@ require('pluginsconfig/lualine')
 require('pluginsconfig/devicons')
 require('pluginsconfig/dressingnvim')
 require('pluginsconfig/nvimtree')
+
+-- vim colorizer is called inside the init.lua (if called here it bug sout)
