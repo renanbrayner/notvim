@@ -32,7 +32,10 @@
 
 require'impatient'
 vim.cmd("source $HOME/.config/nvim/plugins-config/coc.vim") -- Last surviving vim file
-require'pluginsconfig'
 require'plugins'
+require'pluginsconfig'
 require'configs'
 require'rice'
+
+-- This needs to be called here for some misterious reason
+require'colorizer'.setup()
