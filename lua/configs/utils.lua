@@ -46,9 +46,6 @@ endfunction
 function! s:init_explorer()
 	set winhighlight=Normal:MyExplorer
 endfunction
-
-" augroup CustomExplorer
-" 	autocmd!
-" 	autocmd FileType coc-explorer call <SID>init_explorer()
-" augroup END
   ]])
+
+
