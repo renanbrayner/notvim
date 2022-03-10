@@ -1,4 +1,3 @@
-
 -- ███╗   ██╗██╗   ██╗██╗███╗   ███╗
 -- ████╗  ██║██║   ██║██║████╗ ████║
 -- ██╔██╗ ██║██║   ██║██║██╔████╔██║
@@ -13,7 +12,7 @@
 -- This was made in a vertical screen, maybe some things wont fit
 -- porprely on horizontal screens
 
--- Recomended font: JetBrainsMono Nerd Font Mono
+-- Recomended font: JetBrainsMono Nerd Font
 
 --lua
 -- ├── configs
@@ -28,14 +27,14 @@
 -- │   └── init.lua   imports every plugin configuration
 -- │
 -- └── rice
---     └── init.lua   highlights and colortheme
+--     └── init.lua   highlights and colorthemet
 
-require'impatient'
-vim.cmd("source $HOME/.config/nvim/plugins-config/coc.vim") -- Last surviving vim file
-require'plugins'
-require'pluginsconfig'
-require'configs'
-require'rice'
+require("impatient")
+require("plugins")
+require("pluginsconfig")
+require("configs")
+require("lsp")
+require("rice")
+require("colorizer").setup()
 
 -- This needs to be called here for some misterious reason
-require'colorizer'.setup()

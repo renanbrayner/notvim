@@ -190,12 +190,14 @@ List of installed plugins:
 <details>
   <summary>mattn/emmet-vim</summary>
   <h4>Description:</h4>
+    emmet-vim is a vim plug-in which provides support for expanding abbreviations similar to emmet.
   <h4>Repo:</h4>
   <a href="https://github.com/mattn/emmet-vim">Go to repo</a>
 </details>
 <details>
   <summary>mhinz/vim-signify</summary>
   <h4>Description:</h4>
+    Signify (or just Sy) uses the sign column to indicate added, modified and removed lines in a file that is managed by a version control system (VCS).
   <h4>Repo:</h4>
   <a href="https://github.com/mhinz/vim-signify">Go to repo</a>
 </details>
