@@ -2,7 +2,6 @@ vim.cmd([[
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 au BufEnter * if &buftype == 'terminal' | startinsert | else | stopinsert | endif
 
-
 function! ChooseTerm(termname, slider)
 	let pane = bufwinnr(a:termname)
 	let buf = bufexists(a:termname)
@@ -43,9 +42,19 @@ function! ControlP()
 	endif
 endfunction
 
-function! s:init_explorer()
-	set winhighlight=Normal:MyExplorer
+" Adding new snippets
+
+function ReloadSnippetsAll()
+  lua require("luasnip").cleanup()
+  lua require("luasnip.loaders.from_vscode").load()
+  lua require("luasnip.loaders.from_snipmate").load()
 endfunction
-  ]])
 
+au BufWritePost *.snippets :call ReloadSnippetsAll()
 
+command! ReloadSnippets :call ReloadSnippetsAll()
+command! EditSnippets :sp ~/.config/nvim/snippets/%:e.snippets
+
+" Unfolding all folds from start
+au BufNewFile,BufRead * normal! zR
+]])
