@@ -61,7 +61,7 @@ if vim.g.colors_name == "dracula" then
   create('CursorLine', { guibg=dracula.curli}, false)
   create('Normal', { guibg=dracula.bg }, false)
   create('EndOfBuffer', { guifg=dracula.bg }, false) --remove end of buffer ~
-  create('VertSplit', { guibg=dracula.bg, guifg=dracula.bg }, false)
+  -- create('VertSplit', { guibg=dracula.bg, guifg=dracula.bg }, false)
 
   -- Indent lines
   create("IndentBlanklineIndent1", { guifg='#7e444f', gui='nocombine' }, false)
@@ -82,9 +82,10 @@ if vim.g.colors_name == "dracula" then
   create('BufferCurrentSign', { guibg=dracula.bg, guifg=dracula.bg })
   create("BufferCurrentMod", { guifg=dracula.org }, false)
 
-  -- Tree explorers
-  create("MyExplorer", { guibg=dracula.darker })
+  -- NvimTree
   create("NvimTreeNormal", { guibg=dracula.darker }, false)
+  create("NvimTreeVertSplit", { guibg=dracula.darker }, false)
+  create("NvimTreeEndOfBuffer", { guifg=dracula.darker }, false)
 
   -- Git symbols at the side
   create("SignifySignDelete", { guifg=dracula.red, gui='NONE' })
