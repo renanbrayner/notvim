@@ -31,6 +31,7 @@ set.autoindent = true
 set.tabstop = 2
 set.shiftwidth = 2
 set.expandtab = true
+set.termguicolors = true
 set.wildignore = {
   '*/tmp/*',
   '*.so',
