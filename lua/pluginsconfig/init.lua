@@ -1,23 +1,27 @@
 -- NOT LUA PLUGINS START
-require('pluginsconfig/polyglot')
-require('pluginsconfig/fixcursorhold')
-require('pluginsconfig/quickscope')
-require('pluginsconfig/signify')
-require('pluginsconfig/ultisnips')
-require('pluginsconfig/floaterm')
-require('pluginsconfig/vimtex')
-require('pluginsconfig/peartree')
-require('pluginsconfig/fzf')
+require'pluginsconfig.polyglot'
+require'pluginsconfig.fixcursorhold'
+require'pluginsconfig.quickscope'
+require'pluginsconfig.signify'
+require'pluginsconfig.ultisnips'
+require'pluginsconfig.toggleterm'
+require'pluginsconfig.vimtex'
+require'pluginsconfig.peartree'
+require'pluginsconfig.fzf'
 -- NOT LUA PLUGINS END
-require('pluginsconfig/sessionmanager')
-require('pluginsconfig/nvimnotify')
-require('pluginsconfig/indentblankline')
-require('pluginsconfig/barbar')
-require('pluginsconfig/alpha')
-require('pluginsconfig/whichkey')
-require('pluginsconfig/lualine')
-require('pluginsconfig/devicons')
-require('pluginsconfig/dressingnvim')
-require('pluginsconfig/nvimtree')
+require'pluginsconfig.sessionmanager'
+require'pluginsconfig.nvimnotify'
+require'pluginsconfig.indentblankline'
+require'pluginsconfig.barbar'
+require'pluginsconfig.alpha'
+require'pluginsconfig.whichkey'
+require'pluginsconfig.lualine'
+require'pluginsconfig.devicons'
+require'pluginsconfig.dressingnvim'
+require'pluginsconfig.nvimtree'
+require'pluginsconfig.cmp'
+require'pluginsconfig.luasnippets'
+require'pluginsconfig.treesitter'
+require'pluginsconfig.comments'
 
--- vim colorizer is called inside the init.lua (if called here it bug sout)
+-- vim colorizer is called inside the init.lua if called here it bugs out

@@ -3,7 +3,10 @@ vim.g.indent_blankline_filetype_exclude = {
     'coc-explorer',
     'help',
     'packer',
-    'NvimTree'
+    'NvimTree',
+    'lsp-installer',
+    'lspinfo',
+    'toggleterm'
 }
 
 vim.opt.list = true
