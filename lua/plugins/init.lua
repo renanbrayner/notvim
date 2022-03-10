@@ -25,6 +25,7 @@ vim.cmd [[
 
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
+    vim.notify("Error requiring packer", "error")
   return
 end
 
@@ -38,43 +39,63 @@ local use = packer.use
 packer.reset()
 
 packer.startup(function()
+  -- Packer can manage itself
   use {
     'wbthomason/packer.nvim',
     opt = false
   }
-  use {
-    'kyazdani42/nvim-tree.lua',
-    requires = { 'kyazdani42/nvim-web-devicons' },
-  }
-  use 'nvim-lua/popup.nvim'
-  use {'stevearc/dressing.nvim'}        -- vim.ui select
-  use 'rcarriga/nvim-notify'            -- better notifications
-  use 'lewis6991/impatient.nvim'        -- better performance for lua plugins
-  use 'farmergreg/vim-lastplace'        -- reopen vim with cursor on the same position
-  use 'norcalli/nvim-colorizer.lua'     -- color highlight alt(Rethy/vim-hexokinase)
+
+  -- code completion
+  use "hrsh7th/nvim-cmp"         -- The completion plugin
+  use "hrsh7th/cmp-buffer"       -- buffer completions
+  use "hrsh7th/cmp-path"         -- path completions
+  use "hrsh7th/cmp-cmdline"      -- cmdline completions
+  use "saadparwaiz1/cmp_luasnip" -- snippet completions
+  use "hrsh7th/cmp-nvim-lsp"     -- lsp completions
+
+  -- snippets
+  use 'L3MON4D3/LuaSnip'                -- snippets engine
+  use "rafamadriz/friendly-snippets"    -- a bunch of snippets to use
+
+  -- movement
+  use 'justinmk/vim-sneak'     -- friendship ended with s, cl is my new best friend
+  use 'unblevable/quick-scope' -- better FfTt
+
+  -- comments
+  use 'JoosepAlviste/nvim-ts-context-commentstring' -- comments for vue, jsx and more
+  use 'numToStr/Comment.nvim'                       -- auto comment
+
+  -- LSP
+  use 'neovim/nvim-lspconfig'           -- lsp plugin from the neovim development team
+  use 'williamboman/nvim-lsp-installer' -- intall language servers
+  use 'jose-elias-alvarez/null-ls.nvim' -- code actions, diagnostics, formating etc
+
+  -- performance
   use 'antoinemadec/FixCursorHold.nvim' -- fix some shit
-  use 'justinmk/vim-sneak'              -- friendship ended with s, cl is my new best friend
-  use 'unblevable/quick-scope'          -- better FfTt
+  use 'lewis6991/impatient.nvim'        -- better performance for lua plugins
+
+  -- color stuff
+  use 'norcalli/nvim-colorizer.lua'     -- color highlight alt(Rethy/vim-hexokinase)
+  use { 'm00qek/baleia.nvim', tag = 'v1.1.0' }
+
+  use 'nvim-lua/popup.nvim'
+  use 'rcarriga/nvim-notify'            -- better notifications
+  use {'stevearc/dressing.nvim'}        -- vim.ui select
+  -- use 'farmergreg/vim-lastplace'        -- reopen vim with cursor on the same position
   use 'AndrewRadev/tagalong.vim'        -- auto change both tags
-  use 'mattn/emmet-vim'                 -- good old emmet needed for coc-emmet
-  use 'tpope/vim-commentary'            -- autocomment
-  use 'suy/vim-context-commentstring'   -- fix autocomment
+  -- use 'mattn/emmet-vim'                 -- good old emmet needed for coc-emmet
   use 'tpope/vim-surround'              -- surround
-  use 'voldikss/vim-floaterm'           -- terminal inside vim
+  use 'akinsho/toggleterm.nvim'         -- terminal inside vim
   use 'dbeniamine/cheat.sh-vim'         -- wierd search stuff
   use 'mhinz/vim-signify'               -- git symbols at the left
-  use 'tpope/vim-fugitive'              -- git branch
-  use 'sheerun/vim-polyglot'            -- syntax highlight
-  use 'Chiel92/vim-autoformat'          -- auto format files on F3
+  use 'tpope/vim-fugitive'              -- git branch (check gitsigns if you arre any issue)
+  -- use 'Chiel92/vim-autoformat'          -- auto format files on F3
   use 'tmsvg/pear-tree'                 -- nice bracket magic that works
   use 'editorconfig/editorconfig-vim'   -- editorconfig per project
-  use 'SirVer/ultisnips'                -- code snippets
-  use 'honza/vim-snippets'              -- code snippets
   use 'folke/which-key.nvim'            -- mappings at bottom
   use 'goolord/alpha-nvim'              -- fancy startpage
   use 'lukas-reineke/indent-blankline.nvim' -- indent lines
   use { 'junegunn/fzf.vim' }             -- fzf files
-  use { 'neoclide/coc.nvim', branch = 'release' } -- autocomplete
   use { 'junegunn/fzf', dir = '~/.fzf', run = './install --all' } -- fzf files
   use { 'dracula/vim', as = 'dracula' } -- colortheme
   use {
@@ -88,6 +109,14 @@ packer.startup(function()
   use {
     'Shatur/neovim-session-manager',
     requires = {'nvim-lua/plenary.nvim'}
+  }
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+  }
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    run =":TSUpdate"
   }
 
   -- AUTO SET UP CONFIG AFTER CLONING
