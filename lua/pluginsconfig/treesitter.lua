@@ -12,7 +12,7 @@ configs.setup {
   },
   highlight = {
     enable = true, -- false will disable the whole extension
-    disable = { "" }, -- list of language that will be disabled
+    disable = { "sass", "scss", "css", "yaml" }, -- list of language that will be disabled, sass, scss and css had errors with me
     additional_vim_regex_highlighting = true,
   },
   indent = { enable = true, disable = { "yaml" } },
