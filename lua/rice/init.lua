@@ -2,7 +2,8 @@ local create = vim.highlight.create
 local link = vim.highlight.link
 local set = vim.opt
 
-vim.cmd"colorscheme dracula"
+-- vim.cmd"colorscheme dracula"
+vim.cmd"colorscheme gruvbox"
 
 vim.cmd([[
     if exists('+termguicolors')
@@ -92,6 +93,63 @@ if vim.g.colors_name == "dracula" then
 
   -- FfTt
   link('QuickScopeSecondary', 'DraculaLink', true)
+  link('QuickScopePrimary', 'MatchParen', true)
+elseif vim.g.colors_name == "gruvbox" then
+  local gruvbox = {
+    fr = '#f8f8f2', -- TODO: change this color
+    cmt = '#928374',
+    cya = '#8be9fd', -- change this color
+    grn = '#50fa7b', -- change this color
+    org = '#fe8019',
+    pnk = '#ff79c6', -- change this color
+    pur = '#bd93f9', -- change this color
+    red = '#ff5555', -- change this color
+    ylw = '#fabd2f',
+    bg = '#282828',
+    curli = '#363847', -- change this color
+    ntxt = '#504945',
+    dark = '#232425',
+    darker = '#1d2021',
+  }
+
+  -- Indent lines
+  create("IndentBlanklineIndent1", { guifg='#864b4f', gui='nocombine' }, false)
+  create("IndentBlanklineIndent2", { guifg='#887652', gui='nocombine' }, false)
+  create("IndentBlanklineIndent3", { guifg='#617751', gui='nocombine' }, false)
+  create("IndentBlanklineIndent4", { guifg='#3f7077', gui='nocombine' }, false)
+  create("IndentBlanklineIndent5", { guifg='#456d8d', gui='nocombine' }, false)
+  create("IndentBlanklineIndent6", { guifg='#795184', gui='nocombine' }, false)
+
+  -- barbar
+  create('BufferTabpageFill', { guibg=gruvbox.darker, guifg=gruvbox.darker }, true)
+  create('BufferInactive', { guibg=gruvbox.dark, guifg=gruvbox.ntxt }, true)
+  create('BufferInactiveSign', { guibg=gruvbox.dark, guifg=gruvbox.dark })
+  create("BufferInactiveMod", { guibg=gruvbox.dark, guifg=gruvbox.ylw }, false)
+  create('BufferVisible', { guifg=gruvbox.cmt })
+  create('BufferVisibleSign', { guibg=gruvbox.bg, guifg=gruvbox.bg })
+  create("BufferVisibleMod", { guifg=gruvbox.ylw }, false)
+  create('BufferCurrentSign', { guibg=gruvbox.bg, guifg=gruvbox.bg })
+  create("BufferCurrentMod", { guifg=gruvbox.org }, false)
+
+  -- nvimtree
+  create("NvimTreeNormal", { guibg=gruvbox.darker }, false)
+  create("NvimTreeVertSplit", { guibg=gruvbox.darker }, false)
+  create("NvimTreeEndOfBuffer", { guifg=gruvbox.darker }, false)
+
+  -- cleaner visual
+  create('EndOfBuffer', { guifg=gruvbox.bg }, false) --remove end of buffer ~
+  link('SignColumn', 'Normal', true)
+
+  link('QuickScopeSecondary', 'healthWarning', true)
+  link('QuickScopePrimary', 'DarkenedPanel', true)
+else
+  -- !dracula && !gruvbox
+  create("IndentBlanklineIndent1", { guifg='#E06C75', gui='nocombine' }, false)
+  create("IndentBlanklineIndent2", { guifg='#E5C07B', gui='nocombine' }, false)
+  create("IndentBlanklineIndent3", { guifg='#98C379', gui='nocombine' }, false)
+  create("IndentBlanklineIndent4", { guifg='#56B6C2', gui='nocombine' }, false)
+  create("IndentBlanklineIndent5", { guifg='#61AFEF', gui='nocombine' }, false)
+  create("IndentBlanklineIndent6", { guifg='#C678DD', gui='nocombine' }, false)
 
   -- Fzf (SpellLocal = orange)
   vim.g["fzf_colors"] = {
@@ -109,15 +167,9 @@ if vim.g.colors_name == "dracula" then
     spinner = {'fg', 'Label'},
     header = {'fg', 'Comment'}
   }
-else
-  -- Not dracula
-  create("IndentBlanklineIndent1", { guifg='#E06C75', gui='nocombine' }, false)
-  create("IndentBlanklineIndent2", { guifg='#E5C07B', gui='nocombine' }, false)
-  create("IndentBlanklineIndent3", { guifg='#98C379', gui='nocombine' }, false)
-  create("IndentBlanklineIndent4", { guifg='#56B6C2', gui='nocombine' }, false)
-  create("IndentBlanklineIndent5", { guifg='#61AFEF', gui='nocombine' }, false)
-  create("IndentBlanklineIndent6", { guifg='#C678DD', gui='nocombine' }, false)
+
+  link('QuickScopeSecondary', 'healthWarning', true)
+  link('QuickScopePrimary', 'healthSuccess', true)
 end
 
 -- Every theme
-link('QuickScopePrimary', 'MatchParen', true)
