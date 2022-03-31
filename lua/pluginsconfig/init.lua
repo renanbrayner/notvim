@@ -2,7 +2,6 @@
 require'pluginsconfig.polyglot'
 require'pluginsconfig.fixcursorhold'
 require'pluginsconfig.quickscope'
-require'pluginsconfig.signify'
 require'pluginsconfig.ultisnips'
 require'pluginsconfig.toggleterm'
 require'pluginsconfig.vimtex'
@@ -23,5 +22,6 @@ require'pluginsconfig.cmp'
 require'pluginsconfig.luasnippets'
 require'pluginsconfig.treesitter'
 require'pluginsconfig.comments'
+require'pluginsconfig.gitsigns'
 
 -- vim colorizer is called inside the init.lua if called here it bugs out
