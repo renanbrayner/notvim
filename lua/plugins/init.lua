@@ -1,17 +1,17 @@
 local fn = vim.fn
 
 -- AUTO INSTALL PACKER
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
   PACKER_BOOTSTRAP = fn.system {
-    "git",
-    "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
     install_path,
   }
-  print "Installing packer close and reopen Neovim..."
+  print 'Installing packer close and reopen Neovim...'
   vim.cmd [[packadd packer.nvim]]
 end
 
@@ -23,9 +23,9 @@ vim.cmd [[
   augroup end
 ]]
 
-local status_ok, packer = pcall(require, "packer")
+local status_ok, packer = pcall(require, 'packer')
 if not status_ok then
-    vim.notify("Error requiring packer", "error")
+    vim.notify('Error requiring packer', 'error')
   return
 end
 
@@ -46,16 +46,16 @@ packer.startup(function()
   }
 
   -- code completion
-  use "hrsh7th/nvim-cmp"         -- The completion plugin
-  use "hrsh7th/cmp-buffer"       -- buffer completions
-  use "hrsh7th/cmp-path"         -- path completions
-  use "hrsh7th/cmp-cmdline"      -- cmdline completions
-  use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp"     -- lsp completions
+  use 'hrsh7th/nvim-cmp'         -- The completion plugin
+  use 'hrsh7th/cmp-buffer'       -- buffer completions
+  use 'hrsh7th/cmp-path'         -- path completions
+  use 'hrsh7th/cmp-cmdline'      -- cmdline completions
+  use 'saadparwaiz1/cmp_luasnip' -- snippet completions
+  use 'hrsh7th/cmp-nvim-lsp'     -- lsp completions
 
   -- snippets
   use 'L3MON4D3/LuaSnip'                -- snippets engine
-  use "rafamadriz/friendly-snippets"    -- a bunch of snippets to use
+  use 'rafamadriz/friendly-snippets'    -- a bunch of snippets to use
 
   -- movement
   use 'justinmk/vim-sneak'     -- friendship ended with s, cl is my new best friend
@@ -76,52 +76,55 @@ packer.startup(function()
 
   -- color stuff
   use 'norcalli/nvim-colorizer.lua'     -- color highlight alt(Rethy/vim-hexokinase)
-  use { 'm00qek/baleia.nvim', tag = 'v1.1.0' }
+  -- use { 'm00qek/baleia.nvim', tag = 'v1.1.0' } -- this enables ansi scapes codes
+
+  -- git stuff
+  use 'tpope/vim-fugitive'
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = { 'nvim-lua/plenary.nvim' }
+  }
 
   use 'nvim-lua/popup.nvim'
   use 'rcarriga/nvim-notify'            -- better notifications
-  use {'stevearc/dressing.nvim'}        -- vim.ui select
-  -- use 'farmergreg/vim-lastplace'        -- reopen vim with cursor on the same position
-  use 'AndrewRadev/tagalong.vim'        -- auto change both tags
-  -- use 'mattn/emmet-vim'                 -- good old emmet needed for coc-emmet
+  use 'stevearc/dressing.nvim'          -- vim.ui select
   use 'tpope/vim-surround'              -- surround
   use 'akinsho/toggleterm.nvim'         -- terminal inside vim
   use 'dbeniamine/cheat.sh-vim'         -- wierd search stuff
-  use 'mhinz/vim-signify'               -- git symbols at the left
-  use 'tpope/vim-fugitive'              -- git branch (check gitsigns if you arre any issue)
-  -- use 'Chiel92/vim-autoformat'          -- auto format files on F3
+  use 'AndrewRadev/tagalong.vim'        -- auto change both tags
   use 'tmsvg/pear-tree'                 -- nice bracket magic that works
   use 'editorconfig/editorconfig-vim'   -- editorconfig per project
   use 'folke/which-key.nvim'            -- mappings at bottom
   use 'goolord/alpha-nvim'              -- fancy startpage
-  use 'lukas-reineke/indent-blankline.nvim' -- indent lines
-  use { 'junegunn/fzf.vim' }             -- fzf files
+  use 'junegunn/fzf.vim'                -- fzf files
   use { 'junegunn/fzf', dir = '~/.fzf', run = './install --all' } -- fzf files
   use { 'dracula/vim', as = 'dracula' } -- colortheme
+  use { "ellisonleao/gruvbox.nvim" }
+  use 'lukas-reineke/indent-blankline.nvim' -- indent lines highlight
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
   use {
     'romgrk/barbar.nvim',
-    requires = {'kyazdani42/nvim-web-devicons'}
+    requires = { 'kyazdani42/nvim-web-devicons' }
   }
   use {
     'Shatur/neovim-session-manager',
-    requires = {'nvim-lua/plenary.nvim'}
+    requires = { 'nvim-lua/plenary.nvim' }
   }
   use {
     'kyazdani42/nvim-tree.lua',
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
   use {
-    "nvim-treesitter/nvim-treesitter",
-    run =":TSUpdate"
+    'nvim-treesitter/nvim-treesitter',
+    run =':TSUpdate'
   }
 
   -- AUTO SET UP CONFIG AFTER CLONING
   -- PUT THIS AT THE END
   if PACKER_BOOTSTRAP then
-    require"packer".sync()
+    require'packer'.sync()
   end
 end)
