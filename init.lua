@@ -16,18 +16,18 @@
 
 --lua
 -- ├── configs
--- │   ├── init.lua   imports everything on configs
--- │   ├── opts.lua   set options
--- │   └── utils.lua  autocmds, functions and misc
+-- │   ├── init.lua   imports everything on configs
+-- │   ├── opts.lua   set options
+-- │   └── utils.lua  autocmds, functions and misc
 -- │
 -- ├── plugins
--- │   └── init.lua   packer config and plugins
+-- │   └── init.lua   packer config and plugins
 -- │
--- ├── pluginsconfig  plugins configuration files
--- │   └── init.lua   imports every plugin configuration
+-- ├── pluginsconfig  plugins configuration files
+-- │   └── init.lua   imports every plugin configuration
 -- │
 -- └── rice
---     └── init.lua   highlights and colorthemet
+--     └── init.lua   highlights and colorthemet
 
 require("impatient")
 require("plugins")
@@ -35,6 +35,4 @@ require("pluginsconfig")
 require("configs")
 require("lsp")
 require("rice")
-require("colorizer").setup()
-
--- This needs to be called here for some misterious reason
+require("colorizer").setup() -- This needs to be called here for some misterious reason
