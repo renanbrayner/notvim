@@ -134,6 +134,7 @@ wk.register({
     l = { "<cmd>set list!<cr>", "List chars" },
     n = { "<cmd>set relativenumber!<cr>", "Relativenumber" },
     i = { "<cmd>IndentBlanklineToggle<cr>", "Toggle indentline" },
+    b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Current Line Blame"}
   },
 }, { prefix = "<leader>" })
 
