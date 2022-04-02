@@ -99,7 +99,9 @@ packer.startup(function()
   use 'junegunn/fzf.vim'                -- fzf files
   use { 'junegunn/fzf', dir = '~/.fzf', run = './install --all' } -- fzf files
   use { 'dracula/vim', as = 'dracula' } -- colortheme
-  use { "ellisonleao/gruvbox.nvim" }
+  use 'ellisonleao/gruvbox.nvim'        -- colortheme
+  use 'shaunsingh/nord.nvim'            -- colortheme
+  use 'ishan9299/nvim-solarized-lua'    -- colortheme
   use 'lukas-reineke/indent-blankline.nvim' -- indent lines highlight
   use {
     'nvim-lualine/lualine.nvim',
