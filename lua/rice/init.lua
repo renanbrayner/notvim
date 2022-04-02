@@ -80,6 +80,23 @@ elseif vim.g.colors_name == "gruvbox" then
     dark = "#232425",
     darker = "#1d2021",
   }
+elseif vim.g.colors_name == "solarized" then
+  colors = {
+    fr = "#839496",
+    cmt = "#586e75",
+    cya = "#2aa198",
+    grn = "#859900",
+    org = "#cb4b16",
+    pnk = "#d33682",
+    pur = "#6c71c4",
+    red = "#dc322f",
+    ylw = "#b58900",
+    bg = "#002b36",
+    curli = "#073642",
+    ntxt = "#657b83",
+    dark = "#00252e",
+    darker = "#002129",
+  }
 else
   colors = {
     fr = "#f8f8f2",
@@ -134,9 +151,6 @@ if vim.g.colors_name == "dracula" then
   -- Git symbols at the side
   create("SignifySignDelete", { guifg = colors.red, gui = "NONE" })
 
-  -- FfTt
-  link("QuickScopeSecondary", "DraculaLink", true)
-  link("QuickScopePrimary", "MatchParen", true)
 elseif vim.g.colors_name == "gruvbox" then
   -- Indent lines
   create("IndentBlanklineIndent1", { guifg = "#864b4f", gui = "nocombine" }, false)
@@ -162,15 +176,38 @@ elseif vim.g.colors_name == "gruvbox" then
   create("NvimTreeVertSplit", { guibg = colors.darker }, false)
   create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
 
-  -- Quick Scope
-  link("QuickScopeSecondary", "healthWarning", true)
-  link("QuickScopePrimary", "healthSuccess", true)
 
   -- cleaner visual
   create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
   link("SignColumn", "Normal", true)
+elseif vim.g.colors_name == "solarized" then
+  create("IndentBlanklineIndent1", { guifg = "#6e2f33", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent2", { guifg = "#5b5a1b", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent3", { guifg = "#43621b", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent4", { guifg = "#156667", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent5", { guifg = "#364e7d", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent6", { guifg = "#6a315c", gui = "nocombine" }, false)
+
+  -- barbar
+  create("BufferTabpageFill", { guibg = colors.darker, guifg = colors.darker }, true)
+  create("BufferInactive", { guibg = colors.dark, guifg = colors.ntxt }, true)
+  create("BufferInactiveSign", { guibg = colors.dark, guifg = colors.dark })
+  create("BufferInactiveMod", { guibg = colors.dark, guifg = colors.ylw }, false)
+  create("BufferVisible", { guifg = colors.cmt })
+  create("BufferVisibleSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferVisibleMod", { guifg = colors.ylw }, false)
+  create("BufferCurrentSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferCurrentMod", { guifg = colors.org }, false)
+
+  -- nvimtree
+  create("NvimTreeNormal", { guibg = colors.darker }, false)
+  create("NvimTreeVertSplit", { guibg = colors.darker }, false)
+  create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
+
+  -- cleaner visual
+  create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
+  create("LineNr", { guibg = colors.bg }, false)
 else
-  -- !dracula && !gruvbox
   create("IndentBlanklineIndent1", { guifg = "#E06C75", gui = "nocombine" }, false)
   create("IndentBlanklineIndent2", { guifg = "#E5C07B", gui = "nocombine" }, false)
   create("IndentBlanklineIndent3", { guifg = "#98C379", gui = "nocombine" }, false)
@@ -178,8 +215,8 @@ else
   create("IndentBlanklineIndent5", { guifg = "#61AFEF", gui = "nocombine" }, false)
   create("IndentBlanklineIndent6", { guifg = "#C678DD", gui = "nocombine" }, false)
 
-  link("QuickScopeSecondary", "healthWarning", true)
-  link("QuickScopePrimary", "healthSuccess", true)
+  -- cleaner visual
+  create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
 end
 
 -- Every theme
@@ -199,3 +236,7 @@ vim.g["fzf_colors"] = {
   spinner = { "fg", "Label" },
   header = { "fg", "Comment" },
 }
+
+-- QuickScope colors
+  link("QuickScopeSecondary", "healthWarning", true)
+  link("QuickScopePrimary", "healthSuccess", true)
