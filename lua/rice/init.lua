@@ -2,8 +2,15 @@ local create = vim.highlight.create
 local link = vim.highlight.link
 local set = vim.opt
 
--- vim.cmd"colorscheme dracula"
-vim.cmd"colorscheme gruvbox"
+-- ATTENTION! If you are using the rest of my dotfiles there is a script called rice-ctrl
+-- with rice-ctrl --set-theme-dracula or rice-ctrl --set-theme-gruvbox you can change
+-- not just the nvim theme but also the xmobar, xmonad borders, alacritty etc
+-- TODO: rice nord theme ans solarized theme
+
+-- vim.cmd"colorscheme nord" -- SED_NORD
+-- vim.cmd"colorscheme dracula" -- SED_DRACULA
+-- vim.cmd"colorscheme gruvbox" -- SED_GRUVBOX
+vim.cmd"colorscheme solarized" -- SED_SOLARIZED
 
 vim.cmd([[
     if exists('+termguicolors')
@@ -15,7 +22,6 @@ vim.cmd([[
 set.cursorline = true
 set.showmode = false
 set.termguicolors = true
-
 
 -- Meaning of terms:
 --
@@ -37,139 +43,159 @@ set.termguicolors = true
 -- BufferTabpageFill: filler after the buffer section
 -- BufferOffset: offset section, created with set_offset()
 
--- DRACULA ONLY
-if vim.g.colors_name == "dracula" then
-  local dracula = {
-    fr = '#f8f8f2',
-    cmt = '#6272a4',
-    cya = '#8be9fd',
-    grn = '#50fa7b',
-    org = '#ffb86c',
-    pnk = '#ff79c6',
-    pur = '#bd93f9',
-    red = '#ff5555',
-    ylw = '#f1fa8c',
-    -- These are different from the original
-    bg = '#282a37',
-    curli = '#363847',
-    ntxt = '#44475a',
-    dark = '#21222c',
-    darker = '#1c1d26',
-  }
+local colors = {}
 
+if vim.g.colors_name == "dracula" then
+  colors = {
+    fr = "#f8f8f2",
+    cmt = "#6272a4",
+    cya = "#8be9fd",
+    grn = "#50fa7b",
+    org = "#ffb86c",
+    pnk = "#ff79c6",
+    pur = "#bd93f9",
+    red = "#ff5555",
+    ylw = "#f1fa8c",
+    -- These are different from the original
+    bg = "#282a37",
+    curli = "#363847",
+    ntxt = "#44475a",
+    dark = "#21222c",
+    darker = "#1c1d26",
+  }
+elseif vim.g.colors_name == "gruvbox" then
+  colors = {
+    fr = "#ebdbb2",
+    cmt = "#928374",
+    cya = "#458588",
+    grn = "#98971a",
+    org = "#d65d0e",
+    pnk = "#ff79c6", -- TODO: change this color
+    pur = "#b16286",
+    red = "#cc241d",
+    ylw = "#d79921",
+    bg = "#282828",
+    curli = "#3c3836",
+    ntxt = "#504945",
+    dark = "#232425",
+    darker = "#1d2021",
+  }
+else
+  colors = {
+    fr = "#f8f8f2",
+    cmt = "#6272a4",
+    cya = "#8be9fd",
+    grn = "#50fa7b",
+    org = "#ffb86c",
+    pnk = "#ff79c6",
+    pur = "#bd93f9",
+    red = "#ff5555",
+    ylw = "#f1fa8c",
+    bg = "#282a37",
+    curli = "#363847",
+    ntxt = "#44475a",
+    dark = "#21222c",
+    darker = "#1c1d26",
+  }
+end
+
+if vim.g.colors_name == "dracula" then
   -- General configs
-  create('NonText', { guifg=dracula.ntxt }, false)
-  create('CursorLine', { guibg=dracula.curli}, false)
-  create('Normal', { guibg=dracula.bg }, false)
-  create('EndOfBuffer', { guifg=dracula.bg }, false) --remove end of buffer ~
-  -- create('VertSplit', { guibg=dracula.bg, guifg=dracula.bg }, false)
+  create("NonText", { guifg = colors.ntxt }, false)
+  create("CursorLine", { guibg = colors.curli }, false)
+  create("Normal", { guibg = colors.bg }, false)
+  create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
+  -- create('VertSplit', { guibg=colors.bg, guifg=colors.bg }, false)
 
   -- Indent lines
-  create("IndentBlanklineIndent1", { guifg='#7e444f', gui='nocombine' }, false)
-  create("IndentBlanklineIndent2", { guifg='#816e52', gui='nocombine' }, false)
-  create("IndentBlanklineIndent3", { guifg='#5a7051', gui='nocombine' }, false)
-  create("IndentBlanklineIndent4", { guifg='#396975', gui='nocombine' }, false)
-  create("IndentBlanklineIndent5", { guifg='#3f668c', gui='nocombine' }, false)
-  create("IndentBlanklineIndent6", { guifg='#714a83', gui='nocombine' }, false)
+  create("IndentBlanklineIndent1", { guifg = "#7e444f", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent2", { guifg = "#816e52", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent3", { guifg = "#5a7051", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent4", { guifg = "#396975", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent5", { guifg = "#3f668c", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent6", { guifg = "#714a83", gui = "nocombine" }, false)
 
   -- Barbar
-  create('BufferTabpageFill', { guibg=dracula.darker, guifg=dracula.darker }, true)
-  create('BufferInactive', { guibg=dracula.dark, guifg=dracula.ntxt }, true)
-  create('BufferInactiveSign', { guibg=dracula.dark, guifg=dracula.dark })
-  create("BufferInactiveMod", { guibg=dracula.dark, guifg=dracula.ylw }, false)
-  create('BufferVisible', { guifg=dracula.cmt })
-  create('BufferVisibleSign', { guibg=dracula.bg, guifg=dracula.bg })
-  create("BufferVisibleMod", { guifg=dracula.ylw }, false)
-  create('BufferCurrentSign', { guibg=dracula.bg, guifg=dracula.bg })
-  create("BufferCurrentMod", { guifg=dracula.org }, false)
+  create("BufferTabpageFill", { guibg = colors.darker, guifg = colors.darker }, true)
+  create("BufferInactive", { guibg = colors.dark, guifg = colors.ntxt }, true)
+  create("BufferInactiveSign", { guibg = colors.dark, guifg = colors.dark })
+  create("BufferInactiveMod", { guibg = colors.dark, guifg = colors.ylw }, false)
+  create("BufferVisible", { guifg = colors.cmt })
+  create("BufferVisibleSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferVisibleMod", { guifg = colors.ylw }, false)
+  create("BufferCurrentSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferCurrentMod", { guifg = colors.org }, false)
 
   -- NvimTree
-  create("NvimTreeNormal", { guibg=dracula.darker }, false)
-  create("NvimTreeVertSplit", { guibg=dracula.darker }, false)
-  create("NvimTreeEndOfBuffer", { guifg=dracula.darker }, false)
+  create("NvimTreeNormal", { guibg = colors.darker }, false)
+  create("NvimTreeVertSplit", { guibg = colors.darker }, false)
+  create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
 
   -- Git symbols at the side
-  create("SignifySignDelete", { guifg=dracula.red, gui='NONE' })
+  create("SignifySignDelete", { guifg = colors.red, gui = "NONE" })
 
   -- FfTt
-  link('QuickScopeSecondary', 'DraculaLink', true)
-  link('QuickScopePrimary', 'MatchParen', true)
+  link("QuickScopeSecondary", "DraculaLink", true)
+  link("QuickScopePrimary", "MatchParen", true)
 elseif vim.g.colors_name == "gruvbox" then
-  local gruvbox = {
-    fr = '#f8f8f2', -- TODO: change this color
-    cmt = '#928374',
-    cya = '#8be9fd', -- change this color
-    grn = '#50fa7b', -- change this color
-    org = '#fe8019',
-    pnk = '#ff79c6', -- change this color
-    pur = '#bd93f9', -- change this color
-    red = '#ff5555', -- change this color
-    ylw = '#fabd2f',
-    bg = '#282828',
-    curli = '#363847', -- change this color
-    ntxt = '#504945',
-    dark = '#232425',
-    darker = '#1d2021',
-  }
-
   -- Indent lines
-  create("IndentBlanklineIndent1", { guifg='#864b4f', gui='nocombine' }, false)
-  create("IndentBlanklineIndent2", { guifg='#887652', gui='nocombine' }, false)
-  create("IndentBlanklineIndent3", { guifg='#617751', gui='nocombine' }, false)
-  create("IndentBlanklineIndent4", { guifg='#3f7077', gui='nocombine' }, false)
-  create("IndentBlanklineIndent5", { guifg='#456d8d', gui='nocombine' }, false)
-  create("IndentBlanklineIndent6", { guifg='#795184', gui='nocombine' }, false)
+  create("IndentBlanklineIndent1", { guifg = "#864b4f", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent2", { guifg = "#887652", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent3", { guifg = "#617751", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent4", { guifg = "#3f7077", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent5", { guifg = "#456d8d", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent6", { guifg = "#795184", gui = "nocombine" }, false)
 
   -- barbar
-  create('BufferTabpageFill', { guibg=gruvbox.darker, guifg=gruvbox.darker }, true)
-  create('BufferInactive', { guibg=gruvbox.dark, guifg=gruvbox.ntxt }, true)
-  create('BufferInactiveSign', { guibg=gruvbox.dark, guifg=gruvbox.dark })
-  create("BufferInactiveMod", { guibg=gruvbox.dark, guifg=gruvbox.ylw }, false)
-  create('BufferVisible', { guifg=gruvbox.cmt })
-  create('BufferVisibleSign', { guibg=gruvbox.bg, guifg=gruvbox.bg })
-  create("BufferVisibleMod", { guifg=gruvbox.ylw }, false)
-  create('BufferCurrentSign', { guibg=gruvbox.bg, guifg=gruvbox.bg })
-  create("BufferCurrentMod", { guifg=gruvbox.org }, false)
+  create("BufferTabpageFill", { guibg = colors.darker, guifg = colors.darker }, true)
+  create("BufferInactive", { guibg = colors.dark, guifg = colors.ntxt }, true)
+  create("BufferInactiveSign", { guibg = colors.dark, guifg = colors.dark })
+  create("BufferInactiveMod", { guibg = colors.dark, guifg = colors.ylw }, false)
+  create("BufferVisible", { guifg = colors.cmt })
+  create("BufferVisibleSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferVisibleMod", { guifg = colors.ylw }, false)
+  create("BufferCurrentSign", { guibg = colors.bg, guifg = colors.bg })
+  create("BufferCurrentMod", { guifg = colors.org }, false)
 
   -- nvimtree
-  create("NvimTreeNormal", { guibg=gruvbox.darker }, false)
-  create("NvimTreeVertSplit", { guibg=gruvbox.darker }, false)
-  create("NvimTreeEndOfBuffer", { guifg=gruvbox.darker }, false)
+  create("NvimTreeNormal", { guibg = colors.darker }, false)
+  create("NvimTreeVertSplit", { guibg = colors.darker }, false)
+  create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
+
+  -- Quick Scope
+  link("QuickScopeSecondary", "healthWarning", true)
+  link("QuickScopePrimary", "healthSuccess", true)
 
   -- cleaner visual
-  create('EndOfBuffer', { guifg=gruvbox.bg }, false) --remove end of buffer ~
-  link('SignColumn', 'Normal', true)
-
-  link('QuickScopeSecondary', 'healthWarning', true)
-  link('QuickScopePrimary', 'DarkenedPanel', true)
+  create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
+  link("SignColumn", "Normal", true)
 else
   -- !dracula && !gruvbox
-  create("IndentBlanklineIndent1", { guifg='#E06C75', gui='nocombine' }, false)
-  create("IndentBlanklineIndent2", { guifg='#E5C07B', gui='nocombine' }, false)
-  create("IndentBlanklineIndent3", { guifg='#98C379', gui='nocombine' }, false)
-  create("IndentBlanklineIndent4", { guifg='#56B6C2', gui='nocombine' }, false)
-  create("IndentBlanklineIndent5", { guifg='#61AFEF', gui='nocombine' }, false)
-  create("IndentBlanklineIndent6", { guifg='#C678DD', gui='nocombine' }, false)
+  create("IndentBlanklineIndent1", { guifg = "#E06C75", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent2", { guifg = "#E5C07B", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent3", { guifg = "#98C379", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent4", { guifg = "#56B6C2", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent5", { guifg = "#61AFEF", gui = "nocombine" }, false)
+  create("IndentBlanklineIndent6", { guifg = "#C678DD", gui = "nocombine" }, false)
 
-  -- Fzf (SpellLocal = orange)
-  vim.g["fzf_colors"] = {
-    ['fg+'] = {'fg', 'Normal', 'CursorColumn', 'Normal'},
-    ['bg+'] = {'bg', 'Normal', 'CursorColumn'},
-    ['hl+'] = {'fg', 'SpellLocal'},
-    fg = {'fg', 'Normal'},
-    bg = {'bg', 'Normal'},
-    hl = {'fg', 'Function'},
-    info = {'fg', 'PreProc'},
-    border = {'fg', 'Comment'},
-    prompt = {'fg', 'Function'},
-    pointer = {'fg', 'Exception'},
-    marker = {'fg', 'Keyword'},
-    spinner = {'fg', 'Label'},
-    header = {'fg', 'Comment'}
-  }
-
-  link('QuickScopeSecondary', 'healthWarning', true)
-  link('QuickScopePrimary', 'healthSuccess', true)
+  link("QuickScopeSecondary", "healthWarning", true)
+  link("QuickScopePrimary", "healthSuccess", true)
 end
 
 -- Every theme
+-- Fzf (SpellLocal = orange)
+vim.g["fzf_colors"] = {
+  ["fg+"] = { "fg", "Normal", "CursorColumn", "Normal" },
+  ["bg+"] = { "bg", "Normal", "CursorColumn" },
+  ["hl+"] = { "fg", "SpellLocal" },
+  fg = { "fg", "Normal" },
+  bg = { "bg", "Normal" },
+  hl = { "fg", "Function" },
+  info = { "fg", "PreProc" },
+  border = { "fg", "Comment" },
+  prompt = { "fg", "Function" },
+  pointer = { "fg", "Exception" },
+  marker = { "fg", "Keyword" },
+  spinner = { "fg", "Label" },
+  header = { "fg", "Comment" },
+}
