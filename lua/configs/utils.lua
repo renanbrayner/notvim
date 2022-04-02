@@ -57,4 +57,11 @@ command! EditSnippets :sp ~/.config/nvim/snippets/%:e.snippets
 
 " Unfolding all folds from start
 au BufNewFile,BufRead * normal! zR
+
+augroup custom_theme_highlights
+  autocmd!
+  au ColorScheme * highlight GitSignsAdd guibg=NONE
+  au ColorScheme * highlight GitSignsChange guibg=NONE
+  au ColorScheme * highlight GitSignsDelete guibg=NONE
+augroup END
 ]])
