@@ -28,10 +28,15 @@ set.diffopt = set.diffopt + "vertical"
 set.encoding = "utf-8"
 set.syntax = "enable"
 set.autoindent = true
-set.tabstop = 2
-set.shiftwidth = 2
-set.expandtab = true
+set.tabstop = 4
+set.shiftwidth = 4
+set.expandtab = false
 set.termguicolors = true
+set.laststatus = 3
+vim.opt.list = true
+-- vim.opt.listchars:append("space:·")
+vim.opt.listchars:append("eol:﬋")
+vim.opt.listchars:append("trail:")
 set.wildignore = {
   '*/tmp/*',
   '*.so',
@@ -44,3 +49,5 @@ set.completeopt = {
   'noinsert',
   'noselect'
 }
+
+vim.g.svelte_preprocessors = {'typescript'}
