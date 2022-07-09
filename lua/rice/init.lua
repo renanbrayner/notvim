@@ -3,14 +3,11 @@ local link = vim.highlight.link
 local set = vim.opt
 
 -- ATTENTION! If you are using the rest of my dotfiles there is a script called rice-ctrl
--- with rice-ctrl --set-theme-dracula or rice-ctrl --set-theme-gruvbox you can change
--- not just the nvim theme but also the xmobar, xmonad borders, alacritty etc
--- TODO: rice nord theme ans solarized theme
+-- with rice-ctrl you can change the theme by running the command rice-ctrl --set-theme-name where name is the name of the theme
 
--- vim.cmd"colorscheme nord" -- SED_NORD
--- vim.cmd"colorscheme dracula" -- SED_DRACULA
--- vim.cmd"colorscheme gruvbox" -- SED_GRUVBOX
-vim.cmd"colorscheme solarized" -- SED_SOLARIZED
+-- THEME_START
+vim.cmd"colorscheme solarized"
+-- THEME_END
 
 vim.cmd([[
     if exists('+termguicolors')
@@ -42,6 +39,8 @@ set.termguicolors = true
 -- BufferTabpages: tabpage indicator
 -- BufferTabpageFill: filler after the buffer section
 -- BufferOffset: offset section, created with set_offset()
+
+-- TODO: remove all these "ifs" and use the rice-ctrl script ???
 
 local colors = {}
 
@@ -148,6 +147,10 @@ if vim.g.colors_name == "dracula" then
   create("NvimTreeVertSplit", { guibg = colors.darker }, false)
   create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
 
+-- QuickScope colors
+  link("QuickScopeSecondary", "healthWarning", true)
+  link("QuickScopePrimary", "healthSuccess", true)
+
   -- Git symbols at the side
   create("SignifySignDelete", { guifg = colors.red, gui = "NONE" })
 
@@ -176,11 +179,15 @@ elseif vim.g.colors_name == "gruvbox" then
   create("NvimTreeVertSplit", { guibg = colors.darker }, false)
   create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
 
+  -- quickscope colors
+  link("quickscopesecondary", "healthwarning", true)
+  link("quickscopeprimary", "healthsuccess", true)
 
   -- cleaner visual
   create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
   link("SignColumn", "Normal", true)
 elseif vim.g.colors_name == "solarized" then
+
   create("IndentBlanklineIndent1", { guifg = "#6e2f33", gui = "nocombine" }, false)
   create("IndentBlanklineIndent2", { guifg = "#5b5a1b", gui = "nocombine" }, false)
   create("IndentBlanklineIndent3", { guifg = "#43621b", gui = "nocombine" }, false)
@@ -203,6 +210,10 @@ elseif vim.g.colors_name == "solarized" then
   create("NvimTreeNormal", { guibg = colors.darker }, false)
   create("NvimTreeVertSplit", { guibg = colors.darker }, false)
   create("NvimTreeEndOfBuffer", { guifg = colors.darker }, false)
+
+  -- quickscope colors
+  link("QuickScopeSecondary", "ReplaceMode", true)
+  link("QuickScopePrimary", "InsertMode", true)
 
   -- cleaner visual
   create("EndOfBuffer", { guifg = colors.bg }, false) --remove end of buffer ~
@@ -237,6 +248,3 @@ vim.g["fzf_colors"] = {
   header = { "fg", "Comment" },
 }
 
--- QuickScope colors
-  link("QuickScopeSecondary", "healthWarning", true)
-  link("QuickScopePrimary", "healthSuccess", true)
