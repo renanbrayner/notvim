@@ -32,7 +32,9 @@
 require("impatient")
 require("plugins")
 require("pluginsconfig")
-require("configs")
 require("lsp")
 require("rice")
-require("colorizer").setup() -- This needs to be called here for some misterious reason
+require("configs")
+
+-- HACKS
+require("colorizer").setup()
