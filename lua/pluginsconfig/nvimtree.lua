@@ -39,21 +39,23 @@ local keyBindings = {
   { key = ".",                            action = "run_file_command" }
 }
 
-vim.g["nvim_tree_indent_markers"] = 1
-vim.g["nvim_tree_root_folder_modifier"] = ':.:t'
-
 require'nvim-tree'.setup {
   disable_netrw        = true,
   hijack_netrw         = true,
   open_on_setup        = false,
   ignore_buffer_on_setup = false,
   ignore_ft_on_setup   = {},
-  auto_close           = false,
   auto_reload_on_write = true,
   open_on_tab          = false,
   hijack_cursor        = true,
   update_cwd           = true,
   hijack_unnamed_buffer_when_opening = false,
+  renderer = {
+    root_folder_modifier = ':.:t',
+    indent_markers = {
+      enable = true,
+    },
+  },
   hijack_directories   = {
     enable = true,
     auto_open = true,
