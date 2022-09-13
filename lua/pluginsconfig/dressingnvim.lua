@@ -1,10 +1,10 @@
-require'dressing'.setup{
+require("dressing").setup({
   select = {
     fzf = {
       window = {
         width = 0.9,
-        height = 0.8
-      }
-    }
-  }
-}
+        height = 0.8,
+      },
+    },
+  },
+})

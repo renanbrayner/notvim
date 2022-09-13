@@ -1,6 +1,6 @@
 local status_ok, toggleterm = pcall(require, "toggleterm")
 if not status_ok then
-    vim.notify("Error requiring packer", "error")
+  vim.notify("Error requiring packer", "error")
   return
 end
 
@@ -14,11 +14,11 @@ toggleterm.setup({
   start_in_insert = true,
   insert_mappings = true,
   persist_size = true,
-  direction = 'horizontal',
+  direction = "horizontal",
   close_on_exit = true,
   shell = vim.o.shell,
   float_opts = {
-    border = 'curved',
+    border = "curved",
     winblend = 0,
     highlights = {
       border = "Normal",
@@ -28,89 +28,89 @@ toggleterm.setup({
 })
 
 function _G.set_terminal_keymaps()
-  local opts = {noremap = true}
+  local opts = { noremap = true }
   -- vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+  vim.api.nvim_buf_set_keymap(0, "t", "jk", [[<C-\><C-n>]], opts)
+  vim.api.nvim_buf_set_keymap(0, "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+  vim.api.nvim_buf_set_keymap(0, "t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+  vim.api.nvim_buf_set_keymap(0, "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+  vim.api.nvim_buf_set_keymap(0, "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
 end
 
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
 local Terminal = require("toggleterm.terminal").Terminal
 
 local lazygit = Terminal:new({
   cmd = "lazygit",
   hidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _LAZYGIT_TOGGLE()
-	lazygit:toggle()
+  lazygit:toggle()
 end
 
 local lazydocker = Terminal:new({
   cmd = "lazydocker",
   hidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _LAZYDOCKER_TOGGLE()
-	lazydocker:toggle()
+  lazydocker:toggle()
 end
 
 local node = Terminal:new({
   cmd = "node",
   hidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _NODE_TOGGLE()
-	node:toggle()
+  node:toggle()
 end
 
 local ncdu = Terminal:new({
   cmd = "ncdu",
   hidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _NCDU_TOGGLE()
-	ncdu:toggle()
+  ncdu:toggle()
 end
 
 local gotop = Terminal:new({
   cmd = "gotop",
   goidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _GOTOP_TOGGLE()
-	gotop:toggle()
+  gotop:toggle()
 end
 
 local python = Terminal:new({
   cmd = "python",
   hidden = true,
-  direction = 'float',
+  direction = "float",
 })
 
 function _PYTHON_TOGGLE()
-	python:toggle()
+  python:toggle()
 end
 
 local ranger = Terminal:new({
   cmd = "ranger",
   hidden = true,
-  direction = 'float',
+  direction = "float",
   float_opts = {
     height = 1000,
-    width = 1000
-  }
+    width = 1000,
+  },
 })
 
 function _RANGER_TOGGLE()
-	ranger:toggle()
+  ranger:toggle()
 end

@@ -3,10 +3,15 @@ if not status_ok then
   return
 end
 
-configs.setup {
+local colors = require("rice")
+
+configs.setup({
   ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
   ignore_install = { "" }, -- List of parsers to ignore installing
+  autotag = {
+    enable = true,
+  },
   autopairs = {
     enable = true,
   },
@@ -20,7 +25,9 @@ configs.setup {
     enable = true,
     enable_autocmd = false,
   },
-}
-
--- vim.opt.foldmethod = "expr"
--- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  rainbow = {
+    enable = false,
+    extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
+    max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
+  },
+})

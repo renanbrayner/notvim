@@ -9,8 +9,8 @@
 
 -- Press leader (deffault = <space>) to see keybindings
 
--- This was made in a vertical screen, maybe some things wont fit
--- porprely on horizontal screens
+-- This was made in a vertical screen,
+-- maybe some things wont fit porprely on horizontal screens
 
 -- Recomended font: JetBrainsMono Nerd Font
 
@@ -35,6 +35,3 @@ require("pluginsconfig")
 require("lsp")
 require("rice")
 require("configs")
-
--- HACKS
-require("colorizer").setup()

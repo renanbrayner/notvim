@@ -7,9 +7,9 @@ local override = {
     icon = "﵂﵂",
     color = "#428850",
     cterm_color = "65",
-    name = "Vue"
+    name = "Vue",
   },
 }
-devicons.setup {
+devicons.setup({
   default = true,
-}
+})

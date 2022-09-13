@@ -1,3 +1,5 @@
+local filetype = vim.bo.filetype
+
 vim.cmd([[
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 au BufEnter * if &buftype == 'terminal' | startinsert | else | stopinsert | endif
@@ -28,40 +30,37 @@ function! ChooseTerm(termname, slider)
 	endif
 endfunction
 
-function! ControlP()
-	if &filetype == 'coc-explorer' || &filetype == 'NvimTree'
-		:wincmd h
-	endif
-	silent! !git rev-parse --is-inside-work-tree
-	if v:shell_error == 0
-		:GFiles --cached --others --exclude-standard
-		" :Telescope git-files
-	else
-		:Files
-		" :Telescope
-	endif
-endfunction
-
-" Adding new snippets
-
-function ReloadSnippetsAll()
-  lua require("luasnip").cleanup()
-  lua require("luasnip.loaders.from_vscode").load()
-  lua require("luasnip.loaders.from_snipmate").load()
-endfunction
-
-au BufWritePost *.snippets :call ReloadSnippetsAll()
-
-command! ReloadSnippets :call ReloadSnippetsAll()
-command! EditSnippets :sp ~/.config/nvim/snippets/%:e.snippets
-
-" Unfolding all folds from start
-au BufNewFile,BufRead * normal! zR
-
-augroup custom_theme_highlights
-  autocmd!
-  au ColorScheme * highlight GitSignsAdd guibg=NONE
-  au ColorScheme * highlight GitSignsChange guibg=NONE
-  au ColorScheme * highlight GitSignsDelete guibg=NONE
-augroup END
+" Unfolding all folds from start commented because of ufo plugin
+" au BufNewFile,BufRead * normal! zR
+au BufEnter * if &ft ==# 'CHADTree' | set winhighlight=Normal:NvimTreeNormal | endif
+au BufEnter * if &ft ==# 'CHADTree' | setlocal nolist | endif
 ]])
+
+local function has_value(tab, val)
+  for _, value in ipairs(tab) do
+    if value == val then
+      return true
+    end
+  end
+
+  return false
+end
+
+function ControlP()
+  local excluded_filetypes = {
+    "coc-explorer",
+    "NvimTree",
+    "CHADTree",
+  }
+  if has_value(excluded_filetypes, filetype) then
+    vim.api.nvim_command("wincmd h") -- go left to leave the tree on the right
+  end
+  vim.fn.system("git rev-parse --is-inside-work-tree")
+  if vim.v.shell_error == 0 then
+    -- vim.cmd([[:GFiles]])
+    vim.cmd([[:Telescope git_files]])
+  else
+    -- vim.cmd([[:Files]])
+    vim.cmd([[:Telescope find_files]])
+  end
+end

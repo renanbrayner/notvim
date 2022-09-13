@@ -15,9 +15,13 @@ local nrmp = { noremap = true }
 -- SET LEADER KEY
 vim.g.mapleader = " "
 
+local format = function()
+  vim.lsp.buf.format({ async = true })
+end
+
 wk.setup({
   window = {
-    border = "single",
+    border = "rounded",
     margin = { 1, 0, 1, 0 },
     padding = { 2, 2, 2, 2 },
   },
@@ -30,7 +34,37 @@ wk.setup({
 })
 
 wk.register({
-  ["<C-p>"] = { "<cmd>call ControlP()<cr>", "Search files" },
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "n" })
+
+wk.register({
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "v" })
+
+wk.register({
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "o" })
+
+wk.register({
+  n = { "<cmd>execute('normal! ' . v:count1 . 'n')<CR><cmd>lua require('hlslens').start()<CR>", "Next result" },
+  N = { "<cmd>execute('normal! ' . v:count1 . 'N')<CR><cmd>lua require('hlslens').start()<CR>", "Previous result" },
+  ["*"] = { "*<Cmd>lua require('hlslens').start()<CR>", "Search under cursor" },
+  ["#"] = { "#<Cmd>lua require('hlslens').start()<CR>", "Search under cursor backwards" },
+  ["g*"] = { "g*<Cmd>lua require('hlslens').start()<CR>", "Search under cursor" },
+  ["g#"] = { "g#<Cmd>lua require('hlslens').start()<CR>", "Search under cursor backwards" },
+}, { mode = "n" })
+
+wk.register({
+  ["<C-p>"] = { function () ControlP() end, "Search files" },
   ["<C-s>"] = { "<cmd>:w<cr>", "Save file" },
   ["<A-Up>"] = { "<cmd>m .-2<CR>==", "Move line up" },
   ["<A-k>"] = { "<cmd>m .-2<CR>==", "Move line up" },
@@ -56,9 +90,19 @@ wk.register({
   ["<A-n>"] = { "<cmd>Alpha<cr>", "Open alpha" },
   ["<Esc>"] = { ":noh<Esc>", "Esc removing highlight" },
   ["q:"] = { "<nop>", "Disabled" },
-  -- ["<F3>"]     = { "<cmd>Autoformat<CR>"              , "Autoformat file" },
-  ["<F3>"] = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Autoformat file" },
-  ["<F2>"] = { "<cmd>lua vim.lsp.buf.rename()<cr>",     "Rename symbol" },
+  ["<F3>"] = { format, "Autoformat file" },
+  ["<F2>"] = { vim.lsp.buf.rename, "Rename symbol" },
+  ["[d"] = { vim.diagnostic.goto_prev, "Previous diagnostic" },
+  ["]d"] = { vim.diagnostic.goto_next, "Next diagnostic" },
+  ["gd"] = { vim.lsp.buf.definition, "Goto definition" },
+  ["gD"] = { vim.lsp.buf.declaration, "Goto declaration" },
+  ["gi"] = { vim.lsp.buf.implementation, "Goto implementation" },
+  ["gr"] = { vim.lsp.buf.references, "Goto references" },
+  ["gl"] = { vim.diagnostic.open_float, "Diagnostic" },
+  ["zR"] = { require("ufo").openAllFolds, "Open all folds" },
+  ["zM"] = { require("ufo").closeAllFolds, "Close all folds" },
+  -- ["<C-k>"] = { vim.lsp.buf.signature_help, "Signature help"},
+  K = { vim.lsp.buf.hover, "Hover" },
   Q = { "<nop>", "Disabled" },
 })
 
@@ -82,7 +126,6 @@ wk.register({
   ["<leader>,"] = { "<cmd>BufferNext<cr>", "Tab next" },
   ["<leader>."] = { "<cmd>BufferPrevious<cr>", "Tab previous" },
   ["<leader>'"] = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal" },
-  ["<leader>C"] = "Toggle cheatsheet comments",
 })
 
 wk.register({
@@ -103,25 +146,12 @@ wk.register({
 
 wk.register({
   f = {
-    name = "fzf",
-    f = { "<cmd>Files<cr>", "Files" },
-    g = { "<cmd>GFiles<cr>", "Git files" },
-    h = { "<cmd>History<cr>", "Recent files" },
-    r = { "<cmd>Rg<cr>", "Search text on files" },
-    l = { "<cmd>Lines<cr>", "Search text on open files" },
-  },
-}, { prefix = "<leader>" })
-
-wk.register({
-  K = {
-    name = "cheatsheet",
-    K = "not working!",
-    B = "awnser on-buffer",
-    R = "awnser replace",
-    P = "awnser below",
-    C = "toggle last-comment",
-    E = "send error",
-    L = "last query",
+    name = "Find",
+    f = { "<cmd>Telescope find_files<cr>", "Files" },
+    g = { "<cmd>Telescope git_files<cr>", "Git files" },
+    h = { "<cmd>Telescope oldfiles<cr>", "Recent files" },
+    r = { "<cmd>Telescope live_grep<cr>", "Search text on files" },
+    -- l = { "<cmd>Lines<cr>", "Search text on open files" },
   },
 }, { prefix = "<leader>" })
 
@@ -130,11 +160,11 @@ wk.register({
     name = "toggle",
     t = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal split" },
     s = { "<cmd>setlocal spell! spelllang=en_us,pt<cr>", "Spellcheck" },
-    p = { "<cmd>NvimTreeFindFileToggle<cr>", "File tree" },
+    p = { "<cmd>CHADopen<cr>", "File tree" },
     l = { "<cmd>set list!<cr>", "List chars" },
     n = { "<cmd>set relativenumber!<cr>", "Relativenumber" },
     i = { "<cmd>IndentBlanklineToggle<cr>", "Toggle indentline" },
-    b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Current Line Blame"}
+    b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Current Line Blame" },
   },
 }, { prefix = "<leader>" })
 
@@ -142,13 +172,13 @@ wk.register({
   t = {
     name = "terminal",
     T = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal" },
-    g = { "<cmd>lua _LAZYGIT_TOGGLE()<cr>", "Git" },
-    d = { "<cmd>lua _LAZYDOCKER_TOGGLE()<cr>", "Docker" },
-    n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-    p = { "<cmd>lua _PYTGON_TOGGLE()<cr>", "Python" },
-    s = { "<cmd>lua _GOTOP_TOGGLE()<cr>", "Gotop" },
-    h = { "<cmd>lua _NCDU_TOGGLE()<cr>", "Ncdu" },
-    r = { "<cmd>lua _RANGER_TOGGLE()<cr>", "Ranger" },
+    g = { _LAZYGIT_TOGGLE, "Git" },
+    d = { _LAZYDOCKER_TOGGLE, "Docker" },
+    n = { _NODE_TOGGLE, "Node" },
+    p = { _PYTHON_TOGGLE, "Python" },
+    s = { _GOTOP_TOGGLE, "Gotop" },
+    h = { _NCDU_TOGGLE, "Ncdu" },
+    r = { _RANGER_TOGGLE, "Ranger" },
   },
 }, { prefix = "<leader>" })
 
@@ -159,6 +189,15 @@ wk.register({
     c = { "<cmd>wqa<cr>", "Save and exit" },
     s = { "<cmd>wa<cr>", "Save all files" },
     r = { "<cmd>source ~/.config/nvim/init.lua<cr>", "Reload source" },
+  },
+}, { prefix = "<leader>" })
+
+wk.register({
+  l = {
+    name = "lsp",
+    c = { vim.lsp.buf.code_action, "Code action" },
+    q = { vim.diagnostic.setqflist, "Quick fix list" },
+    l = { vim.diagnostic.setloclist, "Loc list" },
   },
 }, { prefix = "<leader>" })
 
