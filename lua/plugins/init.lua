@@ -7,12 +7,6 @@ end
 
 return packer.startup(function(use)
 	use 'wbthomason/packer.nvim' -- Plugin manager
-	-- [[ LSP ]]
-	use {
-		"williamboman/mason.nvim",
-		"williamboman/mason-lspconfig.nvim",
-		"neovim/nvim-lspconfig",
-	}
 	use {
 		-- File tree
 		"ms-jpq/chadtree",
@@ -39,8 +33,32 @@ return packer.startup(function(use)
 			require("plugins.configs.treesitter")
 		end
 	}
-
-	-- colorthemes
+	-- [[ LSP ]]
+	use {
+		"williamboman/mason.nvim",
+		"williamboman/mason-lspconfig.nvim",
+		"neovim/nvim-lspconfig",
+	}
+	-- [[ Auto completion ]]
+	use {
+		"ms-jpq/coq_nvim",
+		branch = "coq",
+		run = {
+			":COQdeps"
+		},
+		config = function()
+			require("plugins.configs.treesitter")
+		end
+	}
+	-- use {
+	-- 	"ms-jpq/coq.artifacts",
+	-- 	branch = "artifacts",
+	-- }
+	-- use {
+	-- 	"ms-jpq/coq.thirdparty",
+	-- 	branch = "3p",
+	-- }
+	-- [[ Colorthemes ]]
 	use {
 		"dracula/vim",
 		as = "dracula"
