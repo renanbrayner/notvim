@@ -1,4 +1,4 @@
 require('rice')
-require('plugins')
+require('utils')
 require('opts')
-require('lsp')
+require('plugins')
