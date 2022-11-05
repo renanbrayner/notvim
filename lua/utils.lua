@@ -1,3 +1,34 @@
+local filetype = vim.bo.filetype
+
+local function has_value(tab, val)
+  for _, value in ipairs(tab) do
+    if value == val then
+      return true
+    end
+  end
+
+  return false
+end
+
+function ControlP()
+  local excluded_filetypes = {
+    "coc-explorer",
+    "NvimTree",
+    "CHADTree",
+  }
+  if has_value(excluded_filetypes, filetype) then
+    vim.api.nvim_command("wincmd h") -- go left to leave the tree on the right
+  end
+  vim.fn.system("git rev-parse --is-inside-work-tree")
+  if vim.v.shell_error == 0 then
+    -- vim.cmd([[:GFiles]])
+    vim.cmd([[:Telescope git_files]])
+  else
+    -- vim.cmd([[:Files]])
+    vim.cmd([[:Telescope find_files]])
+  end
+end
+
 local M = {}
 
 M.add_tables = function ( a, b )
