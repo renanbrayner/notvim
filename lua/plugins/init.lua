@@ -133,6 +133,9 @@ return packer.startup(function(use)
       require('Comment').setup()
     end
   }
+  use {
+    "gpanders/editorconfig.nvim"
+  }
   -- [[ Auto completion ]]
   use {
     "ms-jpq/coq_nvim",
