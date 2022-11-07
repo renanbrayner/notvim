@@ -1,11 +1,32 @@
 local status_ok, wk = pcall(require, "which-key")
 if not status_ok then
-	vim.notify("Error requiring which-key", error)
-	return
+  vim.notify("Error requiring which-key", error)
+  return
 end
 
 wk.register({
-  ["<C-p>"] = { function () ControlP() end, "Search files" },
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "n" })
+
+wk.register({
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "v" })
+
+wk.register({
+  -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
+  -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
+  s = { "<cmd>HopWord<cr>", "Hop window" },
+  S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+}, { mode = "o" })
+
+wk.register({
+  ["<C-p>"] = { function() ControlP() end, "Search files" },
   ["<C-s>"] = { "<cmd>:w<cr>", "Save file" },
   ["<A-Up>"] = { "<cmd>m .-2<CR>==", "Move line up" },
   ["<A-k>"] = { "<cmd>m .-2<CR>==", "Move line up" },
@@ -30,10 +51,10 @@ wk.register({
   ["<A-C>"] = { "<cmd>bd!<CR>", "Force close tab" },
   ["<A-o>"] = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>", "Close all but current tab" },
   ["<A-q>"] = { "<cmd>%bd<cr>", "Close all tabs" },
---  ["<A-n>"] = { "<cmd>Alpha<cr>", "Open alpha" },
+  ["<A-n>"] = { "<cmd>Alpha<cr>", "Open alpha" },
   ["<Esc>"] = { ":noh<Esc>", "Esc removing highlight" },
   ["q:"] = { "<nop>", "Disabled" },
---  ["<F3>"] = { format, "Autoformat file" },
+  ["<F3>"] = { function() vim.lsp.buf.format({ async = true }) end, "Autoformat file" },
   ["<F2>"] = { vim.lsp.buf.rename, "Rename symbol" },
   ["[d"] = { vim.diagnostic.goto_prev, "Previous diagnostic" },
   ["]d"] = { vim.diagnostic.goto_next, "Next diagnostic" },
@@ -42,8 +63,8 @@ wk.register({
   ["gi"] = { vim.lsp.buf.implementation, "Goto implementation" },
   ["gr"] = { vim.lsp.buf.references, "Goto references" },
   ["gl"] = { vim.diagnostic.open_float, "Diagnostic" },
---  ["zR"] = { require("ufo").openAllFolds, "Open all folds" },
---["zM"] = { require("ufo").closeAllFolds, "Close all folds" },
+  --  ["zR"] = { require("ufo").openAllFolds, "Open all folds" },
+  --["zM"] = { require("ufo").closeAllFolds, "Close all folds" },
   -- ["<C-k>"] = { vim.lsp.buf.signature_help, "Signature help"},
   K = { vim.lsp.buf.hover, "Hover" },
   Q = { "<nop>", "Disabled" },
@@ -52,14 +73,14 @@ wk.register({
 wk.register({
   b = {
     name = "buffers",
---    o = { "<cmd>BufferCloseAllButCurrent<cr>", "Buffer only" },
---    b = { "<cmd>Buffers<cr>", "Buffer fuzzy-find" },
+    o = { "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>", "Buffer only" },
+    --    b = { "<cmd>Buffers<cr>", "Buffer fuzzy-find" },
     a = { "<cmd>%bd<cr>", "Buffer close-all" },
---    n = { "<cmd>BufferNext<cr>", "Buffer next" },
---    p = { "<cmd>BufferPrevious<cr>", "Buffer previous" },
+    --    n = { "<cmd>BufferNext<cr>", "Buffer next" },
+    --    p = { "<cmd>BufferPrevious<cr>", "Buffer previous" },
     d = { "<cmd>bp | bd #<cr>", "Buffer delete" },
---    t = { "<cmd>bdelete! term-slider<cr>", "Buffer terminal-delete" },
---    l = { "<cmd>buffers<cr>", "Buffer list-all" },
+    --    t = { "<cmd>bdelete! term-slider<cr>", "Buffer terminal-delete" },
+    --    l = { "<cmd>buffers<cr>", "Buffer list-all" },
     s = { "<cmd>w<cr>", "Buffer save" },
     c = { ":b ", "Buffer command" },
   },
@@ -72,6 +93,7 @@ wk.register({
     g = { "<cmd>Telescope git_files<cr>", "Git files" },
     h = { "<cmd>Telescope oldfiles<cr>", "Recent files" },
     r = { "<cmd>Telescope live_grep<cr>", "Search text on files" },
+    t = { "<cmd>Telescope treesitter<cr>", "TreeSitter" },
     -- l = { "<cmd>Lines<cr>", "Search text on open files" },
   },
 }, { prefix = "<leader>" })
@@ -79,13 +101,13 @@ wk.register({
 wk.register({
   o = {
     name = "toggle",
---    t = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal split" },
+    --    t = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal split" },
     s = { "<cmd>setlocal spell! spelllang=en_us,pt<cr>", "Spellcheck" },
     p = { "<cmd>CHADopen<cr>", "File tree" },
     l = { "<cmd>set list!<cr>", "List chars" },
     n = { "<cmd>set relativenumber!<cr>", "Relativenumber" },
---    i = { "<cmd>IndentBlanklineToggle<cr>", "Toggle indentline" },
---    b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Current Line Blame" },
+    --    i = { "<cmd>IndentBlanklineToggle<cr>", "Toggle indentline" },
+    --    b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Current Line Blame" },
   },
 }, { prefix = "<leader>" })
 
