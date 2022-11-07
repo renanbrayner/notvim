@@ -1,6 +1,5 @@
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
-  -- Guard clause
   vim.notify("Error requiring packer", error)
   return
 end
@@ -8,14 +7,16 @@ end
 -- AUTO SYNC ON SAVE THIS FILE
 vim.cmd([[
   augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost lua/plugins/init.lua source <afile> | PackerSync
+  autocmd!
+  autocmd BufWritePost lua/plugins/init.lua source <afile> | PackerSync
   augroup end
 ]])
 
 packer.init({
   display = {
-    open_fn = require("packer.util").float,
+    open_fn = function()
+      return require("packer.util").float({ border = 'rounded' })
+    end
   },
 })
 
@@ -52,6 +53,7 @@ return packer.startup(function(use)
     end
   }
   use {
+    -- press Ctrl + p
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
     requires = 'nvim-lua/plenary.nvim',
@@ -60,6 +62,7 @@ return packer.startup(function(use)
     end
   }
   use {
+    -- tabs
     'akinsho/bufferline.nvim',
     tag = "v3.*",
     requires = 'kyazdani42/nvim-web-devicons',
@@ -68,6 +71,7 @@ return packer.startup(function(use)
     end
   }
   use {
+    -- status bar
     'nvim-lualine/lualine.nvim',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
@@ -75,9 +79,58 @@ return packer.startup(function(use)
     end
   }
   use {
+    -- startup dashboard
     'goolord/alpha-nvim',
     config = function()
       require('plugins.configs.alpha')
+    end
+  }
+  use {
+    -- session manager
+    "Shatur/neovim-session-manager",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require('plugins.configs.sessionmanager')
+    end
+  }
+  use {
+    -- better interface for selections etc
+    "stevearc/dressing.nvim",
+    config = function()
+      require('plugins.configs.dressing')
+    end
+  }
+  use {
+    -- movement plugin
+    "phaazon/hop.nvim",
+    branch = "v2", -- optional but strongly recommended
+    config = function()
+      require("hop").setup()
+    end
+  }
+  use {
+    -- indent lines highlight
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("plugins.configs.indentblankline")
+    end
+  }
+  use {
+    "unblevable/quick-scope",
+    config = function()
+      vim.g["qs_highlight_on_keys"] = { "f", "F", "t", "T" }
+    end
+  }
+  use {
+    "NvChad/nvim-colorizer.lua",
+    config = function()
+      require("plugins.configs.colorizer")
+    end
+  }
+  use {
+    "numToStr/Comment.nvim",
+    config = function()
+      require('Comment').setup()
     end
   }
   -- [[ Auto completion ]]
@@ -96,12 +149,12 @@ return packer.startup(function(use)
     end
   }
   -- use {
-  -- 	"ms-jpq/coq.artifacts",
-  -- 	branch = "artifacts",
+  --   "ms-jpq/coq.artifacts",
+  --   branch = "artifacts",
   -- }
   -- use {
-  -- 	"ms-jpq/coq.thirdparty",
-  -- 	branch = "3p",
+  --   "ms-jpq/coq.thirdparty",
+  --   branch = "3p",
   -- }
   -- [[ LSP ]]
   use {
