@@ -2,7 +2,7 @@ local alpha = require("alpha")
 local headers = require("plugins.configs.alpha.headers")
 local dashboard = require("alpha.themes.dashboard")
 
-dashboard.section.header.val = headers.sleekraken
+dashboard.section.header.val = headers.shadow
 
 dashboard.section.buttons.val = {
   dashboard.button("f", "  Find file", ":lua ControlP()<CR>"),
