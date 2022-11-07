@@ -1,6 +1,21 @@
-local mason = require("mason")
-local masonlsp = require("mason-lspconfig")
-local lspconfig = require("lspconfig")
+local mason_status_ok, mason = pcall(require, "mason")
+if not mason_status_ok then
+  vim.notify("Error requiring mason", error)
+  return
+end
+
+local masonlsp_status_ok, masonlsp = pcall(require, "mason-lspconfig")
+if not masonlsp_status_ok then
+  vim.notify("Error requiring masonlsp", error)
+  return
+end
+
+local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+if not lspconfig_ok then
+  vim.notify("Error requiring lspconfig", error)
+  return
+end
+
 local opts = {
   capabilities = require("lsp.handlers").capabilities,
   on_attach = require("lsp.handlers").on_attach,
@@ -45,12 +60,12 @@ masonlsp.setup_handlers {
           diagnostics = {
             globals = { "vim" },
           },
-          workspace = { -- this lines is causing bugs
-            library = {
-              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-              [vim.fn.stdpath("config") .. "/lua"] = true,
-            },
-          },
+          -- workspace = { -- this lines is causing bugs
+          --   library = {
+          --     [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+          --     [vim.fn.stdpath("config") .. "/lua"] = true,
+          --   },
+          -- },
         },
       },
     })
