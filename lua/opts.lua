@@ -29,3 +29,13 @@ set.backup = false
 set.swapfile = false
 
 vim.g.mapleader = " "
+
+local map = vim.api.nvim_set_keymap
+local nrmp = { noremap = true }
+
+-- map("v", "", "gcgv", {}) -- comment area
+
+map("v", "<A-k>", ":m '<-2<CR>gv=gv", nrmp) -- move selection up
+map("v", "<A-Up>", ":m '<-2<CR>gv=gv", nrmp) -- move selection up
+map("v", "<A-j>", ":m '>+1<CR>gv=gv", nrmp) -- move selection down
+map("v", "<A-Down>", ":m '>+1<CR>gv=gv", nrmp) -- move selection down
