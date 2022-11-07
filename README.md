@@ -8,26 +8,26 @@ Nothing fancy here, this is just my config for neovim, just clone the contents o
 
 ### Alpha:
 
-![Screenshot](./imgs/screenshot1.png)
+![Screenshot](./.imgs/screenshot1.png)
 
 Highly configurable startpage with multiple shortcuts.
 Currently set to: Find files, find recent files, load last session, select session, open the init.lua file, open a empty buffer, quit notvim (really its not vim)
 
 ### CHADTree:
 
-![Screenshot](./imgs/screenshot2.png)
+![Screenshot](./.imgs/screenshot2.png)
 
 File tree plugin, setup to open on the right side by deffault (this prevents the code shifting around on the screen and keeps things on its place)
 
 ### Telescope:
 
-![Screenshot](./imgs/screenshot3.png)
+![Screenshot](./.imgs/screenshot3.png)
 
 Fuzzy find files, text and etc. By default `Ctrl` + `P` will search all files or git files depending on if you are in a git versioned project or not.
 
 ### Which key:
 
-![Screenshot](./imgs/screenshot4.png)
+![Screenshot](./.imgs/screenshot4.png)
 
 Preview keybinds in a small floating window at the bottom of definitely not *vim*
 
