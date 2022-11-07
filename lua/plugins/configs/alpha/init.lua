@@ -5,8 +5,8 @@ local dashboard = require("alpha.themes.dashboard")
 dashboard.section.header.val = headers.sleekraken
 
 dashboard.section.buttons.val = {
-  dashboard.button("f", "  Find file", ":call ControlP()<CR>"),
-  dashboard.button("r", "  Recent", ":History<CR>"),
+  dashboard.button("f", "  Find file", ":lua ControlP()<CR>"),
+  dashboard.button("r", "  Recent", ":Telescope oldfiles<CR>"),
   dashboard.button("l", "  Load Last session", ":SessionManager load_last_session<CR>"),
   dashboard.button("s", "  Load session", ":SessionManager load_session<CR>"),
   -- dashboard.button( "m", "  Bookmarks", ":Marks <CR>"),
