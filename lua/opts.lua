@@ -21,6 +21,7 @@ set.autoindent = true
 set.tabstop = 2
 set.shiftwidth = 2
 set.softtabstop = -1
+set.laststatus = 3
 set.expandtab = true
 set.writebackup = false
 set.hidden = true
