@@ -9,6 +9,7 @@ wk.register({
   -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
   s = { "<cmd>HopWord<cr>", "Hop window" },
   S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+  ["<C-_>"] = { "<cmd>normal gcc<cr>", "Comment line" }
 }, { mode = "n" })
 
 wk.register({
@@ -16,6 +17,7 @@ wk.register({
   -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
   s = { "<cmd>HopWord<cr>", "Hop window" },
   S = { "<cmd>HopAnywhere<cr>", "Hop anywhere window" },
+  ["<C-_>"] = { "<cmd>normal gcgv<cr>", "Comment selection"}
 }, { mode = "v" })
 
 wk.register({
@@ -54,7 +56,7 @@ wk.register({
   ["<A-n>"] = { "<cmd>Alpha<cr>", "Open alpha" },
   ["<Esc>"] = { ":noh<Esc>", "Esc removing highlight" },
   ["q:"] = { "<nop>", "Disabled" },
-  ["<F3>"] = { function() vim.lsp.buf.format({ async = true }) end, "Autoformat file" },
+  ["<F3>"] = { function() vim.lsp.buf.format({ async = true }) end, "Format file" },
   ["<F2>"] = { vim.lsp.buf.rename, "Rename symbol" },
   ["[d"] = { vim.diagnostic.goto_prev, "Previous diagnostic" },
   ["]d"] = { vim.diagnostic.goto_next, "Next diagnostic" },
