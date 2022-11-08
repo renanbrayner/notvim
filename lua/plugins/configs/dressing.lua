@@ -1,10 +1,10 @@
-local status_ok, dressing = pcall(require, "dressing")
+local status_ok, dressing = pcall(require, 'dressing')
 if not status_ok then
-  vim.notify("Error requiring dressing", error)
+  vim.notify('Error requiring dressing', error)
   return
 end
 
-dressing.setup({
+dressing.setup {
   select = {
     fzf = {
       window = {
@@ -13,4 +13,4 @@ dressing.setup({
       },
     },
   },
-})
+}

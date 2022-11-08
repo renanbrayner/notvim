@@ -1,12 +1,12 @@
 local status_ok, colorizer = pcall(require, 'colorizer')
 if not status_ok then
-  vim.notify("Error requiring colorizer", error)
+  vim.notify('Error requiring colorizer', error)
   return
 end
 
-colorizer.setup({
+colorizer.setup {
   filetypes = {
-    "*",
+    '*',
   },
   user_default_options = {
     RGB = true, -- #RGB hex codes
@@ -17,12 +17,12 @@ colorizer.setup({
     hsl_fn = true, -- CSS hsl() and hsla() functions
     css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
     tailwind = true,
-    mode = "virtualtext", -- Set the display mode.
-    virtualtext = "■",
+    mode = 'virtualtext', -- Set the display mode.
+    virtualtext = '■',
   },
-})
+}
 
 -- execute colorizer as soon as possible
 vim.defer_fn(function()
-  require("colorizer").attach_to_buffer(0)
+  require('colorizer').attach_to_buffer(0)
 end, 0)

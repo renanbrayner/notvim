@@ -1,22 +1,22 @@
 local set = vim.opt
-local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand("~/.config")
+local prefix = vim.env.XDG_CONFIG_HOME or vim.fn.expand '~/.config'
 
 set.number = true -- number column
 set.relativenumber = true -- relative number column
-set.clipboard = "unnamedplus" -- share clipboard with system
-set.mouse = "a" -- mouse suport
+set.clipboard = 'unnamedplus' -- share clipboard with system
+set.mouse = 'a' -- mouse suport
 set.splitright = true -- non retarded splits
 set.splitbelow = true -- non retarded splits
 set.list = true -- ghost text on invisible characters
-set.listchars:append("eol:﬋") -- character at the end of line
-set.listchars:append("trail:") -- character at trailing spaces
-set.signcolumn = "yes" -- extra column at the left
+set.listchars:append 'eol:﬋' -- character at the end of line
+set.listchars:append 'trail:' -- character at trailing spaces
+set.signcolumn = 'yes' -- extra column at the left
 set.undofile = true -- set undo file
-set.undodir = { prefix .. "/nvim/.undo"} -- set undodir to $XDG_CONFIG_HOME/nvim/.undo
+set.undodir = { prefix .. '/nvim/.undo' } -- set undodir to $XDG_CONFIG_HOME/nvim/.undo
 set.scrolloff = 8 -- leave a space at the top and bottom of curso
-set.diffopt:append('vertical') -- dif on a vertical split
+set.diffopt:append 'vertical' -- dif on a vertical split
 
-set.shortmess = set.shortmess + "c"
+set.shortmess = set.shortmess + 'c'
 set.autoindent = true
 set.tabstop = 2
 set.shiftwidth = 2
@@ -28,14 +28,4 @@ set.hidden = true
 set.backup = false
 set.swapfile = false
 
-vim.g.mapleader = " "
-
-local map = vim.api.nvim_set_keymap
-local nrmp = { noremap = true }
-
--- map("v", "", "gcgv", {}) -- comment area
-
-map("v", "<A-k>", ":m '<-2<CR>gv=gv", nrmp) -- move selection up
-map("v", "<A-Up>", ":m '<-2<CR>gv=gv", nrmp) -- move selection up
-map("v", "<A-j>", ":m '>+1<CR>gv=gv", nrmp) -- move selection down
-map("v", "<A-Down>", ":m '>+1<CR>gv=gv", nrmp) -- move selection down
+vim.g.mapleader = ' '

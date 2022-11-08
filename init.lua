@@ -1,4 +1,4 @@
-require('rice')
-require('utils')
-require('opts')
-require('plugins')
+require 'rice'
+require 'utils'
+require 'opts'
+require 'plugins'
