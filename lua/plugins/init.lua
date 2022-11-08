@@ -25,7 +25,7 @@ packer.reset()
 -- Before all plugins set the configuration for notifications
 local notify_ok, notify = pcall(require, 'notify')
 if notify_ok then
-  vim.notify = require 'notify'
+  vim.notify = notify
   require 'plugins.configs.nvim-notify'
 end
 
@@ -152,16 +152,23 @@ return packer.startup(function(use)
     'gpanders/editorconfig.nvim',
   }
   use {
+    'lewis6991/gitsigns.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('plugins.configs.gitsigns')
+    end,
+  }
+  use {
     -- TODO: configure this in according to https://github.com/windwp/nvim-autopairs#override-default-values
     'windwp/nvim-autopairs',
     config = function()
       require 'plugins.configs.autopairs'
     end,
   }
-  -- use {
-  --   -- TODO: configure
-  --   'windwp/nvim-ts-autotag'
-  -- }
+  use {
+    -- TODO: configure
+    'windwp/nvim-ts-autotag',
+  }
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
