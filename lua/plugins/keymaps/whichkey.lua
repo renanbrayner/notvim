@@ -36,7 +36,13 @@ wk.register({
 }, { mode = 'o' })
 
 wk.register {
-  ['<C-p>'] = { function() ControlP() end, 'Search files', },
+  ['<F3>'] = {
+    function()
+      vim.lsp.buf.format { async = true }
+    end,
+    'Format file',
+  },
+  ['<C-p>'] = { ControlP, 'Search files' },
   ['<C-s>'] = { '<cmd>:w<cr>', 'Save file' },
   ['<A-s>'] = { '<cmd>BufferLinePick<cr>', 'Hop to buffer' },
   ['<A-<>'] = { '<cmd>BufferLineMovePrev<CR>', 'Previous tab' },
@@ -60,7 +66,6 @@ wk.register {
   ['<A-n>'] = { '<cmd>Alpha<cr>', 'Open alpha' },
   ['<Esc>'] = { ':noh<Esc>', 'Esc removing highlight' },
   ['q:'] = { '<nop>', 'Disabled' },
-  ['<F3>'] = { function() vim.lsp.buf.format { async = true } end, 'Format file', },
   ['<F2>'] = { vim.lsp.buf.rename, 'Rename symbol' },
   ['[d'] = { vim.diagnostic.goto_prev, 'Previous diagnostic' },
   [']d'] = { vim.diagnostic.goto_next, 'Next diagnostic' },
