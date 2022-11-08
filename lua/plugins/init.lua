@@ -23,8 +23,11 @@ packer.init {
 packer.reset()
 
 -- Before all plugins set the configuration for notifications
-vim.notify = require 'notify'
-require 'plugins.configs.nvim-notify'
+local notify_ok, notify = pcall(require, 'notify')
+if notify_ok then
+  vim.notify = require 'notify'
+  require 'plugins.configs.nvim-notify'
+end
 
 return packer.startup(function(use)
   use 'wbthomason/packer.nvim' -- Plugin manager
