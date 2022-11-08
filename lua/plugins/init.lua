@@ -29,6 +29,7 @@ require 'plugins.configs.nvim-notify'
 return packer.startup(function(use)
   use 'wbthomason/packer.nvim' -- Plugin manager
   use {
+    -- Notifications
     'rcarriga/nvim-notify',
   }
   use {
@@ -60,7 +61,7 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- press Ctrl + p
+    -- Press Ctrl + p
     'nvim-telescope/telescope.nvim',
     tag = '0.1.0',
     requires = 'nvim-lua/plenary.nvim',
@@ -69,7 +70,7 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- tabs
+    -- Tabs
     'akinsho/bufferline.nvim',
     tag = 'v3.*',
     requires = 'kyazdani42/nvim-web-devicons',
@@ -78,7 +79,7 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- status bar
+    -- Status bar
     'nvim-lualine/lualine.nvim',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
@@ -86,14 +87,14 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- startup dashboard
+    -- Startup dashboard
     'goolord/alpha-nvim',
     config = function()
       require 'plugins.configs.alpha'
     end,
   }
   use {
-    -- session manager
+    -- Session manager
     'Shatur/neovim-session-manager',
     requires = { 'nvim-lua/plenary.nvim' },
     config = function()
@@ -101,14 +102,14 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- better interface for selections etc
+    -- Better interface for selections etc
     'stevearc/dressing.nvim',
     config = function()
       require 'plugins.configs.dressing'
     end,
   }
   use {
-    -- movement plugin
+    -- Movement plugin
     'phaazon/hop.nvim',
     branch = 'v2', -- optional but strongly recommended
     config = function()
@@ -116,33 +117,48 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- indent lines highlight
+    -- Indent lines highlight
     'lukas-reineke/indent-blankline.nvim',
     config = function()
       require 'plugins.configs.indentblankline'
     end,
   }
   use {
+    -- Better fFtT
     'unblevable/quick-scope',
     config = function()
       vim.g['qs_highlight_on_keys'] = { 'f', 'F', 't', 'T' }
     end,
   }
   use {
+    -- Color codes highlight example: #FF0000
     'NvChad/nvim-colorizer.lua',
     config = function()
       require 'plugins.configs.colorizer'
     end,
   }
   use {
+    -- Press Ctrl + /
     'numToStr/Comment.nvim',
     config = function()
       require('Comment').setup()
     end,
   }
   use {
+    -- Editorconfig parsing
     'gpanders/editorconfig.nvim',
   }
+  use {
+    -- TODO: configure this in according to https://github.com/windwp/nvim-autopairs#override-default-values
+    'windwp/nvim-autopairs',
+    config = function()
+      require 'plugins.configs.autopairs'
+    end,
+  }
+  -- use {
+  --   -- TODO: configure
+  --   'windwp/nvim-ts-autotag'
+  -- }
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
