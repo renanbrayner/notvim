@@ -155,14 +155,13 @@ return packer.startup(function(use)
     'lewis6991/gitsigns.nvim',
     requires = { 'nvim-lua/plenary.nvim' },
     config = function()
-      require('plugins.configs.gitsigns')
+      require 'plugins.configs.gitsigns'
     end,
   }
   use {
-    -- TODO: configure this in according to https://github.com/windwp/nvim-autopairs#override-default-values
-    'windwp/nvim-autopairs',
+    'steelsojka/pears.nvim',
     config = function()
-      require 'plugins.configs.autopairs'
+      require 'plugins.configs.pears'
     end,
   }
   use {
