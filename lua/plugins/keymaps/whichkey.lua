@@ -113,6 +113,7 @@ wk.register({
   o = {
     name = 'toggle',
     --    t = { "<cmd>call ChooseTerm('term-slider', 1)<cr>", "Terminal split" },
+    a = { '<cmd>AerialToggle!<CR>', 'Aerial' },
     s = { '<cmd>setlocal spell! spelllang=en_us,pt<cr>', 'Spellcheck' },
     p = { '<cmd>CHADopen<cr>', 'File tree' },
     l = { '<cmd>set list!<cr>', 'List chars' },

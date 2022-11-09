@@ -168,6 +168,12 @@ return packer.startup(function(use)
     -- TODO: configure
     'windwp/nvim-ts-autotag',
   }
+  use {
+    'stevearc/aerial.nvim',
+    config = function()
+      require 'plugins.configs.aerial'
+    end,
+  }
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
