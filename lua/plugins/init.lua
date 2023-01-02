@@ -158,20 +158,20 @@ return packer.startup(function(use)
       require 'plugins.configs.gitsigns'
     end,
   }
-  use {
-    'steelsojka/pears.nvim',
-    config = function()
-      require 'plugins.configs.pears'
-    end,
-  }
+  -- use {
+  --   'steelsojka/pears.nvim',
+  --   config = function()
+  --     require 'plugins.configs.pears'
+  --   end,
+  -- }
   use {
     -- TODO: configure
     'windwp/nvim-ts-autotag',
   }
   use {
-    'stevearc/aerial.nvim',
+    'windwp/nvim-autopairs',
     config = function()
-      require 'plugins.configs.aerial'
+      require('nvim-autopairs').setup { map_cr = true }
     end,
   }
   -- [[ Auto completion ]]
@@ -189,14 +189,14 @@ return packer.startup(function(use)
       require 'lsp'
     end,
   }
-  -- use {
-  --   "ms-jpq/coq.artifacts",
-  --   branch = "artifacts",
-  -- }
-  -- use {
-  --   "ms-jpq/coq.thirdparty",
-  --   branch = "3p",
-  -- }
+  use {
+    "ms-jpq/coq.artifacts",
+    branch = "artifacts",
+  }
+  use {
+    "ms-jpq/coq.thirdparty",
+    branch = "3p",
+  }
   -- [[ LSP ]]
   use {
     'williamboman/mason.nvim',
