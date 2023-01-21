@@ -37,7 +37,7 @@ return packer.startup(function(use)
   }
   use {
     -- File tree
-    'ms-jpq/chadtree',
+    'renanbrayner/chadtree',
     branch = 'chad',
     run = {
       'python3 -m chadtree deps',
@@ -45,6 +45,13 @@ return packer.startup(function(use)
     },
     config = function()
       require 'plugins.configs.chadtree'
+    end,
+  }
+  use {
+    'kylechui/nvim-surround',
+    tag = '*', -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+      require('nvim-surround').setup()
     end,
   }
   use {
@@ -178,6 +185,7 @@ return packer.startup(function(use)
   use {
     'ms-jpq/coq_nvim',
     branch = 'coq',
+    commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
     run = {
       ':COQdeps',
     },
@@ -190,12 +198,12 @@ return packer.startup(function(use)
     end,
   }
   use {
-    "ms-jpq/coq.artifacts",
-    branch = "artifacts",
+    'ms-jpq/coq.artifacts',
+    branch = 'artifacts',
   }
   use {
-    "ms-jpq/coq.thirdparty",
-    branch = "3p",
+    'ms-jpq/coq.thirdparty',
+    branch = '3p',
   }
   -- [[ LSP ]]
   use {

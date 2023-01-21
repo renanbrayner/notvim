@@ -3,12 +3,11 @@ if not status_ok then
   vim.notify('Error requiring which-key', error)
   return
 end
-
 wk.register({
   -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
   -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
-  s = { '<cmd>HopWord<cr>', 'Hop window' },
-  S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
+  [','] = { '<cmd>HopWord<cr>', 'Hop window' },
+  -- s = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
   ['<A-Up>'] = { '<cmd>m .-2<CR>==', 'Move line up' },
   ['<A-k>'] = { '<cmd>m .-2<CR>==', 'Move line up' },
   ['<A-Down>'] = { '<cmd>m .+1<CR>==', 'Move line down' },
@@ -19,8 +18,8 @@ wk.register({
 wk.register({
   -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
   -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
-  s = { '<cmd>HopWord<cr>', 'Hop window' },
-  S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
+  [','] = { '<cmd>HopWord<cr>', 'Hop window' },
+  -- S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
   ['<A-k>'] = { ":m '<-2<CR>gv=gv", 'Move selection up' },
   ['<A-j>'] = { ":m '>+1<CR>gv=gv", 'Move selection down' },
   ['<A-Up>'] = { ":m '<-2<CR>gv=gv", 'Move selection up' },
@@ -31,8 +30,8 @@ wk.register({
 wk.register({
   -- f = { '<cmd>HopWordCurrentLine<cr>', 'Hop line' },
   -- F = { '<cmd>HopAnywhereCurrentLine<cr>', 'Hop anywhere line' },
-  s = { '<cmd>HopWord<cr>', 'Hop window' },
-  S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
+  [','] = { '<cmd>HopWord<cr>', 'Hop window' },
+  -- S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
 }, { mode = 'o' })
 
 wk.register {

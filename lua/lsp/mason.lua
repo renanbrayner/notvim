@@ -60,12 +60,12 @@ masonlsp.setup_handlers {
           diagnostics = {
             globals = { 'vim' },
           },
-          -- workspace = { -- this lines is causing bugs
-          --   library = {
-          --     [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          --     [vim.fn.stdpath("config") .. "/lua"] = true,
-          --   },
-          -- },
+          workspace = {
+            library = {
+              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+              [vim.fn.stdpath("config") .. "/lua"] = true,
+            },
+          },
         },
       },
     }
