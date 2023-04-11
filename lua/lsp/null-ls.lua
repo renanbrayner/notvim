@@ -13,7 +13,7 @@ null_ls.setup {
   debug = false,
   sources = {
     formatting.prettier.with {
-      extra_args = { '--no-semi', '--single-quote', '--jsx-single-quote' },
+      -- extra_args = { '--no-semi', '--single-quote', '--jsx-single-quote' },
       prefer_local = 'node_modules/.bin',
     },
     diagnostics.eslint,
