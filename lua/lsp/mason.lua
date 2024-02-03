@@ -1,18 +1,18 @@
 local mason_status_ok, mason = pcall(require, 'mason')
 if not mason_status_ok then
-  vim.notify('Error requiring mason', error)
+  vim.notify('Error requiring mason', vim.log.levels.ERROR)
   return
 end
 
 local masonlsp_status_ok, masonlsp = pcall(require, 'mason-lspconfig')
 if not masonlsp_status_ok then
-  vim.notify('Error requiring masonlsp', error)
+  vim.notify('Error requiring masonlsp', vim.log.levels.ERROR)
   return
 end
 
 local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
 if not lspconfig_ok then
-  vim.notify('Error requiring lspconfig', error)
+  vim.notify('Error requiring lspconfig', vim.log.levels.ERROR)
   return
 end
 
@@ -46,30 +46,31 @@ masonlsp.setup_handlers {
 
   -- language specific configurations
   -- LUA -- REMOVED AFTER ATUALIZATION
-  -- ['sumneko_lua'] = function()
-  --   lspconfig.sumneko_lua.setup {
-  --     on_attach = opts.on_attach,
-  --     capabilities = opts.capabilities,
-  --
-  --     settings = {
-  --       Lua = {
-  --         -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
-  --         completion = {
-  --           autoRequire = false, -- autoRequire is broken
-  --         },
-  --         diagnostics = {
-  --           globals = { 'vim' },
-  --         },
-  --         workspace = {
-  --           library = {
-  --             [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-  --             [vim.fn.stdpath("config") .. "/lua"] = true,
-  --           },
-  --         },
-  --       },
-  --     },
-  --   }
-  -- end,
+  -- lua-language-server lua_ls (keywords: lua)
+  ['lua_ls'] = function()
+    lspconfig.lua_ls.setup {
+      on_attach = opts.on_attach,
+      capabilities = opts.capabilities,
+
+      settings = {
+        Lua = {
+          -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
+          completion = {
+            autoRequire = false, -- autoRequire is broken
+          },
+          diagnostics = {
+            globals = { 'vim' },
+          },
+          workspace = {
+            library = {
+              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+              [vim.fn.stdpath("config") .. "/lua"] = true,
+            },
+          },
+        },
+      },
+    }
+  end,
 
   -- JSON
   ['jsonls'] = function()
