@@ -1,4 +1,5 @@
 local status_ok, packer = pcall(require, 'packer')
+
 if not status_ok then
   vim.notify('Error requiring packer', error)
   return
@@ -31,11 +32,11 @@ end
 
 return packer.startup(function(use)
   use {
-    "rest-nvim/rest.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
+    'rest-nvim/rest.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require 'plugins.configs.rest-client'
-    end
+    end,
   }
   use 'wbthomason/packer.nvim' -- Plugin manager
   use {
@@ -83,7 +84,7 @@ return packer.startup(function(use)
   use {
     -- Press Ctrl + p
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.0',
+    tag = '0.1.4',
     requires = 'nvim-lua/plenary.nvim',
     config = function()
       require 'plugins.configs.telescope'
@@ -104,6 +105,13 @@ return packer.startup(function(use)
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
       require 'plugins.configs.lualine'
+    end,
+  }
+  use {
+    -- foating terminal
+    'voldikss/vim-floaterm',
+    config = function()
+      require 'plugins.configs.floaterm'.setup()
     end,
   }
   use {
@@ -139,8 +147,9 @@ return packer.startup(function(use)
   use {
     -- Indent lines highlight
     'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     config = function()
-      require 'plugins.configs.indentblankline'
+      require 'plugins.configs.indentblankline'.setup()
     end,
   }
   use {
@@ -193,7 +202,8 @@ return packer.startup(function(use)
   }
   -- [[ Auto completion ]]
   use {
-    'renanbrayner/coq_nvim', -- my fork to avoid using old coq version and fix bug bellow
+    'ms-jpq/coq_nvim',
+    -- 'renanbrayner/coq_nvim', -- my fork to avoid using old coq version and fix bug bellow
     branch = 'coq',
     -- commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
     run = {

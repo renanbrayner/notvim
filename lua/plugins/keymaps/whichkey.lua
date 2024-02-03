@@ -132,6 +132,14 @@ wk.register({
 }, { prefix = '<leader>' })
 
 wk.register({
+  t = {
+    name = 'Floaterm',
+    g = { '<cmd>FloatermNew lazygit<cr>', 'Open lazygit' },
+    d = { '<cmd>FloatermNew lazydocker<cr>', 'Open lazydocker' }
+  }
+}, { prefix = '<leader>' })
+
+wk.register({
   v = {
     name = 'vim',
     q = { '<cmd>qa!<cr>', 'Exit vim' },
