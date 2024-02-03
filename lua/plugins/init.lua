@@ -30,6 +30,13 @@ if notify_ok then
 end
 
 return packer.startup(function(use)
+  use {
+    "rest-nvim/rest.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require 'plugins.configs.rest-client'
+    end
+  }
   use 'wbthomason/packer.nvim' -- Plugin manager
   use {
     -- Notifications
@@ -62,6 +69,9 @@ return packer.startup(function(use)
       require 'plugins.keymaps.whichkey'
     end,
   }
+  -- use {
+  --   'leafOfTree/vim-svelte-plugin'
+  -- }
   use {
     -- Highlighter and stuff
     'nvim-treesitter/nvim-treesitter',
@@ -183,9 +193,9 @@ return packer.startup(function(use)
   }
   -- [[ Auto completion ]]
   use {
-    'ms-jpq/coq_nvim',
+    'renanbrayner/coq_nvim', -- my fork to avoid using old coq version and fix bug bellow
     branch = 'coq',
-    commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
+    -- commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
     run = {
       ':COQdeps',
     },

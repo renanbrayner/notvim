@@ -8,7 +8,7 @@ set.mouse = 'a' -- mouse suport
 set.splitright = true -- non retarded splits
 set.splitbelow = true -- non retarded splits
 set.list = true -- ghost text on invisible characters
-set.listchars:append 'eol:﬋' -- character at the end of line
+-- set.listchars:append 'eol:X﬋' -- character at the end of line
 set.listchars:append 'trail:' -- character at trailing spaces
 set.signcolumn = 'yes' -- extra column at the left
 set.undofile = true -- set undo file
@@ -29,3 +29,6 @@ set.backup = false
 set.swapfile = false
 
 vim.g.mapleader = ' '
+vim.g.vim_svelte_plugin_load_full_syntax = 1
+vim.g.vim_svelte_plugin_use_typescript = 1
+vim.g.vim_svelte_plugin_use_sass = 1

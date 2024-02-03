@@ -6,7 +6,7 @@ local set = vim.opt
 -- with rice-ctrl you can change the theme by running the command rice-ctrl --set-theme-name where name is the name of the theme
 
 -- THEME_START
-vim.cmd 'colorscheme solarized'
+vim.cmd 'colorscheme dracula'
 -- THEME_END
 
 vim.cmd [[

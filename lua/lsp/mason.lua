@@ -31,7 +31,7 @@ mason.setup {
 }
 
 masonlsp.setup {
-  ensure_installed = { 'sumneko_lua' },
+  -- ensure_installed = { 'sumneko_lua' }, -- REMOVED AFTER ATUALIZATION
   automatic_installation = true,
 }
 
@@ -45,31 +45,31 @@ masonlsp.setup_handlers {
   end,
 
   -- language specific configurations
-  -- LUA
-  ['sumneko_lua'] = function()
-    lspconfig.sumneko_lua.setup {
-      on_attach = opts.on_attach,
-      capabilities = opts.capabilities,
-
-      settings = {
-        Lua = {
-          -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
-          completion = {
-            autoRequire = false, -- autoRequire is broken
-          },
-          diagnostics = {
-            globals = { 'vim' },
-          },
-          workspace = {
-            library = {
-              [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-              [vim.fn.stdpath("config") .. "/lua"] = true,
-            },
-          },
-        },
-      },
-    }
-  end,
+  -- LUA -- REMOVED AFTER ATUALIZATION
+  -- ['sumneko_lua'] = function()
+  --   lspconfig.sumneko_lua.setup {
+  --     on_attach = opts.on_attach,
+  --     capabilities = opts.capabilities,
+  --
+  --     settings = {
+  --       Lua = {
+  --         -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
+  --         completion = {
+  --           autoRequire = false, -- autoRequire is broken
+  --         },
+  --         diagnostics = {
+  --           globals = { 'vim' },
+  --         },
+  --         workspace = {
+  --           library = {
+  --             [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+  --             [vim.fn.stdpath("config") .. "/lua"] = true,
+  --           },
+  --         },
+  --       },
+  --     },
+  --   }
+  -- end,
 
   -- JSON
   ['jsonls'] = function()

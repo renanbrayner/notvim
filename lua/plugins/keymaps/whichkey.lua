@@ -123,6 +123,15 @@ wk.register({
 }, { prefix = '<leader>' })
 
 wk.register({
+  r = {
+    name = 'Rest Client',
+    r = { '<Plug>RestNvim', 'Run the request under cursor' },
+    l = { '<Plug>RestNvimLast', 'Re-run the last request' },
+    c = { '<Plug>RestNvimPreview', 'Preview the request cURL command' }
+  }
+}, { prefix = '<leader>' })
+
+wk.register({
   v = {
     name = 'vim',
     q = { '<cmd>qa!<cr>', 'Exit vim' },
