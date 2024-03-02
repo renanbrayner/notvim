@@ -81,6 +81,12 @@ wk.register {
 }
 
 wk.register({
+  ['<leader>'] = {
+    c = { '<cmd>Cheat<cr>', 'Open cheat sheet' }
+  }
+})
+
+wk.register({
   b = {
     name = 'buffers',
     o = { '<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>', 'Buffer only' },
@@ -135,7 +141,9 @@ wk.register({
   t = {
     name = 'Floaterm',
     g = { '<cmd>FloatermNew lazygit<cr>', 'Open lazygit' },
-    d = { '<cmd>FloatermNew lazydocker<cr>', 'Open lazydocker' }
+    d = { '<cmd>FloatermNew lazydocker<cr>', 'Open lazydocker' },
+    r = { '<cmd>FloatermNew ranger<cr>', 'Open ranger' },
+    t = { '<cmd>FloatermNew --height=0.3 --width=1.0 --wintype=split --position=bottom<cr>', 'Open ranger' }
   }
 }, { prefix = '<leader>' })
 
@@ -183,3 +191,4 @@ wk.register({
     ['<Left>'] = { '<C-W>h', 'Move left' },
   },
 }, { prefix = '<leader>' })
+
