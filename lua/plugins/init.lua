@@ -82,6 +82,13 @@ return packer.startup(function(use)
     end,
   }
   use {
+    'renanbrayner/nvim-cheat.sh',
+    requires = 'RishabhRD/popfix',
+    setup = function()
+      require 'plugins.configs.nvim-cheat'
+    end,
+  }
+  use {
     -- Press Ctrl + p
     'nvim-telescope/telescope.nvim',
     tag = '0.1.4',
@@ -111,7 +118,7 @@ return packer.startup(function(use)
     -- foating terminal
     'voldikss/vim-floaterm',
     config = function()
-      require 'plugins.configs.floaterm'.setup()
+      require('plugins.configs.floaterm').setup()
     end,
   }
   use {
@@ -149,7 +156,7 @@ return packer.startup(function(use)
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     config = function()
-      require 'plugins.configs.indentblankline'.setup()
+      require('plugins.configs.indentblankline').setup()
     end,
   }
   use {
