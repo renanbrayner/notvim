@@ -20,6 +20,8 @@ null_ls.setup {
     formatting.black.with { extra_args = { '--fast' } },
     formatting.stylua.with { extra_args = { '--indent-width', '2', '--indent-type', 'Spaces', '-' } },
     code_actions.eslint,
-    -- diagnostics.flake8
+    diagnostics.pylint.with {
+      prefer_local = ".venv/bin"
+    },
   },
 }
