@@ -1,37 +1,21 @@
--- ███╗   ██╗██╗   ██╗██╗███╗   ███╗
--- ████╗  ██║██║   ██║██║████╗ ████║
--- ██╔██╗ ██║██║   ██║██║██╔████╔██║
--- ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║
--- ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║
--- ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
---           CONFIG FILE
--- BY: https://github.com/renanbrayner
+--  nvim ←[ root folder ]-
+-- ├──  lua
+-- │  ├──  lsp
+-- │  │  ├──  init.lua ←[ lsp setup ]-
+-- │  │  ├──  handlers.lua ←[ on_atacch and capabilities etc ]-
+-- │  │  ├──  mason-null-ls.lua ←[ bridge between mason and null-ls ]-
+-- │  │  ├──  mason.lua ←[ lsp installer ]-
+-- │  │  └──  null-ls.lua ←[ formatter linting and etc ]-
+-- │  ├──  plugins
+-- │  │  ├──  configs ←[ plugins configurations ]-
+-- │  │  ├──  keymaps ←[ plugins keymaps and whichkey ]-
+-- │  │  └──  init.lua ←[ packer file ]-
+-- │  ├──  opts.lua ←[ vim options ]-
+-- │  ├──  rice.lua ←[ aesthetics stuff ]-
+-- │  └──  utils.lua ←[ utility functions and etc ]-
+-- └──  init.lua ←[ this file ]-
 
--- Press leader (deffault = <space>) to see keybindings
-
--- This was made in a vertical screen,
--- maybe some things wont fit porprely on horizontal screens
-
--- Recomended font: JetBrainsMono Nerd Font
-
---lua
--- ├── configs
--- │   ├── init.lua   imports everything on configs
--- │   ├── opts.lua   set options
--- │   └── utils.lua  autocmds, functions and misc
--- │
--- ├── plugins
--- │   └── init.lua   packer config and plugins
--- │
--- ├── pluginsconfig  plugins configuration files
--- │   └── init.lua   imports every plugin configuration
--- │
--- └── rice
---     └── init.lua   highlights and colorthemet
-
-require("impatient")
-require("plugins")
-require("pluginsconfig")
-require("lsp")
-require("rice")
-require("configs")
+require 'rice'
+require 'utils'
+require 'opts'
+require 'plugins'

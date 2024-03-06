@@ -1,45 +1,66 @@
-local mason = require("mason")
-local mason_lspconfig = require("mason-lspconfig")
-local lspconfig = require("lspconfig")
+local mason_status_ok, mason = pcall(require, 'mason')
+if not mason_status_ok then
+  vim.notify('Error requiring mason', vim.log.levels.ERROR)
+  return
+end
+
+local masonlsp_status_ok, masonlsp = pcall(require, 'mason-lspconfig')
+if not masonlsp_status_ok then
+  vim.notify('Error requiring masonlsp', vim.log.levels.ERROR)
+  return
+end
+
+local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
+if not lspconfig_ok then
+  vim.notify('Error requiring lspconfig', vim.log.levels.ERROR)
+  return
+end
+
 local opts = {
-  capabilities = require("lsp.handlers").capabilities,
-  on_attach = require("lsp.handlers").on_attach,
+  capabilities = require('lsp.handlers').capabilities,
+  on_attach = require('lsp.handlers').on_attach,
 }
 
-mason.setup({
+mason.setup {
   ui = {
-    border = "rounded",
+    border = 'rounded',
     icons = {
-      package_installed = "✓",
+      package_installed = '✓',
     },
   },
-})
+}
 
-mason_lspconfig.setup({
-  ensure_installed = { "sumneko_lua", "rust_analyzer" },
+masonlsp.setup {
+  -- ensure_installed = { 'sumneko_lua' }, -- REMOVED AFTER ATUALIZATION
   automatic_installation = true,
-})
+}
 
-mason_lspconfig.setup_handlers({
+masonlsp.setup_handlers {
+  -- general configuration
   function(server_name)
-    lspconfig[server_name].setup({
-      on_attach = opts.on_attach,
+    lspconfig[server_name].setup {
+      on_atacch = opts.on_attach,
       capabilities = opts.capabilities,
-    })
+    }
   end,
 
-  ["sumneko_lua"] = function()
-    lspconfig.sumneko_lua.setup({
+  -- language specific configurations
+  -- LUA -- REMOVED AFTER ATUALIZATION
+  -- lua-language-server lua_ls (keywords: lua)
+  ['lua_ls'] = function()
+    lspconfig.lua_ls.setup {
       on_attach = opts.on_attach,
       capabilities = opts.capabilities,
 
       settings = {
         Lua = {
           -- Tells Lua that a global variable named vim exists to not have warnings when configuring neovim
-          diagnostics = {
-            globals = { "vim" },
+          completion = {
+            autoRequire = false, -- autoRequire is broken
           },
-
+          diagnostics = {
+            globals = { 'vim' },
+          },
           workspace = {
             library = {
               [vim.fn.expand("$VIMRUNTIME/lua")] = true,
@@ -48,70 +69,53 @@ mason_lspconfig.setup_handlers({
           },
         },
       },
-    })
+    }
   end,
 
-  -- ["tsserver"] = function ()
-  --   lspconfig.tsserver.setup({
-  --     on_attach = opts.on_attach,
-  --     capabilities = opts.capabilities,
-  --     compiler_options = {
-  --       plugins = { name = "ts-vue-plugin" }
-  --     },
-  --     filetypes = {
-  --       "javascript",
-  --       "javascriptreact",
-  --       "javascript.jsx",
-  --       "typescript",
-  --       "typescriptreact",
-  --       "typescript.tsx",
-  --     }
-  --   })
-  -- end,
-
-  ["jsonls"] = function()
+  -- JSON
+  ['jsonls'] = function()
     -- Find more schemas here: https://www.schemastore.org/json/
     -- Schemas for common json files
     local schemas = {
       {
-        description = "Schema for CMake Presets",
+        description = 'Schema for CMake Presets',
         fileMatch = {
-          "CMakePresets.json",
-          "CMakeUserPresets.json",
+          'CMakePresets.json',
+          'CMakeUserPresets.json',
         },
-        url = "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json",
+        url = 'https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json',
       },
       {
-        description = "LLVM compilation database",
+        description = 'LLVM compilation database',
         fileMatch = {
-          "compile_commands.json",
+          'compile_commands.json',
         },
-        url = "https://json.schemastore.org/compile-commands.json",
+        url = 'https://json.schemastore.org/compile-commands.json',
       },
       {
-        description = "Config file for Command Task Runner",
+        description = 'Config file for Command Task Runner',
         fileMatch = {
-          "commands.json",
+          'commands.json',
         },
-        url = "https://json.schemastore.org/commands.json",
+        url = 'https://json.schemastore.org/commands.json',
       },
       {
-        description = "Json schema for properties json file for a GitHub Workflow template",
+        description = 'Json schema for properties json file for a GitHub Workflow template',
         fileMatch = {
-          ".github/workflow-templates/**.properties.json",
+          '.github/workflow-templates/**.properties.json',
         },
-        url = "https://json.schemastore.org/github-workflow-template-properties.json",
+        url = 'https://json.schemastore.org/github-workflow-template-properties.json',
       },
       {
-        description = "JSON schema for Visual Studio component configuration files",
+        description = 'JSON schema for Visual Studio component configuration files',
         fileMatch = {
-          "*.vsconfig",
+          '*.vsconfig',
         },
-        url = "https://json.schemastore.org/vsconfig.json",
+        url = 'https://json.schemastore.org/vsconfig.json',
       },
     }
 
-    lspconfig.jsonls.setup({
+    lspconfig.jsonls.setup {
       on_attach = opts.on_attach,
       capabilities = opts.capabilities,
 
@@ -125,11 +129,11 @@ mason_lspconfig.setup_handlers({
         commands = {
           Format = {
             function()
-              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
+              vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line '$', 0 })
             end,
           },
         },
       },
-    })
+    }
   end,
-})
+}

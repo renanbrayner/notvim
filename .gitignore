@@ -1,5 +1,2 @@
-spell
-undodir
+.undo
 plugin
-init.vim.old
-.netrwhist
