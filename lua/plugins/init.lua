@@ -208,22 +208,22 @@ return packer.startup(function(use)
     end,
   }
   -- [[ Auto completion ]]
-  use {
-    'ms-jpq/coq_nvim',
-    -- 'renanbrayner/coq_nvim', -- my fork to avoid using old coq version and fix bug bellow
-    branch = 'coq',
-    -- commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
-    run = {
-      ':COQdeps',
-    },
-    setup = function()
-      require 'plugins.configs.coq'
-    end,
-    config = function()
-      -- Load LSP after COQ
-      require 'lsp'
-    end,
-  }
+  -- use {
+  --   'ms-jpq/coq_nvim',
+  --   -- 'renanbrayner/coq_nvim', -- my fork to avoid using old coq version and fix bug bellow
+  --   branch = 'coq',
+  --   -- commit = '5eddd31bf8a98d1b893b0101047d0bb31ed20c49', -- This solves the css autocomplete bug
+  --   run = {
+  --     ':COQdeps',
+  --   },
+  --   setup = function()
+  --     require 'plugins.configs.coq'
+  --   end,
+  --   config = function()
+  --     -- Load LSP after COQ
+  --     require 'lsp'
+  --   end,
+  -- }
   use {
     'ms-jpq/coq.artifacts',
     branch = 'artifacts',
