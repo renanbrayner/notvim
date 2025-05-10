@@ -209,19 +209,53 @@ return packer.startup(function(use)
   -- [[ LSP ]]
   use {
     'mason-org/mason-lspconfig.nvim',
-    requires = { 'neovim/nvim-lspconfig', 'mason-org/mason.nvim' },
+    requires = { 'mason-org/mason-lspconfig.nvim' },
     config = function()
       require('mason').setup()
-      require('mason-lspconfig').setup()
+
+      local lspconfig = require 'lspconfig'
+      local coq = require 'coq'
+      local mason_lspconfig = require 'mason-lspconfig'
+
+      mason_lspconfig.setup {
+        ensure_installed = { 'lua_ls' },
+        automatic_enable = true, -- ATEN
+        handlers = {
+          function(server_name)
+            lspconfig[server_name].setup(coq.lsp_ensure_capabilities {})
+          end,
+        },
+      }
+    end,
+  }
+  use {
+    'neovim/nvim-lspconfig',
+    config = function() end,
+  }
+  use {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- Carrega o plugin apenas em arquivos Lua
+    config = function()
+      require('lazydev').setup {
+        library = {
+          { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        },
+      }
     end,
   }
   use {
     'nvimtools/none-ls.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-  }
-  use {
-    'jay-babu/mason-null-ls.nvim',
-    requires = { 'williamboman/mason.nvim', 'nvimtools/none-ls.nvim' },
+    config = function()
+      local null_ls = require 'null-ls'
+      null_ls.setup {
+        sources = {
+          null_ls.builtins.formatting.stylua,
+          null_ls.builtins.formatting.prettierd,
+          null_ls.builtins.formatting.black,
+          null_ls.builtins.diagnostics.shellcheck,
+        },
+      }
+    end,
   }
   -- [[ Auto completion ]]
   use {
@@ -237,7 +271,7 @@ return packer.startup(function(use)
     end,
     config = function()
       -- Load LSP after COQ
-      require 'lsp'
+      -- require 'lsp'
     end,
   }
   use {
