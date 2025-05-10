@@ -1,6 +1,6 @@
 local status_ok, null_ls = pcall(require, 'null-ls')
 if not status_ok then
-  vim.notify('Error requiring null_ls', error)
+  vim.notify('Error requiring none-ls', vim.log.levels.ERROR)
   return
 end
 
@@ -20,6 +20,8 @@ null_ls.setup {
     formatting.black.with { extra_args = { '--fast' } },
     formatting.stylua.with { extra_args = { '--indent-width', '2', '--indent-type', 'Spaces', '-' } },
     code_actions.eslint,
-    -- diagnostics.flake8
+    diagnostics.pylint.with {
+      prefer_local = ".venv/bin"
+    },
   },
 }

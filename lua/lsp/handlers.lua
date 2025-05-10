@@ -72,7 +72,7 @@ local status_ok, coq = pcall(require, 'coq')
 if status_ok then
   M.capabilities = coq.lsp_ensure_capabilities(capabilities)
 else
-  vim.notify('Error requiring coq', error)
+  vim.notify('Error requiring coq', vim.log.levels.ERROR)
 end
 
 return M

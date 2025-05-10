@@ -1,6 +1,6 @@
 local status_ok, aerial = pcall(require, 'aerial')
 if not status_ok then
-  vim.notify('Error requiring aerial', error)
+  vim.notify('Error requiring aerial', vim.log.levels.ERROR)
   return
 end
 

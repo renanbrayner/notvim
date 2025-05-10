@@ -1,7 +1,7 @@
 local status_ok, packer = pcall(require, 'packer')
 
 if not status_ok then
-  vim.notify('Error requiring packer', error)
+  vim.notify('Error requiring packer', vim.log.levels.ERROR)
   return
 end
 
@@ -26,7 +26,7 @@ packer.reset()
 -- Before all plugins set the configuration for notifications
 local notify_ok, notify = pcall(require, 'notify')
 if notify_ok then
-  vim.notify = notify
+  vim.notify = notify.notify -- em vez de vim.notify = notify
   require 'plugins.configs.nvim-notify'
 end
 
@@ -65,6 +65,7 @@ return packer.startup(function(use)
   use {
     -- Commands cheatsheet at the bottom
     'folke/which-key.nvim',
+    requires = { 'echasnovski/mini.icons', 'kyazdani42/nvim-web-devicons' },
     config = function()
       require 'plugins.configs.whichkey'
       require 'plugins.keymaps.whichkey'
@@ -82,9 +83,15 @@ return packer.startup(function(use)
     end,
   }
   use {
+    'renanbrayner/nvim-cheat.sh',
+    requires = 'RishabhRD/popfix',
+    setup = function()
+      require 'plugins.configs.nvim-cheat'
+    end,
+  }
+  use {
     -- Press Ctrl + p
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.4',
     requires = 'nvim-lua/plenary.nvim',
     config = function()
       require 'plugins.configs.telescope'
@@ -93,7 +100,6 @@ return packer.startup(function(use)
   use {
     -- Tabs
     'akinsho/bufferline.nvim',
-    tag = 'v3.*',
     requires = 'kyazdani42/nvim-web-devicons',
     config = function()
       require 'plugins.configs.bufferline'
@@ -111,7 +117,7 @@ return packer.startup(function(use)
     -- foating terminal
     'voldikss/vim-floaterm',
     config = function()
-      require 'plugins.configs.floaterm'.setup()
+      require('plugins.configs.floaterm').setup()
     end,
   }
   use {
@@ -149,7 +155,7 @@ return packer.startup(function(use)
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     config = function()
-      require 'plugins.configs.indentblankline'.setup()
+      require('plugins.configs.indentblankline').setup()
     end,
   }
   use {
@@ -200,6 +206,23 @@ return packer.startup(function(use)
       require('nvim-autopairs').setup { map_cr = true }
     end,
   }
+  -- [[ LSP ]]
+  use {
+    'mason-org/mason-lspconfig.nvim',
+    requires = { 'neovim/nvim-lspconfig', 'mason-org/mason.nvim' },
+    config = function()
+      require('mason').setup()
+      require('mason-lspconfig').setup()
+    end,
+  }
+  use {
+    "nvimtools/none-ls.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+  }
+  use {
+    "jay-babu/mason-null-ls.nvim",
+    requires = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+  }
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
@@ -225,13 +248,28 @@ return packer.startup(function(use)
     'ms-jpq/coq.thirdparty',
     branch = '3p',
   }
-  -- [[ LSP ]]
   use {
-    'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
-    'neovim/nvim-lspconfig',
-    'jose-elias-alvarez/null-ls.nvim',
-    'jayp0521/mason-null-ls.nvim',
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({
+        keymaps = {
+          accept_suggestion = "<C-l>",
+          clear_suggestion = "<C-]>",
+          accept_word = "<C-j>",
+        },
+        ignore_filetypes = { cpp = true }, -- or { "cpp", }
+        color = {
+          suggestion_color = "#ffffff",
+          cterm = 244,
+        },
+        log_level = "info",                -- set to "off" to disable logging completely
+        disable_inline_completion = false, -- disables inline completion for use with cmp
+        disable_keymaps = false,           -- disables built in keymaps for more manual control
+        condition = function()
+          return false
+        end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+      })
+    end,
   }
   -- [[ Colorthemes ]]
   use {

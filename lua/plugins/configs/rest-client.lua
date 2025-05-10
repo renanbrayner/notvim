@@ -1,6 +1,6 @@
 local status_ok, rest = pcall(require, 'rest-nvim')
 if not status_ok then
-  vim.notify('Error requiring rest-nvim', error)
+  vim.notify('Error requiring rest-nvim', vim.log.levels.ERROR)
   return
 end
 

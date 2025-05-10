@@ -1,5 +1,11 @@
 local mappings = require 'plugins.keymaps.telescope'
-require('telescope').setup {
+local status_ok, telescope = pcall(require, 'telescope')
+if not status_ok then
+  vim.notify('Error requiring which-key', vim.log.levels.ERROR)
+  return
+end
+
+telescope.setup {
   defaults = {
     mappings = mappings,
     vimgrep_arguments = {

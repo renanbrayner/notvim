@@ -7,3 +7,5 @@ vim.g.chadtree_settings = {
     ['width'] = 30,
   },
 }
+
+vim.cmd [[ autocmd BufEnter * if (winnr("$") == 1 && &filetype == "CHADTree") | q | endif ]] -- autocloses when chadtree is the last window

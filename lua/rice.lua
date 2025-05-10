@@ -1,5 +1,5 @@
 local highlight = vim.api.nvim_set_hl
-local link = vim.highlight.link
+local link = vim.hl.link
 local set = vim.opt
 
 -- ATTENTION! If you are using the rest of my dotfiles there is a script called rice-ctrl
