@@ -209,29 +209,111 @@ return packer.startup(function(use)
   -- [[ LSP ]]
   use {
     'mason-org/mason-lspconfig.nvim',
-    requires = { 'mason-org/mason.nvim' },
+    -- Certifique-se de que estas dependências sejam carregadas antes ou junto
+    requires = { 'neovim/nvim-lspconfig', 'mason-org/mason.nvim' },
     config = function()
       require('mason').setup()
+      -- Certifique-se que o mason.setup() seja chamado ANTES do mason-lspconfig.setup()
+      -- Se 'mason.nvim' é um plugin separado na sua lista do Packer, o setup dele deve ocorrer antes.
+      -- Se você não tem um 'use' separado para 'mason.nvim' com seu próprio config,
+      -- você precisará adicionar ou garantir a ordem.
+      -- Assumindo que o setup do Mason já ocorreu ou será cuidado pela ordem do Packer.
+      -- Se 'mason.nvim' não tiver seu próprio bloco `use { ... config = ... }` antes deste,
+      -- você pode precisar chamar require('mason').setup() aqui, mas o ideal é que
+      -- 'mason.nvim' tenha seu próprio bloco de configuração.
+      -- Para este exemplo, vou assumir que o setup do Mason é chamado em outro lugar antes.
+      -- Se não, descomente a linha abaixo (mas verifique se não há setup duplicado):
+      -- require('mason').setup()
 
-      local lspconfig = require 'lspconfig'
+      -- 1. Definições Comuns de LSP (on_attach, capabilities)
       local coq = require 'coq'
-      local mason_lspconfig = require 'mason-lspconfig'
+      local capabilities = coq.lsp_ensure_capabilities()
+      local function on_attach(client, bufnr)
+        print('LSP Client Attached: ' .. client.name)
+        local map = function(mode, lhs, rhs, desc)
+          if desc then
+            desc = 'LSP: ' .. desc
+          end
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, noremap = true, silent = true, desc = desc })
+        end
+        map('n', 'gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+        map('n', 'gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+        map('n', 'gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        map('n', 'gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+        map('n', 'K', vim.lsp.buf.hover, 'Hover Documentation')
+        map('n', '<leader>ls', vim.lsp.buf.signature_help, 'Signature Help')
+        map('n', '<leader>lr', vim.lsp.buf.rename, '[R]ename')
+        map('n', '<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
+        map('n', '<leader>ld', vim.diagnostic.open_float, 'Line [D]iagnostics')
+        map('n', '[d', vim.diagnostic.goto_prev, 'Prev Diagnostic')
+        map('n', ']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+      end
 
-      mason_lspconfig.setup {
-        ensure_installed = { 'lua_ls' },
-        automatic_enable = true, -- ATEN
-        handlers = {
-          function(server_name)
-            lspconfig[server_name].setup(coq.lsp_ensure_capabilities {})
-          end,
+      -- 2. Configuração do `mason-lspconfig.nvim`
+      require('mason-lspconfig').setup {
+        ensure_installed = {
+          -- CORRIGIDO: Usar nomes do LSPCONFIG aqui, conforme a nova mensagem de erro
+          'lua_ls',     -- Nome lspconfig (Mason pkg: lua-language-server)
+          'volar',      -- Nome lspconfig (Mason pkg: vue-language-server)
+          'ts_ls',      -- Nome lspconfig (Mason pkg: typescript-language-server) - ANTES ERA tsserver
+          'html',       -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
+          'cssls',      -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
+        },
+        automatic_enable = {
+          -- lua_ls será habilitado automaticamente por mason-lspconfig.
+          -- Os outros estão excluídos para setup manual detalhado abaixo.
+          exclude = { 'volar', 'ts_ls', 'html', 'cssls', 'eslint' },
         },
       }
+
+      -- 3. Configuração Manual dos Servidores LSP Excluídos
+      local lspconfig = require 'lspconfig'
+
+      lspconfig.volar.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'vue' },
+      }
+
+      local global_npm_root = vim.fn.trim(vim.fn.system 'npm root -g')
+      local vue_plugin_location_base = global_npm_root .. '/@vue/language-server'
+      -- (A verificação de `isdirectory` ainda é recomendada aqui)
+      if vim.fn.isdirectory(vue_plugin_location_base) == 0 then
+        vim.notify(
+          'AVISO: Diretório base para @vue/typescript-plugin (via npm global @vue/language-server) não encontrado: '
+          .. vue_plugin_location_base
+          .. '\nVerifique `npm root -g` e a instalação global de `@vue/language-server`.',
+          vim.log.levels.WARN,
+          { title = 'LSP Config Vue' }
+        )
+      end
+
+      -- ATENÇÃO: Mudança de tsserver para ts_ls aqui também!
+      lspconfig.ts_ls.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        init_options = {
+          plugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vue_plugin_location_base,
+              languages = { 'javascript', 'typescript', 'vue' },
+            },
+          },
+        },
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+      }
+
+      local servers_to_setup_manually = { 'html', 'cssls', 'eslint' }
+      for _, lsp_name in ipairs(servers_to_setup_manually) do
+        lspconfig[lsp_name].setup {
+          on_attach = on_attach,
+          capabilities = capabilities,
+        }
+      end
     end,
   }
-  use {
-    'neovim/nvim-lspconfig',
-    config = function() end,
-  }
+
   use {
     'folke/lazydev.nvim',
     ft = 'lua', -- Carrega o plugin apenas em arquivos Lua
@@ -243,20 +325,97 @@ return packer.startup(function(use)
       }
     end,
   }
+
+  -- No seu arquivo de configuração de plugins, dentro do bloco 'nvimtools/none-ls.nvim'
   use {
     'nvimtools/none-ls.nvim',
+    requires = { 'nvim-lua/plenary.nvim' }, -- Adicionando plenary como dependência opcional/recomendada
     config = function()
       local null_ls = require 'null-ls'
-      null_ls.setup {
-        sources = {
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.prettierd,
-          null_ls.builtins.formatting.black,
-          null_ls.builtins.diagnostics.shellcheck,
+      local b = null_ls.builtins
+
+      local sources = {
+        b.formatting.prettier.with {
+          command = 'node_modules/.bin/prettier',
+          extra_args = function(params)
+            return { '--stdin-filepath', params.filename }
+          end,
+          filetypes = {
+            'html',
+            'markdown',
+            'css',
+            'scss',
+            'less',
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'vue',
+            'json',
+            'yaml',
+            'graphql',
+          },
         },
+
+        -- ESLint (configurado como um source único)
+        b.eslint.with { -- CORRIGIDO: Usar b.eslint diretamente
+          command = 'node_modules/.bin/eslint',
+          -- Se o comando acima falhar, o none-ls pode ter problemas para registrar o source.
+          -- Verifique se `node_modules/.bin/eslint` existe e é executável no seu projeto.
+          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue' },
+          -- Para diagnósticos, o builtin eslint geralmente usa --format=json
+          -- Para code_actions (fix), ele usa --fix-to-stdout ou similar.
+          -- O builtin padrão deve lidar com isso.
+        },
+
+        b.formatting.stylua.with {},
+        b.formatting.black.with {},
+        b.diagnostics.shellcheck.with {},
+      }
+
+      null_ls.setup {
+        debug = true, -- MANTENHA true para depurar o ESLint!
+        sources = sources,
+        on_attach = function(client, bufnr)
+          -- ... (sua função on_attach completa para none-ls aqui, como no comentário anterior) ...
+          if client.supports_method 'textDocument/formatting' then
+            local augroup_format = vim.api.nvim_create_augroup('NullLsFormatOnSave', { clear = true })
+            vim.api.nvim_clear_autocmds { group = augroup_format, buffer = bufnr }
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              group = augroup_format,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format {
+                  bufnr = bufnr,
+                  filter = function(c)
+                    return c.id == client.id
+                  end,
+                  async = false,
+                  timeout_ms = 2000,
+                }
+              end,
+            })
+          end
+          if client.supports_method 'textDocument/codeAction' then
+            vim.keymap.set({ 'n', 'v' }, '<leader>la', function()
+              vim.lsp.buf.code_action { bufnr = bufnr, context = { only = { 'quickfix', 'refactor', 'source' } } }
+            end, { buffer = bufnr, noremap = true, silent = true, desc = 'None-LS Code Action' })
+            vim.keymap.set('n', '<leader>lf', function()
+              vim.lsp.buf.code_action {
+                bufnr = bufnr,
+                context = {
+                  diagnostics = vim.diagnostic.get(bufnr, { severity = { min = vim.diagnostic.severity.WARN } }),
+                  only = { 'source.fixAll.eslint' },
+                },
+                apply = true,
+              }
+            end, { buffer = bufnr, noremap = true, silent = true, desc = 'None-LS Fix All (ESLint)' })
+          end
+        end,
       }
     end,
   }
+
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
@@ -296,9 +455,9 @@ return packer.startup(function(use)
           suggestion_color = '#ffffff',
           cterm = 244,
         },
-        log_level = 'info', -- set to "off" to disable logging completely
+        log_level = 'info',                -- set to "off" to disable logging completely
         disable_inline_completion = false, -- disables inline completion for use with cmp
-        disable_keymaps = false, -- disables built in keymaps for more manual control
+        disable_keymaps = false,           -- disables built in keymaps for more manual control
         condition = function()
           return false
         end, -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
