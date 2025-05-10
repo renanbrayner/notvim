@@ -214,7 +214,7 @@ wk.add {
   -- ["<C-k>"] = { vim.lsp.buf.signature_help, "Signature help"},
   {
     'K',
-    vim.lsp.buf.hover,
+    vim.lsp.buf.hover({ border = 'rounded' }),
     desc = 'Hover',
   },
   {

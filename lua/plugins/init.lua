@@ -209,20 +209,34 @@ return packer.startup(function(use)
   -- [[ LSP ]]
   use {
     'mason-org/mason-lspconfig.nvim',
+    -- Certifique-se de que estas dependências sejam carregadas antes ou junto
     requires = { 'neovim/nvim-lspconfig', 'mason-org/mason.nvim' },
     config = function()
-      require('mason').setup()
-      require('mason-lspconfig').setup()
+      require('lsp.servers')
     end,
   }
+
+  use {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- Carrega o plugin apenas em arquivos Lua
+    config = function()
+      require('lazydev').setup {
+        library = {
+          { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        },
+      }
+    end,
+  }
+
+  -- No seu arquivo de configuração de plugins, dentro do bloco 'nvimtools/none-ls.nvim'
   use {
     'nvimtools/none-ls.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
+    requires = { 'nvim-lua/plenary.nvim' }, -- Adicionando plenary como dependência opcional/recomendada
+    config = function()
+      require('lsp.none-ls')
+    end,
   }
-  use {
-    'jay-babu/mason-null-ls.nvim',
-    requires = { 'williamboman/mason.nvim', 'nvimtools/none-ls.nvim' },
-  }
+
   -- [[ Auto completion ]]
   use {
     'ms-jpq/coq_nvim',
@@ -237,7 +251,7 @@ return packer.startup(function(use)
     end,
     config = function()
       -- Load LSP after COQ
-      require 'lsp'
+      -- require 'lsp'
     end,
   }
   use {
@@ -262,9 +276,9 @@ return packer.startup(function(use)
           suggestion_color = '#ffffff',
           cterm = 244,
         },
-        log_level = 'info', -- set to "off" to disable logging completely
+        log_level = 'info',                -- set to "off" to disable logging completely
         disable_inline_completion = false, -- disables inline completion for use with cmp
-        disable_keymaps = false, -- disables built in keymaps for more manual control
+        disable_keymaps = false,           -- disables built in keymaps for more manual control
         condition = function()
           return false
         end, -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
