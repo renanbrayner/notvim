@@ -209,7 +209,7 @@ return packer.startup(function(use)
   -- [[ LSP ]]
   use {
     'mason-org/mason-lspconfig.nvim',
-    requires = { 'mason-org/mason-lspconfig.nvim' },
+    requires = { 'mason-org/mason.nvim' },
     config = function()
       require('mason').setup()
 
