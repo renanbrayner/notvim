@@ -1,6 +1,6 @@
 local Path_ok, Path = pcall(require, 'plenary.path')
 if not Path_ok then
-  vim.notify('Error requiring plenary.path', error)
+  vim.notify('Error requiring plenary.path', vim.log.levels.ERROR)
   return
 end
 

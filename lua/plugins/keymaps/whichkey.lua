@@ -1,6 +1,6 @@
 local status_ok, wk = pcall(require, 'which-key')
 if not status_ok then
-  vim.notify('Error requiring which-key', error)
+  vim.notify('Error requiring which-key', vim.log.levels.ERROR)
   return
 end
 

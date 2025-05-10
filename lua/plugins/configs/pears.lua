@@ -1,6 +1,6 @@
 local status_ok, pears = pcall(require, 'pears')
 if not status_ok then
-  vim.notify('Error requiring pears', error)
+  vim.notify('Error requiring pears', vim.log.levels.ERROR)
   return
 end
 
