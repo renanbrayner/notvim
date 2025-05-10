@@ -45,7 +45,7 @@ return packer.startup(function(use)
   }
   use {
     -- File tree
-    'renanbrayner/chadtree',
+    'ms-jpq/chadtree',
     branch = 'chad',
     run = {
       'python3 -m chadtree deps',
@@ -143,10 +143,10 @@ return packer.startup(function(use)
     end,
   }
   use {
-    -- Movement plugin
-    'phaazon/hop.nvim',
-    branch = 'v2', -- optional but strongly recommended
+    'smoka7/hop.nvim',
+    tag = '*', -- optional but strongly recommended
     config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
       require('hop').setup()
     end,
   }
@@ -216,12 +216,12 @@ return packer.startup(function(use)
     end,
   }
   use {
-    "nvimtools/none-ls.nvim",
-    requires = { "nvim-lua/plenary.nvim" },
+    'nvimtools/none-ls.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
   }
   use {
-    "jay-babu/mason-null-ls.nvim",
-    requires = { "williamboman/mason.nvim", "nvimtools/none-ls.nvim" },
+    'jay-babu/mason-null-ls.nvim',
+    requires = { 'williamboman/mason.nvim', 'nvimtools/none-ls.nvim' },
   }
   -- [[ Auto completion ]]
   use {
@@ -249,31 +249,31 @@ return packer.startup(function(use)
     branch = '3p',
   }
   use {
-    "supermaven-inc/supermaven-nvim",
+    'supermaven-inc/supermaven-nvim',
     config = function()
-      require("supermaven-nvim").setup({
+      require('supermaven-nvim').setup {
         keymaps = {
-          accept_suggestion = "<C-l>",
-          clear_suggestion = "<C-]>",
-          accept_word = "<C-j>",
+          accept_suggestion = '<C-l>',
+          clear_suggestion = '<C-]>',
+          accept_word = '<C-j>',
         },
         ignore_filetypes = { cpp = true }, -- or { "cpp", }
         color = {
-          suggestion_color = "#ffffff",
+          suggestion_color = '#ffffff',
           cterm = 244,
         },
-        log_level = "info",                -- set to "off" to disable logging completely
+        log_level = 'info', -- set to "off" to disable logging completely
         disable_inline_completion = false, -- disables inline completion for use with cmp
-        disable_keymaps = false,           -- disables built in keymaps for more manual control
+        disable_keymaps = false, -- disables built in keymaps for more manual control
         condition = function()
           return false
-        end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
-      })
+        end, -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+      }
     end,
   }
   -- [[ Colorthemes ]]
   use {
-    'dracula/vim',
+    'Mofiqul/dracula.nvim',
     as = 'dracula',
   }
   use 'ellisonleao/gruvbox.nvim'
