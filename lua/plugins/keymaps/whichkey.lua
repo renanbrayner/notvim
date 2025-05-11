@@ -1,3 +1,5 @@
+local utils = require 'utils'
+
 local status_ok, wk = pcall(require, 'which-key')
 if not status_ok then
   vim.notify('Error requiring which-key', vim.log.levels.ERROR)
@@ -8,50 +10,34 @@ wk.add {
   -- NORMAL MODE
   {
     mode = { 'n' },
-    { ',', '<cmd>HopWord<cr>', desc = 'Hop window' },
-    -- s = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
-    {
-      'f',
-      function()
-        if vim.fn.reg_recording() == '' then
-          vim.cmd 'HopWordCurrentLine'
-        else
-          -- fallback para o comportamento padrão do f (find character forward)
-          vim.api.nvim_feedkeys('f', 'n', false)
-        end
-      end,
-      desc = 'Hop line (disabled during macro)',
-    },
-    -- { 'F', '<cmd>HopWordCurrentLine<cr>', desc = 'Hop line' },
-    { '<A-Up>', '<cmd>m .-2<CR>==', desc = 'Move line up' },
-    { '<A-k>', '<cmd>m .-2<CR>==', desc = 'Move line up' },
-    { '<A-Down>', '<cmd>m .+1<CR>==', desc = 'Move line down' },
-    { '<A-j>', '<cmd>m .+1<CR>==', desc = 'Move line down' },
-    { '<C-_>', '<cmd>normal gcc<cr>', desc = 'Comment line' },
+    { ',',        '<cmd>HopWord<cr>',    desc = 'Hop window' },
+    { '<A-Up>',   '<cmd>m .-2<CR>==',    desc = 'Move line up' },
+    { '<A-k>',    '<cmd>m .-2<CR>==',    desc = 'Move line up' },
+    { '<A-Down>', '<cmd>m .+1<CR>==',    desc = 'Move line down' },
+    { '<A-j>',    '<cmd>m .+1<CR>==',    desc = 'Move line down' },
+    { '<C-_>',    '<cmd>normal gcc<cr>', desc = 'Comment line' },
   },
 
   -- VISUAL MODE
   {
     mode = { 'v' },
-    { ',', '<cmd>HopWord<cr>', desc = 'Hop window' },
-    -- S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
-    { '<A-k>', ":m '<-2<CR>gv=gv", desc = 'Move selection up' },
-    { '<A-j>', ":m '>+1<CR>gv=gv", desc = 'Move selection down' },
-    { '<A-Up>', ":m '<-2<CR>gv=gv", desc = 'Move selection up' },
-    { '<A-Down>', ":m '>+1<CR>gv=gv", desc = 'Move selection down' },
-    { '<C-_>', '<cmd>normal gcgv<cr>', desc = 'Comment selection' },
+    { ',',        '<cmd>HopWord<cr>',     desc = 'Hop window' },
+    { '<A-k>',    ":m '<-2<CR>gv=gv",     desc = 'Move selection up' },
+    { '<A-j>',    ":m '>+1<CR>gv=gv",     desc = 'Move selection down' },
+    { '<A-Up>',   ":m '<-2<CR>gv=gv",     desc = 'Move selection up' },
+    { '<A-Down>', ":m '>+1<CR>gv=gv",     desc = 'Move selection down' },
+    { '<C-_>',    '<cmd>normal gcgv<cr>', desc = 'Comment selection' },
   },
 
   -- FUCK WHAT MODE IS THIS?
   {
     mode = { 'o' },
     { ',', '<cmd>HopWord<cr>', desc = 'Hop window' },
-    -- S = { '<cmd>HopAnywhere<cr>', 'Hop anywhere window' },
   },
 
   {
     '<C-p>',
-    ControlP,
+    utils.ControlP,
     desc = 'Search files',
   },
   {

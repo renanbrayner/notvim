@@ -4,7 +4,13 @@ if not status_ok then
   return
 end
 
-require('notify').setup {
+local notify_ok, notify = pcall(require, 'notify')
+if not notify_ok then
+  vim.notify 'Error requiring notify'
+  return
+end
+
+notify.setup {
   stages = {
     function(state)
       local next_height = state.message.height + 2
