@@ -47,6 +47,17 @@ return {
   },
 
   {
+    "gukz/ftFT.nvim",
+    opts = {
+      keys = { "f", "t", "F", "T" }, -- the keys that enable highlights.
+      modes = { "n", "v" },          -- the modes this plugin works in.
+      hl_group = "TelescopeMultiSelection",           -- this property specify the hi group
+      sight_hl_group = "HopNextKey",           -- this property specify the hi group for sight line, if not set, the sight line will not show.
+    },
+    config = true,
+  },
+
+  {
     "renanbrayner/nvim-cheat.sh",
     dependencies = { "RishabhRD/popfix" },
     init = function()
@@ -169,7 +180,10 @@ return {
 
   {
     "nvimtools/none-ls.nvim",
-    dependencies = "nvim-lua/plenary.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvimtools/none-ls-extras.nvim",
+    },
     config = function()
       require("lsp.none-ls")
     end
@@ -184,7 +198,7 @@ return {
     end
   },
 
-  { "ms-jpq/coq.artifacts", branch = "artifacts" },
+  { "ms-jpq/coq.artifacts",  branch = "artifacts" },
   { "ms-jpq/coq.thirdparty", branch = "3p" },
 
   {
@@ -215,7 +229,7 @@ return {
   },
 
   -- Themes
-  { "Mofiqul/dracula.nvim", name = "dracula" },
+  { "dracula/vim",        name = "dracula" },
   { "ellisonleao/gruvbox.nvim" },
   { "shaunsingh/nord.nvim" },
   { "ishan9299/nvim-solarized-lua" },

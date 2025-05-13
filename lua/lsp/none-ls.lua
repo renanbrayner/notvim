@@ -4,50 +4,37 @@ if not null_ls_ok then
   return
 end
 
-
 local b = null_ls.builtins
 
 local sources = {
   b.formatting.prettier.with {
-    command = 'node_modules/.bin/prettier',
+    command = "node_modules/.bin/prettier",
     extra_args = function(params)
-      return { '--stdin-filepath', params.filename }
+      return { "--stdin-filepath", params.filename }
     end,
     filetypes = {
-      'html',
-      'markdown',
-      'css',
-      'scss',
-      'less',
-      'javascript',
-      'javascriptreact',
-      'typescript',
-      'typescriptreact',
-      'vue',
-      'json',
-      'yaml',
-      'graphql',
+      "html", "markdown", "css", "scss", "less", "javascript",
+      "javascriptreact", "typescript", "typescriptreact", "vue",
+      "json", "yaml", "graphql",
     },
   },
 
-  -- ESLint (configurado como um source único)
-  b.eslint.with {       -- CORRIGIDO: Usar b.eslint diretamente
-    command = 'node_modules/.bin/eslint',
-    -- Se o comando acima falhar, o none-ls pode ter problemas para registrar o source.
-    -- Verifique se `node_modules/.bin/eslint` existe e é executável no seu projeto.
-    filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue' },
-    -- Para diagnósticos, o builtin eslint geralmente usa --format=json
-    -- Para code_actions (fix), ele usa --fix-to-stdout ou similar.
-    -- O builtin padrão deve lidar com isso.
+  require("none-ls.diagnostics.eslint").with {
+    command = "node_modules/.bin/eslint",
+    filetypes = { "javascript", "typescript", "vue" },
   },
 
-  b.formatting.stylua.with {},
-  b.formatting.black.with {},
-  b.diagnostics.shellcheck.with {},
+  require("none-ls.code_actions.eslint").with {
+    command = "node_modules/.bin/eslint",
+  },
+
+  b.formatting.stylua,
+  b.formatting.black,
+  b.diagnostics.shellcheck,
 }
 
 null_ls.setup {
-  debug = true,       -- MANTENHA true para depurar o ESLint!
+  debug = true, -- MANTENHA true para depurar o ESLint!
   sources = sources,
   on_attach = function(client, bufnr)
     -- ... (sua função on_attach completa para none-ls aqui, como no comentário anterior) ...

@@ -4,14 +4,14 @@ if not mason_ok then
   return
 end
 
-mason.setup({
+mason.setup {
   ui = {
     border = 'rounded',
     icons = {
       package_installed = '✓',
     },
   },
-})
+}
 
 -- 1. Definições Comuns de LSP (on_attach, capabilities)
 local coq_ok, coq = pcall(require, 'coq')
@@ -21,26 +21,26 @@ if not coq_ok then
 end
 
 local capabilities = coq.lsp_ensure_capabilities()
-local function on_attach(client, bufnr)
-  print('LSP Client Attached: ' .. client.name)
-  local map = function(mode, lhs, rhs, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-    vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, noremap = true, silent = true, desc = desc })
-  end
-  map('n', 'gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  map('n', 'gr', vim.lsp.buf.references, '[G]oto [R]eferences')
-  map('n', 'gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  map('n', 'gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  map('n', 'K', vim.lsp.buf.hover({ border = 'rounded' }), 'Hover Documentation')
-  map('n', '<leader>ls', vim.lsp.buf.signature_help, 'Signature Help')
-  map('n', '<leader>lr', vim.lsp.buf.rename, '[R]ename')
-  map('n', '<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
-  map('n', '<leader>ld', vim.diagnostic.open_float, 'Line [D]iagnostics')
-  map('n', '[d', vim.diagnostic.goto_prev, 'Prev Diagnostic')
-  map('n', ']d', vim.diagnostic.goto_next, 'Next Diagnostic')
-end
+-- local function on_attach(client, bufnr)
+--   print('LSP Client Attached: ' .. client.name)
+--   local map = function(mode, lhs, rhs, desc)
+--     if desc then
+--       desc = 'LSP: ' .. desc
+--     end
+--     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, noremap = true, silent = true, desc = desc })
+--   end
+--   map('n', 'gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+--   map('n', 'gr', vim.lsp.buf.references, '[G]oto [R]eferences')
+--   map('n', 'gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+--   map('n', 'gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+--   map('n', 'K', vim.lsp.buf.hover({ border = 'rounded' }), 'Hover Documentation')
+--   map('n', '<leader>ls', vim.lsp.buf.signature_help, 'Signature Help')
+--   map('n', '<leader>lr', vim.lsp.buf.rename, '[R]ename')
+--   map('n', '<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
+--   map('n', '<leader>ld', vim.diagnostic.open_float, 'Line [D]iagnostics')
+--   map('n', '[d', vim.diagnostic.goto_prev, 'Prev Diagnostic')
+--   map('n', ']d', vim.diagnostic.goto_next, 'Next Diagnostic')
+-- end
 
 -- 2. Configuração do `mason-lspconfig.nvim`
 local mason_lspconfig_ok, mason_lspconfig = pcall(require, 'mason-lspconfig')
@@ -53,10 +53,10 @@ mason_lspconfig.setup {
   ensure_installed = {
     -- CORRIGIDO: Usar nomes do LSPCONFIG aqui, conforme a nova mensagem de erro
     'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
-    'volar',  -- Nome lspconfig (Mason pkg: vue-language-server)
-    'ts_ls',  -- Nome lspconfig (Mason pkg: typescript-language-server) - ANTES ERA tsserver
-    'html',   -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
-    'cssls',  -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
+    'volar', -- Nome lspconfig (Mason pkg: vue-language-server)
+    'ts_ls', -- Nome lspconfig (Mason pkg: typescript-language-server) - ANTES ERA tsserver
+    'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
+    'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
   },
   automatic_enable = {
     -- lua_ls será habilitado automaticamente por mason-lspconfig.
@@ -84,8 +84,8 @@ local vue_plugin_location_base = global_npm_root .. '/@vue/language-server'
 if vim.fn.isdirectory(vue_plugin_location_base) == 0 then
   vim.notify(
     'AVISO: Diretório base para @vue/typescript-plugin (via npm global @vue/language-server) não encontrado: '
-    .. vue_plugin_location_base
-    .. '\nVerifique `npm root -g` e a instalação global de `@vue/language-server`.',
+      .. vue_plugin_location_base
+      .. '\nVerifique `npm root -g` e a instalação global de `@vue/language-server`.',
     vim.log.levels.WARN,
     { title = 'LSP Config Vue' }
   )
