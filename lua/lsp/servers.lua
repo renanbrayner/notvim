@@ -53,7 +53,7 @@ mason_lspconfig.setup {
   ensure_installed = {
     -- CORRIGIDO: Usar nomes do LSPCONFIG aqui, conforme a nova mensagem de erro
     'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
-    'volar', -- Nome lspconfig (Mason pkg: vue-language-server)
+    'vue_ls', -- Nome lspconfig (Mason pkg: vue-language-server)
     'ts_ls', -- Nome lspconfig (Mason pkg: typescript-language-server) - ANTES ERA tsserver
     'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
     'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
