@@ -15,27 +15,52 @@
 -- │  └──  utils.lua ←[ utility functions and etc ]-
 -- └──  init.lua ←[ this file ]-
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath
-  })
+  vim.fn.system {
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable',
+    lazypath,
+  }
 end
 vim.opt.rtp:prepend(lazypath)
 
-
 vim.g.mapleader = ' ' -- precisa ser colocado antes de carregar lazy
 
-local lazy_ok, lazy = pcall(require, "lazy")
+require 'opts'
+
+local lazy_ok, lazy = pcall(require, 'lazy')
 if not lazy_ok then
-  vim.notify("Error loading lazy.nvim", vim.log.levels.ERROR)
+  vim.notify('Error loading lazy.nvim', vim.log.levels.ERROR)
   return
 end
 
-lazy.setup('plugins')
+lazy.setup('plugins', {
+  defaults = { lazy = false },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    reset_packpath = true,
+    rtp = {
+      reset = true,
+      paths = {},
+      disabled_plugins = {
+        'gzip',
+        'matchit',
+        'matchparen',
+        'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+      },
+    },
+  },
+})
 
-require 'rice'
 require 'utils'
-require 'opts'
+require 'rice'

@@ -1,6 +1,15 @@
 return {
   {
-    "rcarriga/nvim-notify",
+    'goolord/alpha-nvim',
+    priority = 1000,
+    event = 'VimEnter',
+    config = function()
+      require 'plugins.configs.alpha'
+    end,
+  },
+
+  {
+    'rcarriga/nvim-notify',
     priority = 1000,
     lazy = false,
     config = function()
@@ -9,228 +18,213 @@ return {
         vim.notify = notify.notify -- em vez de vim.notify = notify
         require 'plugins.configs.nvim-notify'
       end
-    end
+    end,
   },
 
   {
-    "ms-jpq/chadtree",
-    branch = "chad",
-    build = "python3 -m chadtree deps && :CHADdeps",
+    'ms-jpq/chadtree',
+    branch = 'chad',
+    build = 'python3 -m chadtree deps && :CHADdeps',
     config = function()
-      require "plugins.configs.chadtree"
-    end
+      require 'plugins.configs.chadtree'
+    end,
   },
 
   {
-    "kylechui/nvim-surround",
-    tag = "*",
+    'kylechui/nvim-surround',
+    tag = '*',
     config = function()
-      require("nvim-surround").setup()
-    end
+      require('nvim-surround').setup()
+    end,
   },
 
   {
-    "folke/which-key.nvim",
-    dependencies = { "echasnovski/mini.icons", "kyazdani42/nvim-web-devicons" },
+    'folke/which-key.nvim',
+    dependencies = { 'echasnovski/mini.icons', 'kyazdani42/nvim-web-devicons' },
     config = function()
-      require "plugins.configs.whichkey"
-      require "plugins.keymaps.whichkey"
-    end
+      require 'plugins.configs.whichkey'
+      require 'plugins.keymaps.whichkey'
+    end,
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
     config = function()
-      require "plugins.configs.treesitter"
-    end
+      require 'plugins.configs.treesitter'
+    end,
   },
 
   {
-    "gukz/ftFT.nvim",
+    'gukz/ftFT.nvim',
     opts = {
-      keys = { "f", "t", "F", "T" }, -- the keys that enable highlights.
-      modes = { "n", "v" },          -- the modes this plugin works in.
-      hl_group = "TelescopeMultiSelection",           -- this property specify the hi group
-      sight_hl_group = "HopNextKey",           -- this property specify the hi group for sight line, if not set, the sight line will not show.
+      keys = { 'f', 't', 'F', 'T' }, -- the keys that enable highlights.
+      modes = { 'n', 'v' }, -- the modes this plugin works in.
+      hl_group = 'TelescopeMultiSelection', -- this property specify the hi group
+      sight_hl_group = 'HopNextKey', -- this property specify the hi group for sight line, if not set, the sight line will not show.
     },
     config = true,
   },
 
   {
-    "renanbrayner/nvim-cheat.sh",
-    dependencies = { "RishabhRD/popfix" },
+    'renanbrayner/nvim-cheat.sh',
+    dependencies = { 'RishabhRD/popfix' },
     init = function()
-      require "plugins.configs.nvim-cheat"
-    end
+      require 'plugins.configs.nvim-cheat'
+    end,
   },
 
   {
-    "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    'nvim-telescope/telescope.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      require "plugins.configs.telescope"
-    end
+      require 'plugins.configs.telescope'
+    end,
   },
 
   {
-    "akinsho/bufferline.nvim",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    'akinsho/bufferline.nvim',
+    dependencies = 'kyazdani42/nvim-web-devicons',
     config = function()
-      require "plugins.configs.bufferline"
-    end
+      require 'plugins.configs.bufferline'
+    end,
   },
 
   {
-    "nvim-lualine/lualine.nvim",
-    dependencies = "kyazdani42/nvim-web-devicons",
+    'nvim-lualine/lualine.nvim',
+    dependencies = 'kyazdani42/nvim-web-devicons',
     config = function()
-      require "plugins.configs.lualine"
-    end
+      require 'plugins.configs.lualine'
+    end,
   },
 
   {
-    "voldikss/vim-floaterm",
+    'voldikss/vim-floaterm',
     config = function()
-      require("plugins.configs.floaterm").setup()
-    end
+      require('plugins.configs.floaterm').setup()
+    end,
   },
 
   {
-    "goolord/alpha-nvim",
+    'Shatur/neovim-session-manager',
+    dependencies = 'nvim-lua/plenary.nvim',
     config = function()
-      require "plugins.configs.alpha"
-    end
+      require 'plugins.configs.sessionmanager'
+    end,
   },
 
   {
-    "Shatur/neovim-session-manager",
-    dependencies = "nvim-lua/plenary.nvim",
+    'stevearc/dressing.nvim',
     config = function()
-      require "plugins.configs.sessionmanager"
-    end
+      require 'plugins.configs.dressing'
+    end,
   },
 
   {
-    "stevearc/dressing.nvim",
+    'smoka7/hop.nvim',
+    tag = '*',
     config = function()
-      require "plugins.configs.dressing"
-    end
+      require('hop').setup()
+    end,
   },
 
   {
-    "smoka7/hop.nvim",
-    tag = "*",
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
     config = function()
-      require("hop").setup()
-    end
+      require('plugins.configs.indentblankline').setup()
+    end,
   },
 
   {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
+    'NvChad/nvim-colorizer.lua',
     config = function()
-      require("plugins.configs.indentblankline").setup()
-    end
+      require 'plugins.configs.colorizer'
+    end,
   },
 
   {
-    "NvChad/nvim-colorizer.lua",
+    'numToStr/Comment.nvim',
     config = function()
-      require "plugins.configs.colorizer"
-    end
+      require('Comment').setup()
+    end,
   },
 
+  { 'gpanders/editorconfig.nvim' },
+
   {
-    "numToStr/Comment.nvim",
+    'lewis6991/gitsigns.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',
     config = function()
-      require("Comment").setup()
-    end
+      require 'plugins.configs.gitsigns'
+    end,
   },
 
-  { "gpanders/editorconfig.nvim" },
+  { 'windwp/nvim-ts-autotag' },
 
   {
-    "lewis6991/gitsigns.nvim",
-    dependencies = "nvim-lua/plenary.nvim",
+    'windwp/nvim-autopairs',
     config = function()
-      require "plugins.configs.gitsigns"
-    end
-  },
-
-  { "windwp/nvim-ts-autotag" },
-
-  {
-    "windwp/nvim-autopairs",
-    config = function()
-      require("nvim-autopairs").setup { map_cr = true }
-    end
+      require('nvim-autopairs').setup { map_cr = true }
+    end,
   },
 
   {
-    "mason-org/mason-lspconfig.nvim",
+    'mason-org/mason-lspconfig.nvim',
     dependencies = {
-      "neovim/nvim-lspconfig",
-      "mason-org/mason.nvim",
+      'neovim/nvim-lspconfig',
+      'mason-org/mason.nvim',
     },
     config = function()
-      require("lsp.servers")
-    end
+      require 'lsp.servers'
+    end,
   },
 
   {
-    "nvimtools/none-ls.nvim",
+    'nvimtools/none-ls.nvim',
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvimtools/none-ls-extras.nvim",
+      'nvim-lua/plenary.nvim',
+      'nvimtools/none-ls-extras.nvim',
     },
     config = function()
-      require("lsp.none-ls")
-    end
+      require 'lsp.none-ls'
+    end,
   },
 
   {
-    "ms-jpq/coq_nvim",
-    branch = "coq",
-    build = ":COQdeps",
+    'ms-jpq/coq_nvim',
+    branch = 'coq',
+    build = ':COQdeps',
     init = function()
-      require "plugins.configs.coq"
-    end
+      require 'plugins.configs.coq'
+    end,
   },
 
-  { "ms-jpq/coq.artifacts",  branch = "artifacts" },
-  { "ms-jpq/coq.thirdparty", branch = "3p" },
+  { 'ms-jpq/coq.artifacts', branch = 'artifacts' },
+  { 'ms-jpq/coq.thirdparty', branch = '3p' },
 
   {
-    "supermaven-inc/supermaven-nvim",
+    'supermaven-inc/supermaven-nvim',
     config = function()
-      require("plugins.configs.supermaven")
-    end
+      require 'plugins.configs.supermaven'
+    end,
   },
 
   {
-    "folke/lazydev.nvim",
-    ft = "lua",
+    'folke/lazydev.nvim',
+    ft = 'lua',
     config = function()
-      require("lazydev").setup {
+      require('lazydev').setup {
         library = {
-          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        }
+          { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        },
       }
-    end
-  },
-
-  {
-    "rest-nvim/rest.nvim",
-    dependencies = "nvim-lua/plenary.nvim",
-    config = function()
-      require("plugins.configs.rest-client")
-    end
+    end,
   },
 
   -- Themes
-  { "dracula/vim",        name = "dracula" },
-  { "ellisonleao/gruvbox.nvim" },
-  { "shaunsingh/nord.nvim" },
-  { "ishan9299/nvim-solarized-lua" },
+  { 'dracula/vim', name = 'dracula' },
+  { 'ellisonleao/gruvbox.nvim' },
+  { 'shaunsingh/nord.nvim' },
+  { 'ishan9299/nvim-solarized-lua' },
 }
