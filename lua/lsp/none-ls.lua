@@ -4,33 +4,74 @@ if not null_ls_ok then
   return
 end
 
-local b = null_ls.builtins
+-- Usando require direto para os builtins (padrão moderno)
+local formatting = null_ls.builtins.formatting
+local diagnostics = null_ls.builtins.diagnostics
+local code_actions = null_ls.builtins.code_actions
+
+-- Carregar ESLint do none-ls-extras
+local eslint_diagnostics = require 'none-ls.diagnostics.eslint'
+local eslint_code_actions = require 'none-ls.code_actions.eslint'
 
 local sources = {
-  b.formatting.prettier.with {
-    command = "node_modules/.bin/prettier",
+  -- Prettier formatter
+  formatting.prettier.with {
+    command = 'node_modules/.bin/prettier',
     extra_args = function(params)
-      return { "--stdin-filepath", params.filename }
+      return { '--stdin-filepath', params.filename }
     end,
     filetypes = {
-      "html", "markdown", "css", "scss", "less", "javascript",
-      "javascriptreact", "typescript", "typescriptreact", "vue",
-      "json", "yaml", "graphql",
+      'html',
+      'markdown',
+      'css',
+      'scss',
+      'less',
+      'javascript',
+      'javascriptreact',
+      'typescript',
+      'typescriptreact',
+      'vue',
+      'json',
+      'yaml',
+      'graphql',
     },
   },
 
-  require("none-ls.diagnostics.eslint").with {
-    command = "node_modules/.bin/eslint",
-    filetypes = { "javascript", "typescript", "vue" },
+  -- ESLint diagnostics usando none-ls-extras
+  eslint_diagnostics.with {
+    command = 'node_modules/.bin/eslint',
+    filetypes = { 'javascript', 'typescript', 'vue' },
   },
 
-  require("none-ls.code_actions.eslint").with {
-    command = "node_modules/.bin/eslint",
+  -- ESLint code actions usando none-ls-extras
+  eslint_code_actions.with {
+    command = 'node_modules/.bin/eslint',
   },
 
-  b.formatting.stylua,
-  b.formatting.black,
-  b.diagnostics.shellcheck,
+  -- Other formatters (commented out if not installed)
+  formatting.stylua,
+  formatting.black,
+
+  -- Shellcheck diagnostics and code actions
+  (function()
+    local shellcheck_diagnostics_ok, shellcheck_diagnostics = pcall(require, 'none-ls-shellcheck.diagnostics')
+    if shellcheck_diagnostics_ok then
+      return shellcheck_diagnostics
+    else
+      vim.notify('Error loading none-ls-shellcheck diagnostics', vim.log.levels.ERROR)
+      return nil
+    end
+  end)(),
+
+  (function()
+    local shellcheck_code_actions_ok, shellcheck_code_actions = pcall(require, 'none-ls-shellcheck.code_actions')
+    if shellcheck_code_actions_ok then
+      return shellcheck_code_actions
+    else
+      vim.notify('Error loading none-ls-shellcheck code actions', vim.log.levels.ERROR)
+      return nil
+    end
+  end)(),
 }
 
 null_ls.setup {

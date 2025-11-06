@@ -36,9 +36,9 @@ return {
 
   -- Text manipulation - lazy até usar
   {
-    'kylechui/Nvim-surround',
-    tag = '*',
-    event = { 'BufReadPost', 'BufNewFile' },
+    'kylechui/nvim-surround',
+    version = '^3.0.0', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
     config = function()
       require('nvim-surround').setup()
     end,
@@ -148,7 +148,7 @@ return {
   -- Movement plugin
   {
     'smoka7/hop.nvim',
-    tag = '*',
+    version = '*',
     config = function()
       require('hop').setup()
     end,
@@ -222,20 +222,6 @@ return {
       'neovim/nvim-lspconfig',
       'mason-org/mason.nvim',
     },
-    event = { 'BufReadPre', 'BufNewFile' },
-    keys = {
-      'gd',
-      'gD',
-      'gi',
-      'gr',
-      'gl',
-      'K',
-      '[d',
-      ']d',
-      '<F2>',
-      '<F3>',
-      '<leader>l',
-    },
     config = function()
       require 'lsp.servers'
     end,
@@ -247,8 +233,8 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvimtools/none-ls-extras.nvim',
+      'gbprod/none-ls-shellcheck.nvim',
     },
-    event = { 'BufReadPost', 'BufNewFile' },
     config = function()
       require 'lsp.none-ls'
     end,
@@ -259,16 +245,60 @@ return {
     'ms-jpq/coq_nvim',
     branch = 'coq',
     build = ':COQdeps',
-    event = 'InsertEnter',
     config = function()
       require 'plugins.configs.coq'
+    end,
+    init = function()
+      -- Definir configurações antes do plugin carregar
+      vim.g.coq_settings = {
+        auto_start = 'shut-up',
+        display = {
+          ['ghost_text.context'] = { '  ❬ ', ' ❭ ' },
+          pum = {
+            kind_context = { '(', ')' },
+            source_context = { '⌈ ', ' ⌋' },
+          },
+          icons = {
+            mappings = {
+              Text = '',
+              Method = 'm',
+              Function = '',
+              Constructor = '',
+              Field = '',
+              Variable = '',
+              Class = '',
+              Interface = '',
+              Module = '',
+              Property = '',
+              Unit = '',
+              Value = '',
+              Enum = '',
+              Keyword = '',
+              Snippet = '',
+              Color = '',
+              File = '',
+              Reference = '',
+              Folder = '',
+              EnumMember = '',
+              Constant = '',
+              Struct = '',
+              Event = '',
+              Operator = '',
+              TypeParameter = '',
+            },
+          },
+        },
+        keymap = {
+          jump_to_mark = '<c-b>',
+          ['repeat'] = '^.',
+        },
+      }
     end,
   },
 
   {
     'ms-jpq/coq.artifacts',
     branch = 'artifacts',
-    event = 'InsertEnter',
   },
 
   {

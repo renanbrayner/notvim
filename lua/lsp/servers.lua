@@ -51,69 +51,90 @@ end
 
 mason_lspconfig.setup {
   ensure_installed = {
-    -- CORRIGIDO: Usar nomes do LSPCONFIG aqui, conforme a nova mensagem de erro
+    -- Servidores configurados automaticamente pelo mason-lspconfig
     'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
-    'vue_ls', -- Nome lspconfig (Mason pkg: vue-language-server)
-    'ts_ls', -- Nome lspconfig (Mason pkg: typescript-language-server) - ANTES ERA tsserver
+    'ts_ls', -- Nome lspconfig (Mason pkg: typescript-language-server)
     'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
     'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
+    'eslint', -- Nome lspconfig (Mason pkg: eslint-lsp)
   },
-  automatic_enable = {
-    -- lua_ls será habilitado automaticamente por mason-lspconfig.
-    -- Os outros estão excluídos para setup manual detalhado abaixo.
-    exclude = { 'volar', 'ts_ls', 'html', 'cssls', 'eslint' },
+  handlers = {
+    -- Handler padrão para outros servidores
+    function(server_name)
+      -- Não fazer nada para servidores configurados manualmente abaixo
+      if not vim.tbl_contains({ 'html', 'cssls', 'eslint' }, server_name) then
+        vim.lsp.enable(server_name, {
+          capabilities = capabilities,
+          root_dir = vim.fs.root(0, { '.git' }),
+        })
+      end
+    end,
   },
 }
 
--- 3. Configuração Manual dos Servidores LSP Excluídos
-local lspconfig_ok, lspconfig = pcall(require, 'lspconfig')
-if not lspconfig_ok then
-  vim.notify('Error requiring lspconfig', vim.log.levels.ERROR)
-  return
+-- 3. Servidores LSP configurados automaticamente pelo mason-lspconfig
+
+-- 4. Configuração Manual dos Servidores LSP Específicos
+
+local function setup_html()
+  vim.lsp.enable('html', {
+    root_dir = vim.fs.root(0, { 'package.json', '.git' }),
+    capabilities = capabilities,
+    filetypes = { 'html', 'xhtml', 'htmldjango' },
+  })
 end
 
-lspconfig.volar.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { 'vue' },
-}
-
-local global_npm_root = vim.fn.trim(vim.fn.system 'npm root -g')
-local vue_plugin_location_base = global_npm_root .. '/@vue/language-server'
--- (A verificação de `isdirectory` ainda é recomendada aqui)
-if vim.fn.isdirectory(vue_plugin_location_base) == 0 then
-  vim.notify(
-    'AVISO: Diretório base para @vue/typescript-plugin (via npm global @vue/language-server) não encontrado: '
-      .. vue_plugin_location_base
-      .. '\nVerifique `npm root -g` e a instalação global de `@vue/language-server`.',
-    vim.log.levels.WARN,
-    { title = 'LSP Config Vue' }
-  )
+local function setup_cssls()
+  vim.lsp.enable('cssls', {
+    root_dir = vim.fs.root(0, { 'package.json', '.git' }),
+    capabilities = capabilities,
+    filetypes = { 'css', 'scss', 'less', 'sass' },
+  })
 end
 
--- ATENÇÃO: Mudança de tsserver para ts_ls aqui também!
-lspconfig.ts_ls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = {
-    plugins = {
-      {
-        name = '@vue/typescript-plugin',
-        location = vue_plugin_location_base,
-        languages = { 'javascript', 'typescript', 'vue' },
+local function setup_eslint()
+  vim.lsp.enable('eslint', {
+    root_dir = vim.fs.root(0, { '.git', 'package.json' }),
+    capabilities = capabilities,
+    filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+    settings = {
+      codeAction = {
+        disableRuleComment = {
+          enable = true,
+          location = 'separateLine',
+        },
+        showDocumentation = {
+          enable = true,
+        },
+      },
+      codeActionOnSave = {
+        enable = false,
+        mode = 'all',
+      },
+      experimental = {
+        useFlatConfig = false,
+      },
+      format = true,
+      nodePath = '',
+      onIgnoredFiles = 'off',
+      problems = {
+        shortenToSingleLine = false,
+      },
+      quiet = false,
+      rulesCustomizations = {},
+      run = 'onType',
+      useESLintClass = false,
+      validate = 'on',
+      workingDirectory = {
+        mode = 'location',
       },
     },
-  },
-  filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-}
-
-local servers_to_setup_manually = { 'html', 'cssls', 'eslint' }
-for _, lsp_name in ipairs(servers_to_setup_manually) do
-  lspconfig[lsp_name].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+  })
 end
+
+setup_html()
+setup_cssls()
+setup_eslint()
 
 local signs = {
   { name = 'DiagnosticSignError', text = '' },
