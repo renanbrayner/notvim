@@ -2,11 +2,11 @@
 
 ## TODO Tracking
 
-- [ ] **Phase 1**: Theme System Overhaul (HIGH PRIORITY)
-  - [ ] Create base theme system
-  - [ ] Refactor rice.lua to use inheritance
-  - [ ] Update highlight system
-  - [ ] Test all themes
+- [x] **Phase 1**: Theme System Overhaul (HIGH PRIORITY)
+  - [x] Create base theme system
+  - [x] Refactor rice.lua to use inheritance
+  - [x] Update highlight system
+  - [x] Test all themes
 - [ ] **Phase 2**: Keymap Reorganization (HIGH PRIORITY)
   - [ ] Split whichkey.lua by feature
   - [ ] Create keymap categories
