@@ -154,8 +154,11 @@ M.apply_highlights = function(theme)
     M.apply_nord_highlights(theme)
   end
 
-  -- Apply only essential plugin highlights
+  -- Apply essential plugin highlights
   M.apply_essential_plugin_highlights(theme)
+
+  -- Apply indent highlights (important for colored indent lines)
+  M.apply_indent_highlights(theme)
 end
 
 -- Theme-specific highlight adjustments (matching original exactly)
