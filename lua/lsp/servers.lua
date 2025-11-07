@@ -13,7 +13,6 @@ mason.setup {
   },
 }
 
--- 1. Definições Comuns de LSP (on_attach, capabilities)
 local coq_ok, coq = pcall(require, 'coq')
 if not coq_ok then
   vim.notify('Error requiring coq', vim.log.levels.ERROR)
@@ -42,7 +41,6 @@ local capabilities = coq.lsp_ensure_capabilities()
 --   map('n', ']d', vim.diagnostic.goto_next, 'Next Diagnostic')
 -- end
 
--- 2. Configuração do `mason-lspconfig.nvim`
 local mason_lspconfig_ok, mason_lspconfig = pcall(require, 'mason-lspconfig')
 if not mason_lspconfig_ok then
   vim.notify('Error requiring mason-lspconfig', vim.log.levels.ERROR)
@@ -51,18 +49,15 @@ end
 
 mason_lspconfig.setup {
   ensure_installed = {
-    -- Servidores configurados automaticamente pelo mason-lspconfig
     'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
-    'ts_ls', -- Nome lspconfig (Mason pkg: typescript-language-server)
+    'vue_ls', -- Nome lspconfig (Mason pkg: vue-language-server)
     'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
     'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
     'eslint', -- Nome lspconfig (Mason pkg: eslint-lsp)
   },
   handlers = {
-    -- Handler padrão para outros servidores
     function(server_name)
-      -- Não fazer nada para servidores configurados manualmente abaixo
-      if not vim.tbl_contains({ 'html', 'cssls', 'eslint' }, server_name) then
+      if not vim.tbl_contains({ 'html', 'cssls', 'eslint', 'vue_ls' }, server_name) then
         vim.lsp.enable(server_name, {
           capabilities = capabilities,
           root_dir = vim.fs.root(0, { '.git' }),
@@ -71,10 +66,6 @@ mason_lspconfig.setup {
     end,
   },
 }
-
--- 3. Servidores LSP configurados automaticamente pelo mason-lspconfig
-
--- 4. Configuração Manual dos Servidores LSP Específicos
 
 local function setup_html()
   vim.lsp.enable('html', {
@@ -132,9 +123,70 @@ local function setup_eslint()
   })
 end
 
+local function setup_vtsls()
+  local lspconfig = require 'lspconfig'
+
+  local vue_language_server_path = vim.fn.stdpath 'data'
+    .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+
+  lspconfig.vtsls.setup {
+    capabilities = capabilities,
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    settings = {
+      vtsls = {
+        tsserver = {
+          globalPlugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vue_language_server_path,
+              languages = { 'vue' },
+              configNamespace = 'typescript',
+              enableForWorkspaceTypeScriptVersions = true,
+            },
+          },
+        },
+      },
+    },
+  }
+end
+
+local function setup_vue()
+  local lspconfig = require 'lspconfig'
+
+  lspconfig.vue_ls.setup {
+    capabilities = capabilities,
+    on_init = function(client)
+      client.handlers['tsserver/request'] = function(_, result, context)
+        local vtsls_clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
+
+        if #vtsls_clients == 0 then
+          vim.notify('vtsls não encontrado! vue_ls precisa dele.', vim.log.levels.ERROR)
+          return
+        end
+
+        local vtsls_client = vtsls_clients[1]
+        local param = unpack(result)
+        local id, command, payload = unpack(param)
+
+        vtsls_client:exec_cmd({
+          title = 'vue_request_forward',
+          command = 'typescript.tsserverRequest',
+          arguments = { command, payload },
+        }, { bufnr = context.bufnr }, function(_, r)
+          local response = r and r.body
+          local response_data = { { id, response } }
+          client:notify('tsserver/response', response_data)
+        end)
+      end
+    end,
+  }
+end
+
 setup_html()
 setup_cssls()
 setup_eslint()
+setup_vtsls()
+setup_vue()
 
 local signs = {
   { name = 'DiagnosticSignError', text = '' },
@@ -148,13 +200,10 @@ for _, sign in ipairs(signs) do
 end
 
 vim.diagnostic.config {
-  -- disable virtual text
   virtual_text = false,
-  -- show signs
   signs = {
     active = signs,
   },
-  -- delay update diagnsotics
   update_in_insert = false,
   underline = true,
   severity_sort = true,
