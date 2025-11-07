@@ -393,6 +393,116 @@ wk.add {
     desc = 'Loc list',
   },
 
+  -- DAP - Debug Adapter Protocol
+  { '<leader>d', group = 'Debug' },
+  {
+    '<leader>dc',
+    function()
+      require('dap').continue()
+    end,
+    desc = 'Continue',
+  },
+  {
+    '<leader>dj',
+    function()
+      require('dap').step_over()
+    end,
+    desc = 'Step Over',
+  },
+  {
+    '<leader>dl',
+    function()
+      require('dap').step_into()
+    end,
+    desc = 'Step Into',
+  },
+  {
+    '<leader>dh',
+    function()
+      require('dap').step_out()
+    end,
+    desc = 'Step Out',
+  },
+  {
+    '<leader>db',
+    function()
+      require('dap').toggle_breakpoint()
+    end,
+    desc = 'Toggle Breakpoint',
+  },
+  {
+    '<leader>dB',
+    function()
+      require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+    end,
+    desc = 'Set Conditional Breakpoint',
+  },
+  {
+    '<leader>dlp',
+    function()
+      require('dap').set_breakpoint(nil, nil, vim.fn.input 'Log point message: ')
+    end,
+    desc = 'Set Log Point',
+  },
+  {
+    '<leader>dr',
+    function()
+      require('dap').repl.open()
+    end,
+    desc = 'Open REPL',
+  },
+  {
+    '<leader>dl',
+    function()
+      require('dap').run_last()
+    end,
+    desc = 'Run Last',
+  },
+  {
+    '<leader>du',
+    function()
+      require('dapui').toggle()
+    end,
+    desc = 'Toggle UI',
+  },
+  {
+    '<leader>dt',
+    function()
+      require('dap').terminate()
+    end,
+    desc = 'Terminate',
+  },
+  {
+    '<leader>dh',
+    function()
+      require('dap.ui.widgets').hover()
+    end,
+    desc = 'Hover',
+  },
+  {
+    '<leader>dp',
+    function()
+      require('dap.ui.widgets').preview()
+    end,
+    desc = 'Preview',
+  },
+  {
+    '<leader>df',
+    function()
+      local widgets = require 'dap.ui.widgets'
+      widgets.centered_float(widgets.frames)
+    end,
+    desc = 'Frames',
+  },
+  {
+    '<leader>ds',
+    function()
+      local widgets = require 'dap.ui.widgets'
+      widgets.centered_float(widgets.scopes)
+    end,
+    desc = 'Scopes',
+  },
+
   -- Window
   { '<leader>w', group = 'Window' },
   {
@@ -494,5 +604,52 @@ wk.add {
     '<leader>w<Left>',
     '<C-W>h',
     desc = 'Move left',
+  },
+
+  -- DAP Function Keys (debugging rápido)
+  {
+    '<F5>',
+    function()
+      require('dap').continue()
+    end,
+    desc = 'DAP: Continue',
+  },
+  {
+    '<F10>',
+    function()
+      require('dap').step_over()
+    end,
+    desc = 'DAP: Step Over',
+  },
+  {
+    '<F11>',
+    function()
+      require('dap').step_into()
+    end,
+    desc = 'DAP: Step Into',
+  },
+  {
+    '<F12>',
+    function()
+      require('dap').step_out()
+    end,
+    desc = 'DAP: Step Out',
+  },
+  {
+    '<F9>',
+    function()
+      require('dap').toggle_breakpoint()
+    end,
+    desc = 'DAP: Toggle Breakpoint',
+  },
+
+  -- DAP Visual Mode (evaluate selection)
+  {
+    mode = { 'v' },
+    '<leader>de',
+    function()
+      require('dapui').eval()
+    end,
+    desc = 'DAP: Evaluate Selection',
   },
 }

@@ -65,6 +65,26 @@ return {
     end,
   },
 
+  -- Treesitter context - mostra contexto da função/classe no topo
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    event = { 'BufReadPost', 'BufNewFile' },
+    config = function()
+      require('treesitter-context').setup {
+        enable = true,
+        max_lines = 0,
+        min_window_height = 0,
+        line_numbers = true,
+        multiline_threshold = 20,
+        trim_scope = 'outer',
+        mode = 'cursor',
+        separator = nil,
+        zindex = 20,
+      }
+    end,
+  },
+
   -- Movement enhancement - só quando usar f/t/F/T
   {
     'gukz/ftFT.nvim',
@@ -327,6 +347,26 @@ return {
         },
       }
     end,
+  },
+
+  -- Debugging - DAP (Debug Adapter Protocol)
+  {
+    'mfussenegger/nvim-dap',
+    dependencies = {
+      'rcarriga/nvim-dap-ui',
+      'theHamsta/nvim-dap-virtual-text',
+      'nvim-neotest/nvim-nio',
+    },
+    config = function()
+      require 'plugins.configs.dap'
+    end,
+  },
+
+  -- Cursor animation - smear effect
+  {
+    'sphamba/smear-cursor.nvim',
+    event = 'VeryLazy',
+    opts = {},
   },
 
   -- Themes - podem ser lazy, exceto o principal
