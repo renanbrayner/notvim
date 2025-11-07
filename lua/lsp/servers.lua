@@ -51,6 +51,7 @@ mason_lspconfig.setup {
   ensure_installed = {
     'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
     'vue_ls', -- Nome lspconfig (Mason pkg: vue-language-server)
+    'vtsls',
     'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
     'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
     'eslint', -- Nome lspconfig (Mason pkg: eslint-lsp)
@@ -124,14 +125,14 @@ local function setup_eslint()
 end
 
 local function setup_vtsls()
-  local lspconfig = require 'lspconfig'
-
   local vue_language_server_path = vim.fn.stdpath 'data'
     .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 
-  lspconfig.vtsls.setup {
-    capabilities = capabilities,
+  vim.lsp.config('vtsls', {
+    cmd = { 'vtsls', '--stdio' },
+    root_markers = { 'package.json', 'tsconfig.json', '.git' },
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    capabilities = capabilities,
     settings = {
       vtsls = {
         tsserver = {
@@ -147,16 +148,18 @@ local function setup_vtsls()
         },
       },
     },
-  }
+  })
+  vim.lsp.enable 'vtsls'
 end
 
 local function setup_vue()
-  local lspconfig = require 'lspconfig'
-
-  lspconfig.vue_ls.setup {
+  vim.lsp.config('vue_ls', {
+    cmd = { 'vue-language-server', '--stdio' },
+    root_markers = { 'package.json', '.git' },
+    filetypes = { 'vue' },
     capabilities = capabilities,
-    on_init = function(client)
-      client.handlers['tsserver/request'] = function(_, result, context)
+    handlers = {
+      ['tsserver/request'] = function(err, result, context, config)
         local vtsls_clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
 
         if #vtsls_clients == 0 then
@@ -175,11 +178,15 @@ local function setup_vue()
         }, { bufnr = context.bufnr }, function(_, r)
           local response = r and r.body
           local response_data = { { id, response } }
-          client:notify('tsserver/response', response_data)
+          local client = vim.lsp.get_client_by_id(context.client_id)
+          if client then
+            client:notify('tsserver/response', response_data)
+          end
         end)
-      end
-    end,
-  }
+      end,
+    },
+  })
+  vim.lsp.enable 'vue_ls'
 end
 
 setup_html()
