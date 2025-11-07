@@ -28,11 +28,11 @@ set.hidden = true
 set.backup = false
 set.swapfile = false
 
--- Usar variáveis de ambiente para paths dinâmicos
 local home = vim.fn.expand('~')
 vim.env.DOTNET_ROOT = home .. '/.asdf/installs/dotnet/9.0.305'
 vim.env.PATH = home .. '/.asdf/shims:' .. home .. '/.asdf/bin:' .. vim.env.PATH
 vim.env.DOTNET_MULTILEVEL_LOOKUP = '0'
+vim.env.MSBUILDSDKS_PATH = home .. '/.asdf/installs/dotnet/9.0.305/sdk/9.0.305/Sdks'
 vim.g.vim_svelte_plugin_load_full_syntax = 1
 vim.g.vim_svelte_plugin_use_typescript = 1
 vim.g.vim_svelte_plugin_use_sass = 1
