@@ -49,154 +49,54 @@ M.set_theme = function(name)
   end
 end
 
--- Apply base highlights
-M.apply_base_highlights = function(theme)
+-- Apply essential base highlights (minimal approach)
+M.apply_essential_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Basic syntax highlighting
+  -- Only set the most essential highlight that must match exactly
+  -- Let the colorscheme handle the rest
   highlight(0, 'Normal', { bg = colors.ui.background_primary, fg = colors.semantic.foreground })
-  highlight(0, 'NormalFloat', { bg = colors.ui.background_secondary, fg = colors.semantic.foreground })
-  highlight(0, 'FloatBorder', { bg = colors.ui.background_secondary, fg = colors.ui.border })
-
-  -- Cursor and selection
-  highlight(0, 'CursorLine', { bg = colors.ui.cursor_line })
-  highlight(0, 'CursorLineNr', { bg = colors.ui.cursor_line, fg = colors.ui.foreground_primary })
-  highlight(0, 'Visual', { bg = colors.ui.visual, reverse = true })
-  highlight(0, 'VisualNOS', { bg = colors.ui.visual })
-
-  -- Line numbers
-  highlight(0, 'LineNr', { bg = colors.ui.background_primary, fg = colors.ui.foreground_tertiary })
-  highlight(0, 'SignColumn', { bg = colors.ui.background_primary, fg = colors.ui.foreground_tertiary })
-
-  -- Text elements
-  highlight(0, 'Comment', { fg = colors.semantic.comment, italic = true })
-  highlight(0, 'String', { fg = colors.semantic.string })
-  highlight(0, 'Character', { fg = colors.semantic.string })
-  highlight(0, 'Number', { fg = colors.semantic.constant })
-  highlight(0, 'Boolean', { fg = colors.semantic.constant })
-  highlight(0, 'Float', { fg = colors.semantic.constant })
-
-  -- Functions and variables
-  highlight(0, 'Function', { fg = colors.semantic.function_name })
-  highlight(0, 'Identifier', { fg = colors.semantic.variable })
-  highlight(0, 'Variable', { fg = colors.semantic.variable })
-
-  -- Keywords and types
-  highlight(0, 'Keyword', { fg = colors.semantic.keyword, bold = true })
-  highlight(0, 'Type', { fg = colors.semantic.type })
-  highlight(0, 'Structure', { fg = colors.semantic.type })
-  highlight(0, 'StorageClass', { fg = colors.semantic.keyword })
-
-  -- Operators and special
-  highlight(0, 'Operator', { fg = colors.semantic.operator })
-  highlight(0, 'Special', { fg = colors.semantic.special })
-
-  -- Non-text elements
-  highlight(0, 'NonText', { fg = colors.ui.foreground_tertiary })
-  highlight(0, 'EndOfBuffer', { fg = colors.ui.background_primary })
-  highlight(0, 'Whitespace', { fg = colors.ui.foreground_tertiary })
-
-  -- Separators
-  highlight(0, 'VertSplit', { fg = colors.ui.border, bg = colors.ui.background_primary })
-  highlight(0, 'WinSeparator', { fg = colors.ui.border, bg = colors.ui.background_primary })
-
-  -- Search and matches
-  highlight(0, 'Search', { bg = colors.ui.match, fg = colors.ui.background_primary })
-  highlight(0, 'IncSearch', { bg = colors.ui.accent, fg = colors.ui.background_primary })
-  highlight(0, 'MatchParen', { bg = colors.ui.accent, fg = colors.ui.background_primary, bold = true })
-
-  -- Messages
-  highlight(0, 'ErrorMsg', { fg = colors.semantic.error, bold = true })
-  highlight(0, 'WarningMsg', { fg = colors.semantic.warning, bold = true })
-  highlight(0, 'MoreMsg', { fg = colors.semantic.info })
-  highlight(0, 'ModeMsg', { fg = colors.semantic.info })
-
-  -- Status line
-  highlight(0, 'StatusLine', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_primary })
-  highlight(0, 'StatusLineNC', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_secondary })
-
-  -- Tabs
-  highlight(0, 'TabLine', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_secondary })
-  highlight(0, 'TabLineFill', { bg = colors.ui.background_secondary, fg = colors.ui.background_secondary })
-  highlight(0, 'TabLineSel', { bg = colors.ui.accent, fg = colors.ui.background_primary, bold = true })
-
-  -- Menu
-  highlight(0, 'Pmenu', { bg = colors.ui.menu, fg = colors.ui.foreground_primary })
-  highlight(0, 'PmenuSel', { bg = colors.ui.menu_select, fg = colors.ui.foreground_primary })
-  highlight(0, 'PmenuSbar', { bg = colors.ui.scrollbar })
-  highlight(0, 'PmenuThumb', { bg = colors.ui.foreground_tertiary })
-  highlight(0, 'PmenuKind', { bg = colors.ui.menu, fg = colors.semantic.type })
-
-  -- Wild menu
-  highlight(0, 'WildMenu', { bg = colors.ui.accent, fg = colors.ui.background_primary })
-
-  -- Folds
-  highlight(0, 'Folded', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_secondary })
-  highlight(0, 'FoldColumn', { bg = colors.ui.background_primary, fg = colors.ui.foreground_tertiary })
-
-  -- Diff
-  highlight(0, 'DiffAdd', { bg = colors.git.add, fg = colors.semantic.foreground })
-  highlight(0, 'DiffChange', { bg = colors.git.change, fg = colors.semantic.foreground })
-  highlight(0, 'DiffDelete', { bg = colors.git.delete, fg = colors.semantic.foreground })
-  highlight(0, 'DiffText', { bg = colors.git.change, fg = colors.semantic.foreground, bold = true })
-
-  -- Spell
-  highlight(0, 'SpellBad', { fg = colors.semantic.error, undercurl = true })
-  highlight(0, 'SpellCap', { fg = colors.semantic.warning, undercurl = true })
-  highlight(0, 'SpellLocal', { fg = colors.semantic.info, undercurl = true })
-  highlight(0, 'SpellRare', { fg = colors.semantic.hint, undercurl = true })
-
-  -- Conceal
-  highlight(0, 'Conceal', { fg = colors.ui.foreground_tertiary })
 end
 
--- Apply plugin-specific highlights
-M.apply_plugin_highlights = function(theme)
+-- Apply global bufferline highlights (from original rice.lua)
+M.apply_global_bufferline_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Bufferline highlights
-  M.apply_bufferline_highlights(theme)
+  -- NvimTree highlights (from original)
+  highlight(0, 'NvimTreeNormal', { bg = colors.ui.background_tertiary })
+  highlight(0, 'NvimTreeVertSplit', { bg = colors.ui.background_tertiary })
+  highlight(0, 'NvimTreeEndOfBuffer', { fg = colors.ui.background_tertiary })
 
-  -- Rainbow highlights
+  -- Bufferline highlights (from original - exact match)
+  highlight(0, 'BufferTabpageFill', { bg = colors.ui.background_tertiary, fg = colors.ui.background_tertiary })
+  highlight(0, 'BufferInactive', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_tertiary })
+  highlight(0, 'BufferInactiveSign', { bg = colors.ui.background_secondary, fg = colors.ui.background_secondary })
+  highlight(0, 'BufferInactiveMod', { bg = colors.ui.background_secondary, fg = colors.semantic.warning })
+  highlight(0, 'BufferVisible', { fg = colors.semantic.comment })
+  highlight(0, 'BufferVisibleSign', { bg = colors.ui.background_primary, fg = colors.ui.background_primary })
+  highlight(0, 'BufferVisibleMod', { fg = colors.semantic.warning })
+  highlight(0, 'BufferCurrent', { fg = colors.semantic.foreground, bg = colors.ui.background_primary })
+  highlight(0, 'BufferCurrentSign', { bg = colors.ui.background_primary, fg = colors.ui.background_primary })
+  highlight(0, 'BufferCurrentMod', { fg = colors.semantic.warning })
+
+  -- QuickScope highlights (from original)
+  highlight(0, 'QuickScopeSecondary', { link = 'healthWarning' })
+  highlight(0, 'QuickScopePrimary', { link = 'healthSuccess' })
+end
+
+-- Apply essential plugin highlights (minimal approach)
+M.apply_essential_plugin_highlights = function(theme)
+  local colors = theme
+  local highlight = vim.api.nvim_set_hl
+
+  -- Only rainbow highlights (if available) - essential for functionality
   if colors.extensions.rainbow then
     for i, color in ipairs(colors.extensions.rainbow) do
       highlight(0, 'rainbowcol' .. i, { fg = color })
     end
   end
-
-  -- Indent blankline highlights
-  M.apply_indent_highlights(theme)
-
-  -- Git signs highlights
-  highlight(0, 'GitSignsAdd', { fg = colors.git.add, bg = colors.ui.background_primary })
-  highlight(0, 'GitSignsChange', { fg = colors.git.change, bg = colors.ui.background_primary })
-  highlight(0, 'GitSignsDelete', { fg = colors.git.delete, bg = colors.ui.background_primary })
-  highlight(0, 'GitSignsAddNr', { fg = colors.git.add, bg = colors.ui.background_primary })
-  highlight(0, 'GitSignsChangeNr', { fg = colors.git.change, bg = colors.ui.background_primary })
-  highlight(0, 'GitSignsDeleteNr', { fg = colors.git.delete, bg = colors.ui.background_primary })
-
-  -- Telescope highlights
-  highlight(0, 'TelescopeNormal', { bg = colors.ui.background_primary, fg = colors.ui.foreground_primary })
-  highlight(0, 'TelescopeBorder', { bg = colors.ui.background_primary, fg = colors.ui.border })
-  highlight(0, 'TelescopePromptTitle', { bg = colors.ui.accent, fg = colors.ui.background_primary, bold = true })
-  highlight(0, 'TelescopeResultsTitle', { bg = colors.ui.accent, fg = colors.ui.background_primary, bold = true })
-  highlight(0, 'TelescopePreviewTitle', { bg = colors.ui.accent, fg = colors.ui.background_primary, bold = true })
-  highlight(0, 'TelescopeSelection', { bg = colors.ui.selection, fg = colors.ui.foreground_primary })
-  highlight(0, 'TelescopeSelectionCaret', { fg = colors.ui.accent, bg = colors.ui.selection })
-  highlight(0, 'TelescopeMatching', { fg = colors.ui.accent, bold = true })
-
-  -- Which-key highlights
-  highlight(0, 'WhichKeyFloat', { bg = colors.ui.background_secondary, fg = colors.ui.foreground_primary })
-  highlight(0, 'WhichKeyBorder', { bg = colors.ui.background_secondary, fg = colors.ui.border })
-  highlight(0, 'WhichKeyGroup', { fg = colors.ui.accent, bold = true })
-  highlight(0, 'WhichKeySeparator', { fg = colors.ui.foreground_secondary })
-  highlight(0, 'WhichKeyDesc', { fg = colors.ui.foreground_primary })
-
-  -- QuickScope highlights
-  highlight(0, 'QuickScopePrimary', { fg = colors.ui.accent, underline = true })
-  highlight(0, 'QuickScopeSecondary', { fg = colors.ui.accent_secondary, underline = true })
 end
 
 -- Apply bufferline highlights
@@ -237,11 +137,11 @@ end
 
 -- Apply all highlights for a theme
 M.apply_highlights = function(theme)
-  -- Apply base highlights
-  M.apply_base_highlights(theme)
+  -- Apply only essential base highlights
+  M.apply_essential_highlights(theme)
 
-  -- Apply plugin-specific highlights
-  M.apply_plugin_highlights(theme)
+  -- Apply global bufferline highlights (from original rice.lua)
+  M.apply_global_bufferline_highlights(theme)
 
   -- Apply theme-specific highlights
   if theme.name == 'dracula' then
@@ -253,15 +153,29 @@ M.apply_highlights = function(theme)
   elseif theme.name == 'nord' then
     M.apply_nord_highlights(theme)
   end
+
+  -- Apply only essential plugin highlights
+  M.apply_essential_plugin_highlights(theme)
 end
 
--- Theme-specific highlight adjustments
+-- Theme-specific highlight adjustments (matching original exactly)
 M.apply_dracula_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Dracula-specific adjustments
+  -- General configs (exact match to original)
   highlight(0, 'NonText', { fg = colors.ui.foreground_tertiary })
+  highlight(0, 'EndOfBuffer', { fg = colors.ui.background_primary })
+
+  -- Indent lines (exact match to original)
+  highlight(0, 'IndentBlanklineIndent1', { fg = '#7e444f' })
+  highlight(0, 'IndentBlanklineIndent2', { fg = '#816e52' })
+  highlight(0, 'IndentBlanklineIndent3', { fg = '#5a7051' })
+  highlight(0, 'IndentBlanklineIndent4', { fg = '#396975' })
+  highlight(0, 'IndentBlanklineIndent5', { fg = '#3f668c' })
+  highlight(0, 'IndentBlanklineIndent6', { fg = '#714a83' })
+
+  -- Git symbols at the side (exact match to original)
   highlight(0, 'SignifySignDelete', { fg = colors.semantic.error })
 end
 
@@ -269,7 +183,16 @@ M.apply_gruvbox_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Gruvbox-specific adjustments
+  -- Indent lines (exact match to original)
+  highlight(0, 'IndentBlanklineIndent1', { fg = '#864b4f' })
+  highlight(0, 'IndentBlanklineIndent2', { fg = '#887652' })
+  highlight(0, 'IndentBlanklineIndent3', { fg = '#617751' })
+  highlight(0, 'IndentBlanklineIndent4', { fg = '#3f7077' })
+  highlight(0, 'IndentBlanklineIndent5', { fg = '#456d8d' })
+  highlight(0, 'IndentBlanklineIndent6', { fg = '#795184' })
+
+  -- Cleaner visual (exact match to original)
+  highlight(0, 'EndOfBuffer', { fg = colors.ui.background_primary })
   highlight(0, 'SignColumn', { link = 'Normal' })
 end
 
@@ -277,23 +200,51 @@ M.apply_solarized_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Solarized-specific adjustments
-  highlight(0, 'LineNr', { bg = colors.ui.background_primary })
+  -- Indent blankline (exact match to original)
   highlight(0, 'IndentBlanklineContextChar', { fg = '#b1cc00' })
-  highlight(0, 'QuickScopeSecondary', { link = 'ReplaceMode' })
-  highlight(0, 'QuickScopePrimary', { link = 'InsertMode' })
+  highlight(0, 'IndentBlanklineIndent1', { fg = '#6e2f33' })
+  highlight(0, 'IndentBlanklineIndent2', { fg = '#5b5a1b' })
+  highlight(0, 'IndentBlanklineIndent3', { fg = '#43621b' })
+  highlight(0, 'IndentBlanklineIndent4', { fg = '#156667' })
+  highlight(0, 'IndentBlanklineIndent5', { fg = '#364e7d' })
+  highlight(0, 'IndentBlanklineIndent6', { fg = '#6a315c' })
+
+  
+  -- Cleaner visual (exact match to original)
+  highlight(0, 'EndOfBuffer', { fg = colors.ui.background_primary })
+  highlight(0, 'LineNr', { bg = colors.ui.background_primary })
+
+  -- Git signs (exact match to original)
+  highlight(0, 'GitSignsChange', { bg = colors.ui.background_primary, fg = colors.semantic.warning })
+  highlight(0, 'GitSignsAdd', { bg = colors.ui.background_primary, fg = colors.semantic.string })
+  highlight(0, 'GitSignsDelete', { bg = colors.ui.background_primary, fg = colors.semantic.error })
 end
 
 M.apply_nord_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
 
-  -- Nord-specific adjustments
+  -- Indent lines (exact match to original)
+  highlight(0, 'IndentBlanklineIndent1', { fg = '#774b55' })
+  highlight(0, 'IndentBlanklineIndent2', { fg = '#7f5e58' })
+  highlight(0, 'IndentBlanklineIndent3', { fg = '#8d8066' })
+  highlight(0, 'IndentBlanklineIndent4', { fg = '#697966' })
+  highlight(0, 'IndentBlanklineIndent5', { fg = '#5b7a88' })
+  highlight(0, 'IndentBlanklineIndent6', { fg = '#716177' })
+
+  -- Nord-specific highlights (exact match to original)
   highlight(0, 'NonText', { fg = colors.ui.foreground_tertiary })
   highlight(0, 'Folded', { link = 'Visual' })
+
+  -- Indent context (exact match to original)
+  vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#88C0D0' })
+
+  -- Visual and split (exact match to original)
   highlight(0, 'VertSplit', { bg = colors.ui.background_primary, fg = colors.ui.cursor_line })
-  highlight(0, 'QuickScopeSecondary', { link = 'LeapLabelPrimary' })
-  highlight(0, 'QuickScopePrimary', { link = 'LeapLabelPrimary' })
+
+  
+  -- End of buffer (exact match to original)
+  highlight(0, 'EndOfBuffer', { fg = colors.ui.background_primary })
 end
 
 -- Legacy compatibility - return colors in old format
