@@ -1,5 +1,6 @@
-local bufferline = require 'bufferline'
-bufferline.setup {
+local loader = require('utils.loader')
+
+local bufferline_config = {
   options = {
     mode = 'buffers',
     diagnostics = 'nvim_lsp',
@@ -8,3 +9,5 @@ bufferline.setup {
     },
   },
 }
+
+loader.safe_setup('bufferline', bufferline_config)

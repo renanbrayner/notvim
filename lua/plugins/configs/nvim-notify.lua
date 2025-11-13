@@ -1,16 +1,12 @@
-local status_ok, stages_util = pcall(require, 'notify.stages.util')
-if not status_ok then
-  vim.notify 'Error requiring notify.stages.util'
+local loader = require('utils.loader')
+
+local stages_util = loader.safe_require('notify.stages.util', true) -- silent
+if not stages_util then
+  loader.safe_setup('notify', {})
   return
 end
 
-local notify_ok, notify = pcall(require, 'notify')
-if not notify_ok then
-  vim.notify 'Error requiring notify'
-  return
-end
-
-notify.setup {
+local notify_config = {
   stages = {
     function(state)
       local next_height = state.message.height + 2
@@ -64,3 +60,5 @@ notify.setup {
     end,
   },
 }
+
+loader.safe_setup('notify', notify_config)

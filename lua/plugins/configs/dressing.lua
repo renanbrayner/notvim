@@ -1,10 +1,6 @@
-local status_ok, dressing = pcall(require, 'dressing')
-if not status_ok then
-  vim.notify('Error requiring dressing', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-dressing.setup {
+local dressing_config = {
   select = {
     fzf = {
       window = {
@@ -14,3 +10,5 @@ dressing.setup {
     },
   },
 }
+
+loader.safe_setup('dressing', dressing_config)

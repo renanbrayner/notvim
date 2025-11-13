@@ -1,10 +1,12 @@
-local Path_ok, Path = pcall(require, 'plenary.path')
-if not Path_ok then
-  vim.notify('Error requiring plenary.path', vim.log.levels.ERROR)
+local loader = require('utils.loader')
+
+local Path = loader.safe_require('plenary.path', true) -- silent
+if not Path then
+  vim.notify('Failed to load plenary.path for session manager', loader.WARN)
   return
 end
 
-require('session_manager').setup {
+local sessionmanager_config = {
   sessions_dir = Path:new(vim.fn.stdpath 'data', 'sessions'),
   path_replacer = '__',
   colon_replacer = '++',
@@ -16,3 +18,5 @@ require('session_manager').setup {
   },
   autosave_only_in_session = false,
 }
+
+loader.safe_setup('session_manager', sessionmanager_config)

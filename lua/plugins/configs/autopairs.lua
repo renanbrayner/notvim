@@ -1,12 +1,6 @@
-local npairs_ok, npairs = pcall(require, 'nvim-autopairs')
-if not npairs_ok then
-  vim.notify('Error requiring nvim-autopairs', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-local Rule = require 'nvim-autopairs.rule'
-
-npairs.setup {
+local autopairs_config = {
   check_ts = true,
   ts_config = {
     lua = { 'string' }, -- it will not add a pair on that treesitter node
@@ -15,10 +9,19 @@ npairs.setup {
   },
 }
 
-local ts_conds = require 'nvim-autopairs.ts-conds'
+local npairs = loader.safe_require('nvim-autopairs')
+if not npairs then
+  return
+end
 
--- press % => %% only while inside a comment or string
-npairs.add_rules {
-  Rule('%', '%', 'lua'):with_pair(ts_conds.is_ts_node { 'string', 'comment' }),
-  Rule('$', '$', 'lua'):with_pair(ts_conds.is_not_ts_node { 'function' }),
-}
+npairs.setup(autopairs_config)
+
+local Rule = loader.safe_require('nvim-autopairs.rule', true) -- silent
+local ts_conds = loader.safe_require('nvim-autopairs.ts-conds', true) -- silent
+
+if Rule and ts_conds then
+  npairs.add_rules {
+    Rule('%', '%', 'lua'):with_pair(ts_conds.is_ts_node { 'string', 'comment' }),
+    Rule('$', '$', 'lua'):with_pair(ts_conds.is_not_ts_node { 'function' }),
+  }
+end

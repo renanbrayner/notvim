@@ -1,10 +1,6 @@
-local status_ok, colorizer = pcall(require, 'colorizer')
-if not status_ok then
-  vim.notify('Error requiring colorizer', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-colorizer.setup {
+local colorizer_config = {
   filetypes = {
     '*',
   },
@@ -22,7 +18,11 @@ colorizer.setup {
   },
 }
 
--- execute colorizer as soon as possible
-vim.defer_fn(function()
-  require('colorizer').attach_to_buffer(0)
-end, 0)
+if loader.safe_setup('colorizer', colorizer_config) then
+  local colorizer = loader.safe_require('colorizer', true) -- silent
+  if colorizer then
+    vim.defer_fn(function()
+      colorizer.attach_to_buffer(0)
+    end, 0)
+  end
+end

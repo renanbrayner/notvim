@@ -1,10 +1,6 @@
-local supermaven_ok, supermaven = pcall(require, 'supermaven-nvim')
-if not supermaven_ok then
-  vim.notify('Error requiring supermaven', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-supermaven.setup {
+local supermaven_config = {
   keymaps = {
     accept_suggestion = '<C-l>',
     clear_suggestion = '<C-]>',
@@ -22,3 +18,5 @@ supermaven.setup {
     return false
   end,       -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
 }
+
+loader.safe_setup('supermaven-nvim', supermaven_config)

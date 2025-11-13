@@ -1,10 +1,6 @@
-local status_ok, wk = pcall(require, 'which-key')
-if not status_ok then
-  vim.notify('Error requiring which-key', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-wk.setup {
+local whichkey_config = {
   window = {
     border = 'rounded',
     margin = { 1, 0, 1, 0 },
@@ -17,3 +13,5 @@ wk.setup {
     align = 'left', -- align columns left, center or right
   },
 }
+
+loader.safe_setup('which-key', whichkey_config)

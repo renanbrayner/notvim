@@ -1,11 +1,8 @@
-local mappings = require 'plugins.keymaps.telescope'
-local status_ok, telescope = pcall(require, 'telescope')
-if not status_ok then
-  vim.notify('Error requiring which-key', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-telescope.setup {
+local mappings = require 'plugins.keymaps.telescope'
+
+local telescope_config = {
   defaults = {
     mappings = mappings,
     vimgrep_arguments = {
@@ -55,3 +52,5 @@ telescope.setup {
     buffer_previewer_maker = require('telescope.previewers').buffer_previewer_maker,
   },
 }
+
+loader.safe_setup('telescope', telescope_config)

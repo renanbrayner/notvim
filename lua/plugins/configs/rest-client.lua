@@ -1,10 +1,6 @@
-local status_ok, rest = pcall(require, 'rest-nvim')
-if not status_ok then
-  vim.notify('Error requiring rest-nvim', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-rest.setup {
+local rest_client_config = {
   -- Open request results in a horizontal split
   result_split_horizontal = true,
   -- Keep the http file buffer above|left when split horizontal|vertical
@@ -41,3 +37,5 @@ rest.setup {
   custom_dynamic_variables = {},
   yank_dry_run = true,
 }
+
+loader.safe_setup('rest-nvim', rest_client_config)

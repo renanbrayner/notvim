@@ -1,10 +1,6 @@
-local status_ok, gitsigns = pcall(require, 'gitsigns')
-if not status_ok then
-  vim.notify('Error requiring gitsigns', vim.log.levels.ERROR)
-  return
-end
+local loader = require('utils.loader')
 
-gitsigns.setup {
+local gitsigns_config = {
   signs = {
     add = { text = '▎' },
     change = { text = '▎' },
@@ -43,3 +39,5 @@ gitsigns.setup {
     col = 1,
   },
 }
+
+loader.safe_setup('gitsigns', gitsigns_config)
