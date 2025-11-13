@@ -256,6 +256,16 @@ return {
     end,
   },
 
+  -- Rustaceanvim - Rust LSP and tools
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6',
+    ft = 'rust',
+    init = function()
+      require 'plugins.configs.rustaceanvim'
+    end,
+  },
+
   -- None-ls - formatters/linters
   {
     'nvimtools/none-ls.nvim',
