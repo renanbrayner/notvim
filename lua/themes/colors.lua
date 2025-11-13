@@ -135,6 +135,20 @@ M.apply_indent_highlights = function(theme)
   highlight(0, 'IndentBlanklineContextEnd', { bg = colors.ui.background_secondary })
 end
 
+-- Apply git-blame highlights
+M.apply_git_blame_highlights = function(theme)
+  local colors = theme
+  local highlight = vim.api.nvim_set_hl
+
+  -- Custom highlight for git-blame virtual text
+  -- Match cursorline background with comment foreground for readability
+  highlight(0, 'GitBlameVirtualText', {
+    bg = colors.ui.cursor_line,    -- Match cursorline background
+    fg = colors.semantic.comment,  -- Use comment color for readability
+    italic = true,                 -- Subtle styling to differentiate
+  })
+end
+
 -- Apply all highlights for a theme
 M.apply_highlights = function(theme)
   -- Apply only essential base highlights
@@ -157,6 +171,9 @@ M.apply_highlights = function(theme)
   -- Apply essential plugin highlights
   M.apply_essential_plugin_highlights(theme)
 
+  -- Apply git-blame highlights
+  M.apply_git_blame_highlights(theme)
+
   -- Apply indent highlights (important for colored indent lines)
   M.apply_indent_highlights(theme)
 end
@@ -165,6 +182,10 @@ end
 M.apply_dracula_highlights = function(theme)
   local colors = theme
   local highlight = vim.api.nvim_set_hl
+
+  -- Override CursorLine to match our theme's cursor_line color
+  -- This ensures git-blame background matches the actual cursorline
+  highlight(0, 'CursorLine', { bg = colors.ui.cursor_line })
 
   -- General configs (exact match to original)
   highlight(0, 'NonText', { fg = colors.ui.foreground_tertiary })
