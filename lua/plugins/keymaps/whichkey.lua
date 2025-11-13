@@ -329,6 +329,29 @@ wk.add {
     desc = 'Preview the request cURL command',
   },
 
+  -- GIT
+  { '<leader>g', group = 'Git' },
+  {
+    '<leader>gb',
+    '<cmd>GitBlameToggle<cr>',
+    desc = 'Toggle git blame',
+  },
+  {
+    '<leader>go',
+    '<cmd>GitBlameOpenCommitURL<cr>',
+    desc = 'Open commit URL',
+  },
+  {
+    '<leader>gs',
+    '<cmd>GitBlameCopySHA<cr>',
+    desc = 'Copy commit SHA',
+  },
+  {
+    '<leader>gf',
+    '<cmd>GitBlameCopyFileURL<cr>',
+    desc = 'Copy file URL',
+  },
+
   -- FLOATERM
   { '<leader>t', group = 'Floaterm' },
   {

@@ -219,6 +219,15 @@ return {
     end,
   },
 
+  -- Git blame - mostra informações do commit ao lado das linhas
+  {
+    'f-person/git-blame.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require 'plugins.configs.git-blame'
+    end,
+  },
+
   -- Auto tag - específico para HTML/XML
   {
     'windwp/nvim-ts-autotag',
