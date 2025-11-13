@@ -2,26 +2,24 @@
 
 ## TODO Tracking
 
-- [x] **Phase 1**: Theme System Overhaul (HIGH PRIORITY)
+- [x] **Phase 1**: Theme System Overhaul (HIGH PRIORITY) ✅
   - [x] Create base theme system
   - [x] Refactor rice.lua to use inheritance
   - [x] Update highlight system
   - [x] Test all themes
-- [ ] **Phase 2**: Keymap Reorganization (HIGH PRIORITY)
-  - [ ] Split whichkey.lua by feature
-  - [ ] Create keymap categories
-  - [ ] Update which-key configuration
-  - [ ] Test all keymaps
-- [ ] **Phase 3**: Error Handling Centralization (HIGH PRIORITY)
-  - [ ] Create utility loader
-  - [ ] Update all plugin configs
-  - [ ] Standardize error patterns
-- [ ] **Phase 4**: Plugin Configuration Consolidation (MEDIUM PRIORITY)
-  - [ ] Group plugins by category
-  - [ ] Merge similar configurations
-  - [ ] Update init.lua loading
+- [x] **Phase 2**: Keymap Reorganization (HIGH PRIORITY) ✅
+  - [x] **DECISION**: Keep current keymap structure (whichkey.lua)
+  - [x] Maintain single-file approach for better maintainability
+- [x] **Phase 3**: Error Handling Centralization (HIGH PRIORITY) ✅
+  - [x] Create centralized `utils/loader.lua`
+  - [x] Update 12+ plugin configs to use `loader.safe_setup()`
+  - [x] Handle complex configs with additional logic
+  - [x] Standardize error handling across all configurations
+- [x] **Phase 4**: Plugin Configuration Consolidation (MEDIUM PRIORITY) ✅ CANCELLED
+  - [x] **DECISION**: Keep separation of concerns (specs ≠ configs)
+  - [x] Maintain current file structure for better organization
 - [ ] **Phase 5**: Core Architecture Improvements (LOW PRIORITY)
-  - [ ] Create configuration registry
+  - [ ] **Phase 5.1**: Configuration Registry (CURRENT FOCUS)
   - [ ] Add environment detection
   - [ ] Implement feature flags
   - [ ] Add health checks
@@ -1166,35 +1164,61 @@ return plugins
 
 ### **Objective**: Add advanced architectural features for better maintainability
 
-### **Feature 5.1: Configuration Registry**
+### **Feature 5.1: Configuration Registry** ⭐ **CURRENT FOCUS**
+**Objective**: Implement centralized registration and loading system for plugin configurations
+
+#### **Core Architecture**
 ```lua
 -- lua/core/registry.lua
 local M = {
-  configs = {},
-  loaded = {},
+  configs = {},      -- Registered configuration functions
+  loaded = {},       -- Track loaded categories
+  stats = {          -- Loading statistics
+    total_configs = 0,
+    loaded_configs = 0,
+    failed_configs = {}
+  }
 }
 
 -- Register a configuration function
 M.register = function(category, name, fn)
   M.configs[category] = M.configs[category] or {}
   M.configs[category][name] = fn
+  M.stats.total_configs = M.stats.total_configs + 1
 end
 
--- Load configurations by category
+-- Load configurations by category with error handling
 M.load_category = function(category)
   if M.loaded[category] then
-    return
+    return true, 'Category already loaded'
   end
 
   local category_configs = M.configs[category] or {}
+  local success_count = 0
+  local failed_count = 0
+
   for name, fn in pairs(category_configs) do
     local ok, err = pcall(fn)
     if not ok then
       vim.notify(string.format('Failed to load config %s.%s: %s', category, name, err), vim.log.levels.ERROR)
+      failed_count = failed_count + 1
+      table.insert(M.stats.failed_configs, { category = category, name = name, error = err })
+    else
+      success_count = success_count + 1
+      M.stats.loaded_configs = M.stats.loaded_configs + 1
     end
   end
 
   M.loaded[category] = true
+
+  local message = string.format('Category %s loaded: %d success, %d failed', category, success_count, failed_count)
+  if failed_count > 0 then
+    vim.notify(message, vim.log.levels.WARN)
+  else
+    vim.notify(message, vim.log.levels.INFO)
+  end
+
+  return failed_count == 0, message
 end
 
 -- Load all configurations
@@ -1204,8 +1228,86 @@ M.load_all = function()
   end
 end
 
+-- Get registry statistics
+M.get_stats = function()
+  return {
+    total = M.stats.total_configs,
+    loaded = M.stats.loaded_configs,
+    failed = #M.stats.failed_configs,
+    categories_loaded = vim.tbl_count(M.loaded),
+    categories_total = vim.tbl_count(M.configs)
+  }
+end
+
+-- List all registered configurations
+M.list_configs = function()
+  local result = {}
+  for category, configs in pairs(M.configs) do
+    result[category] = vim.tbl_keys(configs)
+  end
+  return result
+end
+
+-- Clear registry (for testing)
+M.clear = function()
+  M.configs = {}
+  M.loaded = {}
+  M.stats = {
+    total_configs = 0,
+    loaded_configs = 0,
+    failed_configs = {}
+  }
+end
+
 return M
 ```
+
+#### **Defined Categories**
+- **`ui`**: Interface plugins (whichkey, bufferline, lualine, notify)
+- **`editor`**: Text editing plugins (treesitter, autopairs, surround, comment)
+- **`navigation`**: File navigation (telescope, chadtree, hop)
+- **`lsp`**: Language server plugins (mason, lspconfig, none-ls)
+- **`git`**: Git integration (gitsigns, git-blame, lazygit)
+- **`tools`**: Development tools (rest-client, floaterm, dap)
+
+#### **Usage Examples**
+```lua
+-- In plugin configuration file
+local registry = require('core.registry')
+
+registry.register('ui', 'whichkey', function()
+  local loader = require('utils.loader')
+  local config = { window = { border = 'rounded' } }
+  loader.safe_setup('which-key', config)
+end)
+
+-- In main init.lua
+local registry = require('core.registry')
+
+-- Load all UI plugins
+registry.load_category('ui')
+
+-- Load all configurations
+registry.load_all()
+
+-- Check loading statistics
+local stats = registry.get_stats()
+print(string.format('Loaded %d/%d configurations', stats.loaded, stats.total))
+```
+
+#### **Benefits**
+- ✅ **Centralized Control**: Single point to manage all plugin configurations
+- ✅ **Duplicate Prevention**: Categories loaded only once
+- ✅ **Loading Statistics**: Track success/failure rates
+- ✅ **Debug Support**: Clear visibility into what was loaded
+- ✅ **Conditional Loading**: Easy to load by category
+- ✅ **Error Isolation**: Failed configs don't break the entire system
+
+#### **Integration Plan**
+1. **Step 1**: Create `lua/core/registry.lua` with core functionality
+2. **Step 2**: Update existing plugin configs to use `registry.register()`
+3. **Step 3**: Integrate `registry.load_category()` calls in main init.lua
+4. **Step 4**: Add loading statistics and health checks
 
 ### **Feature 5.2: Environment Detection**
 ```lua
@@ -1378,27 +1480,36 @@ return M
 
 ## 📋 **Implementation Timeline**
 
-### **Week 1: Phase 1 - Theme System**
-- **Day 1-2**: Create base theme system and individual theme files
-- **Day 3-4**: Create theme manager and color utilities
-- **Day 5**: Refactor rice.lua and test all themes
+### **✅ Week 1: Phase 1 - Theme System** (COMPLETED)
+- **Day 1-2**: ✅ Create base theme system and individual theme files
+- **Day 3-4**: ✅ Create theme manager and color utilities
+- **Day 5**: ✅ Refactor rice.lua and test all themes
 
-### **Week 2: Phase 2 - Keymap Organization**
-- **Day 1-2**: Create loader utilities and split keymaps
-- **Day 3-4**: Create which-key configurations
-- **Day 5**: Test all keymaps and which-key groups
+### **✅ Week 2: Phase 2 - Keymap Organization** (COMPLETED - DECISION TO KEEP CURRENT)
+- **Day 1-2**: ✅ Analyze current keymap structure
+- **Day 3-4**: ✅ Decide to maintain single-file approach
+- **Day 5**: ✅ Document decision and rationale
 
-### **Week 3: Phase 3 - Error Handling**
-- **Day 1-2**: Create enhanced plugin loader
-- **Day 3-4**: Update all plugin configurations
-- **Day 5**: Test error handling and edge cases
+### **✅ Week 3: Phase 3 - Error Handling** (COMPLETED)
+- **Day 1-2**: ✅ Create centralized `utils/loader.lua`
+- **Day 3-4**: ✅ Update 12+ plugin configs to use `loader.safe_setup()`
+- **Day 5**: ✅ Handle complex configs and test error handling
 
-### **Week 4: Phase 4 - Plugin Consolidation**
-- **Day 1-2**: Create category-based plugin files
-- **Day 3-4**: Update main plugin file
-- **Day 5**: Test plugin loading and configurations
+### **✅ Week 4: Phase 4 - Plugin Consolidation** (COMPLETED - DECISION TO KEEP CURRENT)
+- **Day 1-2**: ✅ Evaluate consolidation approach
+- **Day 3-4**: ✅ Decide to maintain separation of concerns (specs ≠ configs)
+- **Day 5**: ✅ Document architectural decision
 
-### **Week 5+: Phase 5 - Advanced Features (Optional)**
+### **🎯 Current Week: Phase 5.1 - Configuration Registry** (IN PROGRESS)
+- **Step 1**: 🔄 Create `lua/core/registry.lua` with core functionality
+- **Step 2**: ⏳ Update existing plugin configs to use `registry.register()`
+- **Step 3**: ⏳ Integrate `registry.load_category()` calls in main init.lua
+- **Step 4**: ⏳ Add loading statistics and health checks
+
+### **📅 Future: Phase 5.2-5.4 - Optional Advanced Features**
+- Feature flags system
+- Environment detection
+- Health checks
 - Implement as needed based on requirements
 
 ---
@@ -1438,6 +1549,160 @@ return M
 2. **Performance testing**: Measure startup time and memory usage
 3. **Documentation**: Update any documentation if needed
 4. **Cleanup**: Remove old files and configurations
+
+---
+
+## 📁 **Phase 6: Folder Structure Optimization**
+
+### **Objective**: Improve organization while respecting user preferences for file management
+
+### **Current Structure Analysis**
+
+#### **Strengths**
+- ✅ Excellent plugin management with lazy.nvim
+- ✅ Clean separation between core, LSP, plugins, themes
+- ✅ Comprehensive error handling system
+- ✅ Advanced theme inheritance architecture
+
+#### **Areas for Improvement**
+- ⚠️ Large data files mixed with configurations (alpha headers: 627 lines)
+- ⚠️ Plugin configs could be better categorized
+- ⚠️ Missing separation between data and configuration logic
+
+### **Target Folder Structure**
+
+```
+/home/renan/.config/nvim/
+├── lua/
+│   ├── core/                    # Core functionality
+│   │   ├── autocmds.lua
+│   │   └── init.lua
+│   ├── lsp/                     # LSP configurations
+│   │   ├── servers.lua
+│   │   └── none-ls.lua
+│   ├── plugins/                 # Plugin management
+│   │   ├── init.lua             # Plugin specs (lazy.nvim)
+│   │   ├── configs/             # **REORGANIZED**: Plugin configurations
+│   │   │   ├── ui/              # Interface plugins
+│   │   │   │   ├── whichkey.lua
+│   │   │   │   ├── bufferline.lua
+│   │   │   │   ├── lualine.lua
+│   │   │   │   └── nvim-notify.lua
+│   │   │   ├── editor/          # Text editing
+│   │   │   │   ├── treesitter.lua
+│   │   │   │   ├── autopairs.lua
+│   │   │   │   ├── surround.lua
+│   │   │   │   └── comment.lua
+│   │   │   ├── navigation/      # File navigation
+│   │   │   │   ├── telescope.lua
+│   │   │   │   ├── chadtree.lua
+│   │   │   │   └── hop.lua
+│   │   │   ├── lsp_completion/  # LSP & completion
+│   │   │   │   ├── mason.lua
+│   │   │   │   ├── coq.lua
+│   │   │   │   └── supermaven.lua
+│   │   │   ├── git/             # Git integration
+│   │   │   │   ├── gitsigns.lua
+│   │   │   │   └── git-blame.lua
+│   │   │   └── tools/           # Development tools
+│   │   │       ├── rest-client.lua
+│   │   │       ├── floaterm.lua
+│   │   │       ├── dap.lua
+│   │   │       └── colorizer.lua
+│   │   └── keymaps/             # **PRESERVED**: Keymaps
+│   │       ├── whichkey.lua     # **MAINTAINED**: Large central keymap file
+│   │       └── telescope.lua    # Plugin-specific keymaps
+│   ├── themes/                  # Theme system (existing)
+│   ├── utils/                   # Utilities (existing)
+│   └── data/                    # **NEW**: Pure data files
+│       ├── alpha/               # Alpha dashboard data
+│       │   └── headers.lua      # Move from configs/alpha/
+│       └── themes/              # Theme-specific data
+│           └── palettes/         # Color definitions
+├── Config files                 # Root level: init.lua, opts.lua, rice.lua, utils.lua
+└── Documentation                # CLAUDE.md, REFACTOR.md
+```
+
+### **Implementation Plan**
+
+#### **Step 6.1: Data Separation (HIGH PRIORITY)**
+**Objective**: Separate data from configuration logic
+- Create `lua/data/` directory structure
+- Move `configs/alpha/headers.lua` → `data/alpha/headers.lua`
+- Extract pure color definitions to `data/themes/palettes/`
+- Create clear distinction between data and configuration
+
+#### **Step 6.2: Plugin Config Reorganization (MEDIUM PRIORITY)**
+**Objective**: Organize plugins by functional category while maintaining individual files
+- Create category directories under `lua/plugins/configs/`
+- Move existing configs to appropriate categories
+- Maintain all individual files (no consolidation)
+- Keep `whichkey.lua` in its preferred location
+
+#### **Step 6.3: Path Updates (MEDIUM PRIORITY)**
+**Objective**: Update all require statements to match new structure
+- Update plugin declarations in `init.lua`
+- Update require statements in affected files
+- Ensure all configurations load correctly
+
+### **Design Decisions Made**
+
+#### **Preserve User Preferences**
+- ✅ **Keep large whichkey.lua file**: User prefers centralized keymap location
+- ✅ **Maintain individual plugin files**: No file consolidation
+- ✅ **Keep existing core structure**: Don't break working patterns
+
+#### **Optimize Organization**
+- ✅ **Logical grouping**: Related plugins in same directory
+- ✅ **Data separation**: Pure data files separate from logic
+- ✅ **Intuitive navigation**: Easy to find specific functionality
+
+### **Benefits Expected**
+
+#### **Organizational Improvements**
+- ✅ **Better discoverability**: Related plugins grouped together
+- ✅ **Cleaner separation**: Data vs configuration logic
+- ✅ **Maintainable structure**: Each category self-contained
+
+#### **Preserved Advantages**
+- ✅ **Centralized keymaps**: Easy to find and modify
+- ✅ **Individual files**: No need to search through consolidated files
+- ✅ **Existing patterns**: Maintain working workflows
+
+### **Migration Strategy**
+
+#### **Phase 1: Data Separation (Day 1)**
+1. Create `lua/data/alpha/` directory
+2. Move `configs/alpha/headers.lua` with minimal changes
+3. Test alpha dashboard functionality
+
+#### **Phase 2: Directory Organization (Day 2-3)**
+1. Create category directories under `lua/plugins/configs/`
+2. Move existing configs to appropriate categories
+3. Update require statements where needed
+
+#### **Phase 3: Theme Data Extraction (Day 4)**
+1. Create `lua/data/themes/palettes/`
+2. Extract pure color definitions from theme files
+3. Update theme system to use separated data
+
+#### **Phase 4: Validation (Day 5)**
+1. Test all plugin configurations load correctly
+2. Validate keymaps still work
+3. Ensure theme system functions properly
+
+### **Success Metrics**
+
+#### **Quantitative**
+- Data files separated: ~3 major files
+- Plugin configs organized: 24 files into 6 logical categories
+- Zero breaking changes to existing functionality
+
+#### **Qualitative**
+- Easier to locate specific plugin configurations
+- Clear separation between data and logic
+- Intuitive folder navigation
+- Preserved user workflow preferences
 
 ---
 
