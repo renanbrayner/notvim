@@ -11,6 +11,10 @@ mason.setup {
       package_installed = '✓',
     },
   },
+  registries = {
+    'github:mason-org/mason-registry',
+    'github:Crashdummyy/mason-registry',
+  },
 }
 
 local coq_ok, coq = pcall(require, 'coq')
@@ -49,12 +53,12 @@ end
 
 mason_lspconfig.setup {
   ensure_installed = {
-    'lua_ls', -- Nome lspconfig (Mason pkg: lua-language-server)
-    'vue_ls', -- Nome lspconfig (Mason pkg: vue-language-server)
+    'lua_ls',
+    'vue_ls',
     'vtsls',
-    'html', -- Nome lspconfig (Mason pkg: html-lsp ou vscode-html-language-server)
-    'cssls', -- Nome lspconfig (Mason pkg: css-lsp ou vscode-css-language-server)
-    'eslint', -- Nome lspconfig (Mason pkg: eslint-lsp)
+    'html',
+    'cssls',
+    'eslint',
   },
   handlers = {
     function(server_name)
@@ -126,7 +130,7 @@ end
 
 local function setup_vtsls()
   local vue_language_server_path = vim.fn.stdpath 'data'
-    .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+      .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
 
   vim.lsp.config('vtsls', {
     cmd = { 'vtsls', '--stdio' },
@@ -223,3 +227,60 @@ vim.diagnostic.config {
     prefix = '',
   },
 }
+
+-- HACK: Roslyn não consegue encontrar dotnet do asdf quando em um projeto com toolsversion diferente, então precisamos corrigir o script
+local function fix_roslyn_script()
+  local mason_bin = vim.fn.stdpath('data') .. '/mason/bin/roslyn'
+  local mason_dll = vim.fn.stdpath('data') .. '/mason/packages/roslyn/libexec/Microsoft.CodeAnalysis.LanguageServer.dll'
+
+  local dotnet_wrapper = vim.fn.expand('~/.local/bin/dotnet-roslyn')
+
+  if vim.fn.filereadable(mason_bin) == 0 then
+    return
+  end
+
+  if vim.fn.executable(dotnet_wrapper) == 0 then
+    vim.notify('Wrapper dotnet-roslyn não encontrado em ~/.local/bin/', vim.log.levels.WARN)
+    return
+  end
+
+  local current_content = vim.fn.readfile(mason_bin)
+  local needs_fix = true
+
+  for _, line in ipairs(current_content) do
+    if line:match('dotnet%-roslyn') then
+      needs_fix = false
+      break
+    end
+  end
+
+  if needs_fix then
+    local new_content = {
+      '#!/usr/bin/env bash',
+      '',
+      string.format('exec "%s" "%s" "$@"', dotnet_wrapper, mason_dll),
+    }
+
+    vim.fn.writefile(new_content, mason_bin)
+    vim.fn.system({ 'chmod', '+x', mason_bin })
+    vim.notify('Roslyn: Script corrigido para usar dotnet wrapper', vim.log.levels.INFO)
+  end
+end
+
+-- Autocmd para corrigir após atualizações do Mason
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'MasonToolsUpdateCompleted',
+  callback = function()
+    vim.schedule(fix_roslyn_script)
+  end,
+  desc = 'Fix Roslyn script after Mason updates',
+})
+
+-- Também roda uma vez na inicialização
+vim.api.nvim_create_autocmd('VimEnter', {
+  once = true,
+  callback = function()
+    vim.schedule(fix_roslyn_script)
+  end,
+  desc = 'Ensure Roslyn script uses correct dotnet wrapper',
+})

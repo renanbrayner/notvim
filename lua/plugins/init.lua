@@ -266,6 +266,32 @@ return {
     end,
   },
 
+  -- Roslyn.nvim - C# LSP
+  {
+    'seblyng/roslyn.nvim',
+    ft = 'cs',
+    opts = {
+      dotnet_cmd = '/home/renan/.asdf/shims/dotnet',
+      config = {
+        settings = {
+          ['csharp|inlay_hints'] = {
+            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+            csharp_enable_inlay_hints_for_types = true,
+          },
+        },
+      },
+    },
+    config = function(_, opts)
+      -- Carrega Coq se estiver disponível e adiciona capabilities
+      local coq_ok, coq = pcall(require, 'coq')
+      if coq_ok then
+        opts.config.capabilities = coq.lsp_ensure_capabilities()
+      end
+      require('roslyn').setup(opts)
+    end,
+  },
+
   -- None-ls - formatters/linters
   {
     'nvimtools/none-ls.nvim',
