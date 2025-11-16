@@ -13,17 +13,16 @@ return {
   {
     'folke/noice.nvim',
     event = 'VeryLazy',
-    priority = 1000, -- Prioridade máxima para garantir carregamento primeiro
+    priority = 1000,
     dependencies = {
       'MunifTanjim/nui.nvim',
-      'rcarriga/nvim-notify', -- still needed for some functionality
+      'rcarriga/nvim-notify',
     },
     config = function()
       require 'plugins.configs.noice'
       require 'plugins.configs.nvim-notify'
     end,
     init = function()
-      -- Substitui vim.notify o mais cedo possível
       vim.notify = require('noice').notify
     end,
   },
