@@ -1,12 +1,5 @@
 local loader = require('utils.loader')
 
--- Garante que noice substitua vim.notify antes de qualquer outra coisa
-local noice_ok, noice = pcall(require, 'noice')
-if not noice_ok then
-  vim.notify('Error requiring noice', vim.log.levels.ERROR)
-  return
-end
-
 loader.safe_setup('noice', {
   cmdline = {
     enabled = true,
@@ -128,3 +121,4 @@ loader.safe_setup('noice', {
 
 -- Garante que vim.notify seja substituído explicitamente
 vim.notify = require('noice').notify
+
