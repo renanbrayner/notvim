@@ -2,24 +2,29 @@ return {
   -- Dashboard - deve carregar primeiro na inicialização
   {
     'goolord/alpha-nvim',
-    priority = 1000,
+    priority = 1100, -- Prioridade mais alta que noice
     event = 'VimEnter',
     config = function()
       require 'plugins.configs.alpha'
     end,
   },
 
-  -- Sistema de notificações - carrega cedo mas não imediato
+  -- Noice.nvim - UI/notifications replacement
   {
-    'rcarriga/nvim-notify',
-    priority = 900,
+    'folke/noice.nvim',
     event = 'VeryLazy',
+    priority = 1000, -- Prioridade máxima para garantir carregamento primeiro
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify', -- still needed for some functionality
+    },
     config = function()
-      local notify_ok, notify = pcall(require, 'notify')
-      if notify_ok then
-        vim.notify = notify.notify
-        require 'plugins.configs.nvim-notify'
-      end
+      require 'plugins.configs.noice'
+      require 'plugins.configs.nvim-notify'
+    end,
+    init = function()
+      -- Substitui vim.notify o mais cedo possível
+      vim.notify = require('noice').notify
     end,
   },
 
@@ -48,6 +53,7 @@ return {
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
+    priority = 800,
     dependencies = { 'echasnovski/mini.icons', 'kyazdani42/nvim-web-devicons' },
     config = function()
       require 'plugins.configs.whichkey'
