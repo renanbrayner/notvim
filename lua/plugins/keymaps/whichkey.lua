@@ -675,4 +675,12 @@ wk.add {
     end,
     desc = 'DAP: Evaluate Selection',
   },
+
+  -- NOICE
+  { '<leader>n', group = 'Noice' },
+  {
+    '<leader>nd',
+    '<cmd>NoiceDismiss<CR>',
+    desc = 'Noice: Dismiss',
+  }
 }
