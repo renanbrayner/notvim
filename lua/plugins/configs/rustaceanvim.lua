@@ -1,103 +1,251 @@
--- Configuração do rustaceanvim para modo STANDALONE sem features nightly
+-- Configuração completa do rustaceanvim com todas as funcionalidades
 vim.g.rustaceanvim = {
   server = {
     cmd = function()
       return { 'rust-analyzer' }
     end,
-    -- Configuração específica para modo standalone sem nightly features
+    -- Configuração completa com todas as funcionalidades habilitadas
     settings = {
       ['rust-analyzer'] = {
-        -- Desabilitar completamente check/clippy para evitar erros em standalone
+        -- Habilitar check/clippy para análise completa
         check = {
-          command = nil,  -- Desabilitado para modo standalone
+          command = "check",
+          extraArgs = {},
         },
-        -- Configuração mínima de Cargo para standalone
+        -- Configuração completa de Cargo
         cargo = {
-          allFeatures = false,
-          features = nil,  -- Sem features para evitar problemas
-          loadOutDirsFromCheck = false,
-          autoreload = false,
+          allFeatures = true,
+          features = "all",
+          loadOutDirsFromCheck = true,
+          autoreload = true,
         },
-        -- Desabilitar features que podem causar problemas
+        -- Habilitar todas as features úteis
         inlayHints = {
-          enable = false,
+          enable = true,
+          display = {
+            parameterHints = true,
+            typeHints = true,
+            chainingHints = true,
+            maxLength = 25,
+          },
+          bindingModeHints = {
+            enable = true,
+          },
+          closingBraceHints = {
+            enable = true,
+            minLines = 25,
+          },
+          lifetimeElisionHints = {
+            enable = "skip_trivial",
+          },
         },
         lens = {
-          enable = false,
+          enable = true,
+          run = {
+            enable = true,
+          },
+          debug = {
+            enable = true,
+          },
+          implementations = {
+            enable = true,
+          },
+          methodReferences = {
+            enable = true,
+          },
+          references = {
+            enable = true,
+          },
+          enumVariantReferences = {
+            enable = true,
+          },
         },
         hover = {
           actions = {
-            enable = false,  -- Desabilitar actions que podem tentar compilar
+            enable = true,
+            implementations = {
+              enable = true,
+            },
+            references = {
+              enable = true,
+            },
+            run = {
+              enable = true,
+            },
+            debug = {
+              enable = true,
+            },
+            gotoTypeDef = {
+              enable = true,
+            },
           },
         },
-        -- Configurações de formatação seguras para stable
+        -- Configurações de formatação
         rustfmt = {
-          extraArgs = { "--edition", "2021" },  -- Edition segura para stable
+          extraArgs = { "--edition", "2021" },
+          overrideCommand = nil,
         },
-        -- Proc macros podem causar problemas em standalone
+        -- Habilitar proc macros para funcionalidade completa
         procMacro = {
-          enable = false,
+          enable = true,
+          ignored = {},
+          attributes = {
+            enable = true,
+          },
         },
-        -- Diagnostics podem tentar compilar
+        -- Habilitar diagnostics completos
         diagnostics = {
-          enable = false,
+          enable = true,
+          enableExperimental = false,
+          disabled = {},
+          warningsAsHint = {},
+          warningsAsInfo = {},
+        },
+        -- Outras configurações úteis
+        completion = {
+          addCallParentheses = true,
+          addCallArgumentSnippets = true,
+          postfix = {
+            enable = true,
+          },
+          autoimport = {
+            enable = true,
+          },
+        },
+        semanticHighlighting = {
+          strings = {
+            enable = true,
+          },
+          punctuation = {
+            enable = true,
+            separate = {
+              macro = {
+                enable = true,
+              },
+            },
+            specialize = {
+              enable = true,
+            },
+          },
         },
       },
     },
-    -- on_attach essencial sem funcionalidades problemáticas
+    -- on_attach com todas as funcionalidades LSP e Coq
     on_attach = function(client, bufnr)
       local opts = { buffer = bufnr, silent = true }
-      -- Apenas keymaps básicos de LSP
+      -- Keymaps básicos de LSP
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
       vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
       vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+      vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+      vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+      vim.keymap.set('n', '<leader>f', vim.lsp.buf.formatting, opts)
+
+      -- Coq integration se disponível
+      if require('coq') then
+        require('coq').lsp_ensure_capabilities()
+      end
+    end,
+    capabilities = function()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      -- Adicionar Coq capabilities se disponível
+      local ok, coq = pcall(require, 'coq')
+      if ok then
+        capabilities = coq.lsp_ensure_capabilities(capabilities)
+      end
+      return capabilities
     end,
   },
 
-  -- root_dir para modo standalone
+  -- root_dir robusto para projetos e arquivos standalone
   root_dir = function()
     local cargo_root = vim.fs.root(0, { 'Cargo.toml' })
     if cargo_root then
-      return cargo_root  -- Modo projeto
+      return cargo_root
     end
 
-    -- Modo standalone para arquivos .rs sem Cargo.toml
+    -- Para arquivos .rs sem Cargo.toml, usar diretório do arquivo
     local filename = vim.fn.expand('%:t')
     if filename:match('%.rs$') then
-      vim.notify('Rust standalone mode - Cargo.toml not found', vim.log.levels.INFO)
-      return nil  -- Explicitamente nil para standalone
+      return vim.fn.expand('%:p:h')
     end
 
-    return vim.fn.expand('%:p:h')
+    return vim.fn.getcwd()
   end,
 
-  -- Desabilitar ferramentas que podem tentar compilar
+  -- Habilitar todas as ferramentas úteis
   tools = {
     executor = {
-      enable = false,
+      enable = true,
     },
     test = {
-      enable = false,
+      enable = true,
     },
     hover_actions = {
-      enable = false,
+      enable = true,
+      replace_builtin_hover = true,
     },
     inlay_hints = {
-      auto = false,
+      auto = true,
+      only_current_line = false,
+      show_parameter_hints = true,
+      parameter_hints_prefix = "",
+      other_hints_prefix = "",
+      max_len_align = false,
+      max_len_align_padding = 1,
+      right_align = false,
+      right_align_padding = 7,
+      highlight = "LspInlayHint",
     },
     code_actions = {
-      ui_select_fallback = false,
+      ui_select_fallback = true,
     },
     crate_graph = {
-      enable = false,
+      enable = true,
+      backend = "dot",
+      output = nil,
+      full = true,
+      enabled_graphviz_backends = {
+        "dot",
+        "circo",
+        "fdp",
+        "neato",
+        "twopi",
+      },
+      pipe = nil,
+    },
+    open_wsdl = {
+      enable = true,
+    },
+    move_item = {
+      enable = true,
+      mover = {
+        char = {
+          enable = true,
+          left = "<C-h>",
+          right = "<C-l>",
+        },
+        line = {
+          enable = true,
+          down = "<C-j>",
+          up = "<C-k>",
+        },
+        prev = false,
+        next = false,
+      },
     },
   },
 
-  -- Desabilitar DAP para evitar tentativas de compilação
+  -- Habilitar DAP para debug
   dap = {
-    adapter = nil,
+    adapter = {
+      type = "executable",
+      command = "lldb-vscode",
+      name = "rt_lldb",
+    },
   },
 }
 
