@@ -29,7 +29,7 @@ return {
 
   -- File explorer - só quando usar <leader>op
   {
-    'ms-jpq/chadtree',
+    'renanbrayner/chadtree',
     branch = 'chad',
     build = 'python3 -m chadtree deps && :CHADdeps',
     cmd = { 'CHADopen' },
