@@ -22,7 +22,7 @@ loader.safe_setup('noice', {
     view_search = 'virtualtext',
   },
   popupmenu = {
-    enabled = true,
+    enabled = false,
     backend = 'nui',
   },
   redirect = {
