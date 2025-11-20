@@ -27,6 +27,7 @@ set.writebackup = false
 set.hidden = true
 set.backup = false
 set.swapfile = false
+set.shortmess:append 'I' -- Remover a tela inicial do Neovim
 
 local home = vim.fn.expand('~')
 vim.env.DOTNET_ROOT = home .. '/.asdf/installs/dotnet/9.0.305'
@@ -36,4 +37,3 @@ vim.env.MSBUILDSDKS_PATH = home .. '/.asdf/installs/dotnet/9.0.305/sdk/9.0.305/S
 vim.g.vim_svelte_plugin_load_full_syntax = 1
 vim.g.vim_svelte_plugin_use_typescript = 1
 vim.g.vim_svelte_plugin_use_sass = 1
-vim.opt.shortmess:append 'I' -- Remover a tela inicial do Neovim
