@@ -31,6 +31,7 @@ vim.g.coq_settings = {
   display = {
     ['ghost_text.context'] = { '  ❬ ', ' ❭ ' },
     pum = {
+      fast_close = false,
       kind_context = { '(', ')' },
       source_context = { '⌈ ', ' ⌋' },
     },
