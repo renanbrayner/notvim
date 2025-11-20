@@ -315,54 +315,8 @@ return {
     'ms-jpq/coq_nvim',
     branch = 'coq',
     build = ':COQdeps',
-    config = function()
-      require 'plugins.configs.coq'
-    end,
     init = function()
-      -- Definir configurações antes do plugin carregar
-      vim.g.coq_settings = {
-        auto_start = 'shut-up',
-        display = {
-          ['ghost_text.context'] = { '  ❬ ', ' ❭ ' },
-          pum = {
-            kind_context = { '(', ')' },
-            source_context = { '⌈ ', ' ⌋' },
-          },
-          icons = {
-            mappings = {
-              Text = '',
-              Method = 'm',
-              Function = '',
-              Constructor = '',
-              Field = '',
-              Variable = '',
-              Class = '',
-              Interface = '',
-              Module = '',
-              Property = '',
-              Unit = '',
-              Value = '',
-              Enum = '',
-              Keyword = '',
-              Snippet = '',
-              Color = '',
-              File = '',
-              Reference = '',
-              Folder = '',
-              EnumMember = '',
-              Constant = '',
-              Struct = '',
-              Event = '',
-              Operator = '',
-              TypeParameter = '',
-            },
-          },
-        },
-        keymap = {
-          jump_to_mark = '<c-b>',
-          ['repeat'] = '^.',
-        },
-      }
+      require 'plugins.configs.coq'
     end,
   },
 
