@@ -46,5 +46,4 @@ lazy.setup('plugins', {
 })
 
 require 'utils'
-require 'rice'
 require 'core.autocmds'

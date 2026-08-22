@@ -675,6 +675,8 @@ wk.add {
     end,
     desc = 'DAP: Evaluate Selection',
   },
+  -- Avante
+  { '<leader>a', group = 'Avante' },
 
   -- NOICE
   { '<leader>n', group = 'Noice' },

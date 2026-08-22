@@ -340,6 +340,30 @@ return {
     end,
   },
 
+  -- AI stuff
+  {
+    "yetone/avante.nvim",
+    build = vim.fn.has("win32") ~= 0
+        and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+        or "make",
+    event = "VeryLazy",
+    version = false,
+    opts = function()
+      return require('plugins.configs.avante')
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      -- se usar render-markdown, recomendo NÃO incluir "Avante" nos filetypes
+      -- para não interferir na aparência da sidebar:
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = { file_types = { "Avante" } },
+        ft = { "Avante" },
+      },
+    },
+  },
+
   -- Lazydev - só para arquivos Lua
   {
     'folke/lazydev.nvim',
@@ -367,15 +391,22 @@ return {
   },
 
   -- Cursor animation - smear effect
-  {
-    'sphamba/smear-cursor.nvim',
-    event = 'VeryLazy',
-    opts = {},
-  },
+  -- {
+  --   'sphamba/smear-cursor.nvim',
+  --   event = 'VeryLazy',
+  --   opts = {},
+  -- },
 
   -- Themes - podem ser lazy, exceto o principal
-  { 'dracula/vim', name = 'dracula', lazy = false }, -- seu tema principal
-  { 'ellisonleao/gruvbox.nvim', lazy = true },
-  { 'shaunsingh/nord.nvim', lazy = true },
+  {
+    'dracula/vim',
+    name = 'dracula',
+    lazy = false,
+    config = function()
+      require 'rice'
+    end,
+  }, -- seu tema principal
+  { 'ellisonleao/gruvbox.nvim',     lazy = true },
+  { 'shaunsingh/nord.nvim',         lazy = true },
   { 'ishan9299/nvim-solarized-lua', lazy = true },
 }
