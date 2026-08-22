@@ -10,7 +10,7 @@ local notify_config = {
   stages = {
     function(state)
       local next_height = state.message.height + 2
-      local next_row = stages_util.available_slot(state.open_windows, next_height, stages_util.DIRECTION.BOTTOM_UP)
+      local next_row = stages_util.available_slot(state.open_windows, next_height, stages_util.DIRECTION.TOP_DOWN)
       if not next_row then
         return nil
       end
@@ -62,3 +62,4 @@ local notify_config = {
 }
 
 loader.safe_setup('notify', notify_config)
+vim.notify = require('notify')

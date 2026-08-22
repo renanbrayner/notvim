@@ -22,9 +22,6 @@ return {
       require 'plugins.configs.noice'
       require 'plugins.configs.nvim-notify'
     end,
-    init = function()
-      vim.notify = require('noice').notify
-    end,
   },
 
   -- File explorer - só quando usar <leader>op
@@ -123,10 +120,13 @@ return {
     end,
   },
 
-  -- Bufferline - deve carregar quando usar comandos de buffer
+  -- Bufferline - carrega em VimEnter (depois dos lazy=false) para garantir
+  -- que rice.lua já aplicou os highlights custom quando bufferline.setup()
+  -- lê BufferCurrent, BufferInactive, etc. Evita race condition.
   {
     'akinsho/bufferline.nvim',
     dependencies = 'kyazdani42/nvim-web-devicons',
+    event = 'VimEnter',
     config = function()
       require 'plugins.configs.bufferline'
     end,
@@ -288,11 +288,8 @@ return {
       },
     },
     config = function(_, opts)
-      -- Carrega Coq se estiver disponível e adiciona capabilities
-      local coq_ok, coq = pcall(require, 'coq')
-      if coq_ok then
-        opts.config.capabilities = coq.lsp_ensure_capabilities()
-      end
+      -- coq.lsp_ensure_capabilities removido no v2 (no-op).
+      -- Neovim 0.12 já injeta as capabilities via vim.lsp.protocol.make_client_capabilities()
       require('roslyn').setup(opts)
     end,
   },
@@ -401,12 +398,19 @@ return {
   {
     'dracula/vim',
     name = 'dracula',
+    lazy = true,
+    config = function()
+      require 'rice'
+    end,
+  }, -- tema alternativo (solarized é o principal, definido em rice.lua)
+  { 'ellisonleao/gruvbox.nvim',     lazy = true },
+  { 'shaunsingh/nord.nvim',         lazy = true },
+  -- { 'ishan9299/nvim-solarized-lua', lazy = true },
+  {
+    'maxmx03/solarized.nvim',
     lazy = false,
     config = function()
       require 'rice'
     end,
   }, -- seu tema principal
-  { 'ellisonleao/gruvbox.nvim',     lazy = true },
-  { 'shaunsingh/nord.nvim',         lazy = true },
-  { 'ishan9299/nvim-solarized-lua', lazy = true },
 }

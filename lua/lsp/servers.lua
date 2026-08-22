@@ -17,13 +17,9 @@ mason.setup {
   },
 }
 
-local coq_ok, coq = pcall(require, 'coq')
-if not coq_ok then
-  vim.notify('Error requiring coq', vim.log.levels.ERROR)
-  return
-end
-
-local capabilities = coq.lsp_ensure_capabilities()
+-- coq.lsp_ensure_capabilities removido no v2 (no-op).
+-- Neovim 0.12 já injeta as capabilities via vim.lsp.protocol.make_client_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- local function on_attach(client, bufnr)
 --   print('LSP Client Attached: ' .. client.name)
 --   local map = function(mode, lhs, rhs, desc)

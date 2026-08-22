@@ -1,9 +1,8 @@
 local loader = require('utils.loader')
 
 local whichkey_config = {
-  window = {
+  win = {
     border = 'rounded',
-    margin = { 1, 0, 1, 0 },
     padding = { 2, 2, 2, 2 },
   },
   layout = {

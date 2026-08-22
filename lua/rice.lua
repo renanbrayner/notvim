@@ -7,8 +7,20 @@ local theme_manager = require('themes.colors')
 -- THEME INITIALIZATION
 -- ============================================================================
 
+-- Apply custom highlights BEFORE setting colorscheme, so plugins that
+-- read highlights in the ColorScheme autocmd (e.g. bufferline) see our
+-- values instead of the colorscheme's defaults. With
+-- `defaults = { lazy = false }`, bufferline.setup() may run before this
+-- file, so its ColorScheme autocmd would otherwise capture the wrong colors.
+local current_theme = theme_manager.get_theme('solarized')
+theme_manager.apply_highlights(current_theme)
+
 -- Set default theme (can be overridden by user)
-vim.cmd 'colorscheme dracula'
+vim.cmd 'colorscheme solarized'
+
+-- Re-apply defensively in case the colorscheme file overrode anything
+current_theme = theme_manager.get_current_theme()
+theme_manager.apply_highlights(current_theme)
 
 -- Enable true colors and UI options
 vim.opt.termguicolors = true
@@ -29,10 +41,6 @@ vim.opt.shortmess:append 'I'
 -- ============================================================================
 -- THEME APPLICATION
 -- ============================================================================
-
--- Get and apply current theme highlights
-local current_theme = theme_manager.get_current_theme()
-theme_manager.apply_highlights(current_theme)
 
 -- Set up fzf colors for compatibility
 theme_manager.setup_fzf_colors(current_theme)

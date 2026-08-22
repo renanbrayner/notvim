@@ -79,7 +79,7 @@ null_ls.setup {
   sources = sources,
   on_attach = function(client, bufnr)
     -- ... (sua função on_attach completa para none-ls aqui, como no comentário anterior) ...
-    if client.supports_method 'textDocument/formatting' then
+    if client:supports_method('textDocument/formatting', bufnr) then
       local augroup_format = vim.api.nvim_create_augroup('NullLsFormatOnSave', { clear = true })
       vim.api.nvim_clear_autocmds { group = augroup_format, buffer = bufnr }
       vim.api.nvim_create_autocmd('BufWritePre', {
@@ -97,7 +97,7 @@ null_ls.setup {
         end,
       })
     end
-    if client.supports_method 'textDocument/codeAction' then
+    if client:supports_method('textDocument/codeAction', bufnr) then
       vim.keymap.set({ 'n', 'v' }, '<leader>la', function()
         vim.lsp.buf.code_action { bufnr = bufnr, context = { only = { 'quickfix', 'refactor', 'source' } } }
       end, { buffer = bufnr, noremap = true, silent = true, desc = 'None-LS Code Action' })

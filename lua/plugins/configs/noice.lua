@@ -15,7 +15,7 @@ loader.safe_setup('noice', {
   },
   messages = {
     enabled = true,
-    view = 'notify',
+    view = 'mini',
     view_error = 'notify',
     view_warn = 'notify',
     view_history = 'messages',
@@ -118,7 +118,3 @@ loader.safe_setup('noice', {
     },
   },
 })
-
--- Garante que vim.notify seja substituído explicitamente
-vim.notify = require('noice').notify
-
